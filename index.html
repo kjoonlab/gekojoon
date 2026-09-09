@@ -32,8 +32,8 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
 
-    <!-- Google reCAPTCHA v2 API (체크박스형) -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Google reCAPTCHA v3 API (발급하신 Score 키 연동) -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcuNbltAAAAAAazGc4tbwcdWm1vLJOUrlkRhpRk"></script>
 
     <style>
         :root {
@@ -177,8 +177,6 @@
         .admin-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
         .admin-table th, .admin-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-color); }
         .admin-table th { background: rgba(0,0,0,0.05); font-weight: 800; color: var(--text-muted); }
-
-        .recaptcha-wrapper { display: flex; justify-content: center; margin: 12px 0 16px 0; }
 
         #toastContainer { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 30000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .toast { background: rgba(15, 23, 42, 0.95); color: white; padding: 0.95rem 1.5rem; border-radius: 16px; font-weight: 700; font-size: 0.92rem; box-shadow: 0 20px 40px rgba(0,0,0,0.4); pointer-events: auto; }
@@ -367,7 +365,7 @@
         </div>
     </div>
 
-    <!-- 로그인 모달 (reCAPTCHA 체크박스 포함) -->
+    <!-- 로그인 모달 -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('loginModal')">&times;</button>
@@ -376,18 +374,12 @@
             <form onsubmit="handleEmailLogin(event)">
                 <div class="form-group"><label>이메일</label><input type="email" id="loginEmail" class="form-control" required></div>
                 <div class="form-group"><label>비밀번호</label><input type="password" id="loginPassword" class="form-control" required></div>
-                
-                <!-- reCAPTCHA 체크박스 ("로봇이 아닙니다") -->
-                <div class="recaptcha-wrapper">
-                    <div class="g-recaptcha" data-sitekey="6LcuNbltAAAAAAazGc4tbwcdWm1vLJOUrlkRhpRk"></div>
-                </div>
-
                 <button type="submit" class="btn" style="width:100%;">로그인 / 회원가입</button>
             </form>
         </div>
     </div>
 
-    <!-- 소스 등록 및 수정 모달 (reCAPTCHA 체크박스 포함) -->
+    <!-- 소스 등록 및 수정 모달 -->
     <div class="modal" id="submitModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('submitModal')">&times;</button>
@@ -410,12 +402,6 @@
                 </div>
                 <div class="form-group"><label>설명</label><textarea id="subDesc" class="form-control"></textarea></div>
                 <div class="form-group"><label>코드 본문</label><textarea id="subHtml" class="form-control"></textarea></div>
-
-                <!-- reCAPTCHA 체크박스 -->
-                <div class="recaptcha-wrapper">
-                    <div class="g-recaptcha" data-sitekey="6LcuNbltAAAAAAazGc4tbwcdWm1vLJOUrlkRhpRk"></div>
-                </div>
-
                 <button type="submit" class="btn" style="width:100%; padding:12px;">제출하기</button>
             </form>
         </div>
@@ -463,6 +449,8 @@
     <script>
         let currentLang = 'KO';
         let isDarkMode = false;
+        const GEKOJOON_GEMINI_KEY = "AQ.Ab8RN6JrwfslGF2YXUt4wuRHYU_UmOfF8zgWtJMcyKFbHnSS-Q";
+
         const translations = {
             KO: { login: "로그인", logout: "로그아웃", mypage: "👤 마이페이지", contribute: "➕ 소스 기여하기", hero_title: "개발자를 위한 프리미엄 소스 마켓", hero_desc: "파일, 텍스트 스니펫, 코드 등 다양한 에셋을 공유하고 광고 수익을 5:5로 공정하게 정산받으세요.", hero_btn: "🚀 내 소스 등록하고 수익 창출", section_title: "🔥 공유된 소스 및 에셋 목록", search_ph: "소스, 파일 또는 키워드 검색...", filter_all: "전체 보기", filter_code: "💻 코드 스니펫", filter_file: "📁 파일 에셋", footer_support: "고객센터", footer_review: "⭐ 플랫폼 이용후기" },
             EN: { login: "Login", logout: "Logout", mypage: "👤 My Page", contribute: "➕ Contribute", hero_title: "Premium Source Market for Developers", hero_desc: "Share files and code assets while earning 5:5 ad revenue shares.", hero_btn: "🚀 Upload Source & Earn", section_title: "🔥 Shared Sources & Assets", search_ph: "Search sources, files...", filter_all: "All", filter_code: "💻 Code", filter_file: "📁 Files", footer_support: "Support Center", footer_review: "⭐ Platform Reviews" }
@@ -490,6 +478,7 @@
 
         function showToast(msg) {
             const container = document.getElementById('toastContainer');
+            if(!container) return;
             const toast = document.createElement('div');
             toast.className = 'toast'; toast.innerText = msg;
             container.appendChild(toast);
@@ -635,18 +624,6 @@
             }
         });
 
-        // ================= reCAPTCHA 체크박스 검증 함수 =================
-        function checkRecaptcha() {
-            if (typeof grecaptcha !== 'undefined') {
-                const response = grecaptcha.getResponse();
-                if (response.length === 0) {
-                    showToast('⚠️ [로봇이 아닙니다] 체크박스를 완료해주세요.');
-                    return false;
-                }
-            }
-            return true;
-        }
-
         // 로그인 및 제출 기능
         function loginWithGoogle() {
             auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => { showToast('로그인 성공!'); closeModal('loginModal'); });
@@ -654,16 +631,13 @@
 
         function handleEmailLogin(e) {
             e.preventDefault();
-            if (!checkRecaptcha()) return;
             const email = document.getElementById('loginEmail').value;
             const pass = document.getElementById('loginPassword').value;
             auth.signInWithEmailAndPassword(email, pass).then(() => {
                 showToast('로그인 성공!'); closeModal('loginModal');
-                if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
             }).catch(() => {
                 auth.createUserWithEmailAndPassword(email, pass).then(() => {
                     showToast('회원가입 완료 및 로그인!'); closeModal('loginModal');
-                    if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
                 }).catch(err => showToast('오류: ' + err.message));
             });
         }
@@ -671,7 +645,6 @@
         function handleUserSubmitGame(e) {
             e.preventDefault();
             if (!currentUser) return showToast('로그인 필요');
-            if (!checkRecaptcha()) return;
 
             const editId = document.getElementById('editingSourceId').value;
             const title = document.getElementById('subTitle').value;
@@ -684,7 +657,6 @@
             if(editId) {
                 db.collection(COLL_SOURCES).doc(editId).update({ title, icon, contentType, tag, desc, htmlContent }).then(() => {
                     showToast('수정 완료!'); closeModal('submitModal');
-                    if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
                 });
             } else {
                 db.collection(COLL_PENDING).add({
@@ -693,7 +665,6 @@
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
                     showToast('등록 신청 완료! 관리자 승인 대기'); closeModal('submitModal');
-                    if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
                 });
             }
         }
@@ -745,18 +716,40 @@
         function deleteSource(id) { db.collection(COLL_SOURCES).doc(id).delete().then(() => { switchAdminTab('sources'); showToast('삭제 완료'); }); }
         function banIp(ip) { db.collection(COLL_BANS).doc(ip.replace(/\./g, '_')).set({ip}).then(() => showToast('IP 차단 완료')); }
 
-        // AI 챗봇 및 기타 유틸
+        // AI 챗봇 연동
         function toggleGekojoonAiModal() { const m = document.getElementById('gekojoonAiModal'); m.style.display = m.style.display === 'none' ? 'flex' : 'none'; }
         function openUserAiHistoryModal() { openModal('userAiHistoryModal'); db.collection(COLL_AI_LOGS).where("userEmail", "==", currentUser ? currentUser.email : '').get().then(s => {
             let html = ''; s.forEach(d => html += `<div>Q: ${d.data().userText}</div>`); document.getElementById('userAiHistoryContainer').innerHTML = html || '기록 없음';
         }); }
-        function sendGekojoonAiMessage() {
+
+        async function sendGekojoonAiMessage() {
             const txt = document.getElementById('gekojoonAiInput').value; if(!txt) return;
             const body = document.getElementById('gekojoonAiChatBody');
             body.innerHTML += `<div class="ai-msg user"><div class="ai-bubble">${txt}</div></div>`;
             document.getElementById('gekojoonAiInput').value = '';
-            setTimeout(() => body.innerHTML += `<div class="ai-msg bot"><div class="ai-avatar">🤖</div><div class="ai-bubble">답변: ${txt}에 대한 응답입니다.</div></div>`, 500);
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEKOJOON_GEMINI_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: txt }] }] })
+                });
+                if(res.ok) {
+                    const data = await res.json();
+                    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '응답을 받지 못했습니다.';
+                    body.innerHTML += `<div class="ai-msg bot"><div class="ai-avatar">🤖</div><div class="ai-bubble">${reply}</div></div>`;
+                    if(db && currentUser) {
+                        db.collection(COLL_AI_LOGS).add({ userEmail: currentUser.email, userText: txt, aiReply: reply, modelUsed: 'gemini-1.5-flash', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                    }
+                } else {
+                    body.innerHTML += `<div class="ai-msg bot"><div class="ai-avatar">🤖</div><div class="ai-bubble">API 통신 오류가 발생했습니다.</div></div>`;
+                }
+            } catch(e) {
+                body.innerHTML += `<div class="ai-msg bot"><div class="ai-avatar">🤖</div><div class="ai-bubble">오류: ${e.message}</div></div>`;
+            }
+            body.scrollTop = body.scrollHeight;
         }
+
         function handleAiInputKeyDown(e) { if(e.key === 'Enter') sendGekojoonAiMessage(); }
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
@@ -768,11 +761,12 @@
             const g = window.gamesCache[id]; if(!g) return;
             document.getElementById('detailTitle').innerText = g.title;
             document.getElementById('detailDesc').innerText = g.desc;
+            const contentSec = document.getElementById('contentSection');
+            contentSec.innerHTML = g.htmlContent ? `<textarea class="form-control" style="min-height:120px;" readonly>${g.htmlContent}</textarea>` : '';
             openModal('detailModal');
         }
         function submitSiteReview(e) { e.preventDefault(); showToast('이용후기 등록 완료'); closeModal('siteReviewModal'); }
         function handleSupportSubmit(e) { e.preventDefault(); showToast('문의 접수 완료'); closeModal('supportModal'); }
-        function loadSiteReviews() {}
     </script>
 </body>
 </html>
