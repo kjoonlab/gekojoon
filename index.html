@@ -1,772 +1,210 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-PZR7MB6D');</script>
-    <!-- End Google Tag Manager -->
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gekojoon HUB | 프리미엄 소스 마켓 & 개발자 플랫폼</title>
-
-    <meta name="google-site-verification" content="DNlT8QvnWOtqtAg-3swbzZFeRQBt-toW5FlQCs8wb0w" />
-    <meta name="naver-site-verification" content="gekojoon-search-console-verification-placeholder" />
-
-    <meta name="description" content="Gekojoon HUB - 파일, 텍스트 스니펫, 코드 등 다양한 에셋을 공유하고 광고 수익을 5:5로 공정하게 정산받는 프리미엄 개발자 플랫폼입니다.">
-    <meta name="keywords" content="Gekojoon, 경준tv, 게코뱀, 소스 공유, 오픈소스, 파일 공유, 텍스트 스니펫, 코드 스니펫, 수익배분, 파이썬, 리액트">
-    <link rel="canonical" href="https://gekojoon.com/">
-
-    <link rel="shortcut icon" href="IMG_1702website.png" type="image/png">
-    <link rel="icon" href="IMG_1702website.png" type="image/png">
-
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
-
-    <!-- Firebase SDK (V10 Compat) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
-
-    <!-- Google reCAPTCHA v3 API (발급하신 Score 키 연동) -->
-    <script src="https://www.google.com/recaptcha/api.js?render=6LcuNbltAAAAAAazGc4tbwcdWm1vLJOUrlkRhpRk"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <!-- 구글 폰트 (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- 구글 reCAPTCHA Enterprise 스크립트 추가 -->
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LehBLQTAAAAD8mUvYBaJMffG1HY_PGtWV5QFbf" async defer></script>
 
     <style>
-        :root {
-            --bg-color: #f8fafc;
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --card-hover: #ffffff;
-            --primary: #3b82f6;
-            --primary-hover: #2563eb;
-            --primary-glow: rgba(59, 130, 246, 0.3);
-            --text-color: #0f172a;
-            --text-muted: #64748b;
-            --border-color: rgba(226, 232, 240, 0.9);
-            --danger: #ef4444;
-            --success: #10b981;
-            --accent: #8b5cf6;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
-            --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
-            --shadow-lg: 0 20px 40px -12px rgba(15, 23, 42, 0.12);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        body.dark-mode {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.85);
-            --card-hover: #1e293b;
-            --primary: #60a5fa;
-            --primary-hover: #3b82f6;
-            --primary-glow: rgba(96, 165, 250, 0.35);
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.12);
-            --glass-bg: rgba(15, 23, 42, 0.85);
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 20px 40px -12px rgba(0, 0, 0, 0.6);
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0d0f12;
+            color: #e1e4e8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; -webkit-tap-highlight-color: transparent; }
-        input, textarea, select { -webkit-user-select: text; user-select: text; }
-
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
-        body { 
-            background-color: var(--bg-color); color: var(--text-color); min-height: 100vh; display: flex; flex-direction: column; 
-            background-image: radial-gradient(circle at 12% 20%, rgba(59, 130, 246, 0.07), transparent 35%), radial-gradient(circle at 88% 70%, rgba(139, 92, 246, 0.07), transparent 35%);
-            background-attachment: fixed; transition: background 0.3s ease, color 0.3s ease;
+        /* 배경 미세한 그라데이션 및 블러 효과 */
+        .background-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, rgba(13, 15, 18, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
         }
 
-        header { 
-            background-color: var(--glass-bg); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-color); 
-            padding: 0.9rem 2rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; 
-        }
-        .logo-container { display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; }
-        .logo-box { width: 44px; height: 44px; border-radius: 14px; background-image: url('IMG_1702website.png'); background-size: cover; background-position: center; border: 1px solid rgba(0,0,0,0.08); }
-        .logo-title { font-size: 1.45rem; font-weight: 900; background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        body.dark-mode .logo-title { background: linear-gradient(135deg, #ffffff 0%, #60a5fa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .nav-links { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
-        button, .btn { 
-            background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%); color: white; border: none; padding: 0.65rem 1.25rem; 
-            border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 0.88rem; transition: all 0.25s; box-shadow: 0 4px 14px var(--primary-glow); display: inline-flex; align-items: center; justify-content: center; gap: 6px; 
-        }
-        button:hover, .btn:hover { transform: translateY(-2px); }
-        .btn-secondary { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); box-shadow: var(--shadow-sm); }
-        .btn-danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
-        .btn-success { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-
-        main { flex: 1; max-width: 1300px; width: 100%; margin: 0 auto; padding: 2.5rem 1.5rem; }
-        .hero-banner { 
-            background: linear-gradient(125deg, var(--card-bg) 0%, #eff6ff 40%, #e0e7ff 70%, #f3e8ff 100%); 
-            border: 1px solid var(--border-color); border-radius: 28px; padding: 3.2rem 3rem; margin-bottom: 2.5rem; 
-            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-md); flex-wrap: wrap; gap: 2rem; 
-        }
-        body.dark-mode .hero-banner { background: linear-gradient(125deg, #1e293b 0%, #0f172a 100%); }
-        .hero-banner h1 { font-size: 2.3rem; font-weight: 900; margin-bottom: 0.8rem; color: #1e3a8a; }
-        body.dark-mode .hero-banner h1 { color: #93c5fd; }
-        .hero-banner p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; }
-
-        .ad-banner { 
-            width: 100%; background: var(--card-bg); border: 1.5px dashed var(--border-color); border-radius: 18px; 
-            padding: 1.2rem; text-align: center; color: var(--text-muted); margin-bottom: 2.5rem; font-size: 0.9rem; font-weight: 600; 
+        .container {
+            position: relative;
+            z-index: 1;
+            background: rgba(22, 27, 34, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 48px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            max-width: 440px;
+            width: 90%;
         }
 
-        .controls-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1.5rem; }
-        .controls-bar h2 { font-size: 1.55rem; font-weight: 900; color: var(--text-color); }
-
-        .filter-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 2rem; }
-        .filter-chips { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
-        .chip { 
-            padding: 9px 18px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 22px; 
-            font-size: 0.9rem; font-weight: 700; color: var(--text-muted); cursor: pointer; white-space: nowrap; box-shadow: var(--shadow-sm); 
+        .error-code {
+            font-size: 3rem;
+            font-weight: 600;
+            letter-spacing: -1px;
+            color: #f0f6fc;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff 30%, #8b949e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .chip:hover { border-color: var(--primary); color: var(--primary); }
-        .chip.active { background: linear-gradient(135deg, var(--primary), #2563eb); color: white; border-color: var(--primary); }
 
-        .search-container { position: relative; width: 420px; max-width: 100%; }
-        .search-box { 
-            background-color: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 26px; 
-            padding: 0.55rem 1rem 0.55rem 1.3rem; display: flex; align-items: center; box-shadow: var(--shadow-sm); 
+        .error-message {
+            font-size: 0.95rem;
+            color: #8b949e;
+            margin-bottom: 28px;
+            line-height: 1.5;
+            font-weight: 300;
         }
-        .search-box input { background: transparent; border: none; color: var(--text-color); outline: none; width: 100%; font-size: 0.95rem; }
 
-        .source-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.6rem; }
-        .source-card { 
-            background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color); 
-            display: flex; flex-direction: column; transition: all 0.3s; cursor: pointer; box-shadow: var(--shadow-sm); 
+        .recaptcha-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+            transform: scale(0.95);
+            transform-origin: center;
         }
-        .source-card:hover { transform: translateY(-6px); border-color: var(--primary); background-color: var(--card-hover); box-shadow: var(--shadow-md); }
-        .source-header { padding: 1.5rem 1.5rem 1rem 1.5rem; display: flex; align-items: center; gap: 1rem; }
-        .source-icon { width: 52px; height: 52px; border-radius: 16px; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); display: flex; align-items: center; justify-content: center; font-size: 1.85rem; flex-shrink: 0; }
-        body.dark-mode .source-icon { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); }
-        .source-meta { flex: 1; min-width: 0; }
-        .source-title { font-weight: 800; font-size: 1.12rem; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.45rem; }
-        .source-type-badge { font-size: 0.72rem; color: var(--accent); background: #f5f3ff; padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 700; display: inline-block; }
-        body.dark-mode .source-type-badge { background: #2e1065; color: #c084fc; }
-        .source-tag-badge { font-size: 0.72rem; color: var(--text-muted); background: rgba(0,0,0,0.05); padding: 0.2rem 0.6rem; border-radius: 6px; font-weight: 700; display: inline-block; margin-left: 4px; }
-        .source-body { padding: 0 1.5rem 1.5rem 1.5rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .source-desc { color: var(--text-muted); font-size: 0.92rem; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1.2rem; }
-        .source-footer-stats { font-size: 0.82rem; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; padding-top: 0.85rem; border-top: 1px dashed var(--border-color); font-weight: 600; }
 
-        footer { background: var(--card-bg); border-top: 1px solid var(--border-color); padding: 2.8rem 1.5rem; text-align: center; margin-top: auto; }
-        .footer-links { display: flex; justify-content: center; align-items: center; gap: 1.6rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
-        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
-
-        .modal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(15, 23, 42, 0.65); 
-            z-index: 10000; justify-content: center; align-items: center; padding: 1.2rem; backdrop-filter: blur(10px); 
+        #success-notice {
+            font-size: 0.85rem;
+            color: #3fb950;
+            margin-top: -14px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
         }
-        .modal-content { 
-            background-color: var(--card-bg); border: 1px solid var(--border-color); padding: 2.4rem; border-radius: 24px; 
-            width: 100%; max-width: 750px; position: relative; max-height: 90vh; overflow-y: auto; color: var(--text-color); box-shadow: var(--shadow-lg); 
+
+        /* 버튼 그룹 스타일 */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
-        .close-btn { position: absolute; top: 1.3rem; right: 1.3rem; background: var(--border-color); border: none; color: var(--text-muted); width: 38px; height: 38px; border-radius: 12px; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
-        .form-group { margin-bottom: 1.3rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 700; color: var(--text-color); }
-        .form-control { width: 100%; padding: 0.85rem 1.1rem; background-color: var(--bg-color); border: 1.5px solid var(--border-color); border-radius: 12px; color: var(--text-color); font-size: 0.95rem; outline: none; }
-        
-        .admin-table-container { width: 100%; overflow-x: auto; margin-top: 1rem; border: 1px solid var(--border-color); border-radius: 12px; }
-        .admin-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
-        .admin-table th, .admin-table td { padding: 10px 14px; border-bottom: 1px solid var(--border-color); }
-        .admin-table th { background: rgba(0,0,0,0.05); font-weight: 800; color: var(--text-muted); }
 
-        #toastContainer { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 30000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .toast { background: rgba(15, 23, 42, 0.95); color: white; padding: 0.95rem 1.5rem; border-radius: 16px; font-weight: 700; font-size: 0.92rem; box-shadow: 0 20px 40px rgba(0,0,0,0.4); pointer-events: auto; }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            
+            /* 기본적으로 비활성화 상태 스타일 */
+            background-color: rgba(255, 255, 255, 0.03);
+            color: #484f58;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: not-allowed;
+            pointer-events: none;
+        }
 
-        .ai-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); z-index: 12000; display: flex; justify-content: center; align-items: center; padding: 1rem; }
-        .ai-modal-card { width: 100%; max-width: 820px; height: 720px; background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 28px; display: flex; flex-direction: column; overflow: hidden; color: #f8fafc; }
-        .ai-modal-header { padding: 1.1rem 1.6rem; background: rgba(30, 41, 59, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; }
-        .ai-chat-body { flex: 1; padding: 1.6rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.1rem; }
-        .ai-msg { display: flex; gap: 12px; max-width: 88%; }
-        .ai-msg.bot { align-self: flex-start; }
-        .ai-msg.user { align-self: flex-end; flex-direction: row-reverse; }
-        .ai-avatar { width: 38px; height: 38px; border-radius: 14px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
-        .ai-bubble { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); padding: 0.95rem 1.25rem; border-radius: 18px; font-size: 0.94rem; line-height: 1.65; color: #e2e8f0; word-break: break-word; }
-        .ai-msg.user .ai-bubble { background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%); color: #ffffff; }
-        .ai-input-area { padding: 1.1rem 1.6rem; background: rgba(30, 41, 59, 0.9); border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; gap: 10px; align-items: center; }
-        #gekojoonAiInput { flex: 1; background: rgba(15, 23, 42, 0.9); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 18px; padding: 0.85rem 1.1rem; color: #ffffff; font-size: 0.95rem; outline: none; }
+        /* 인증 완료 후 활성화된 상태 스타일 */
+        .btn.enabled {
+            cursor: pointer;
+            pointer-events: auto;
+        }
 
-        .ai-floating-trigger { position: fixed; bottom: 28px; right: 28px; background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); color: white; border: none; padding: 13px 22px; border-radius: 30px; font-weight: 800; cursor: pointer; box-shadow: 0 8px 25px rgba(139, 92, 246, 0.45); z-index: 999; }
+        .btn.enabled.btn-youtube {
+            background-color: #ff0000;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn.enabled.btn-youtube:hover {
+            background-color: #e00000;
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+        }
+
+        .btn.enabled.btn-sub {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #e1e4e8;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn.enabled.btn-sub:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
     </style>
 </head>
 <body>
-    <div id="toastContainer"></div>
 
-    <header>
-        <a href="#" class="logo-container" onclick="location.reload()">
-            <div class="logo-box"></div>
-            <div>
-                <span class="logo-title">GEKOJOON</span>
-                <span style="font-size:0.65rem; color:var(--primary); font-weight:800; display:block; text-transform:uppercase;">HUB</span>
-            </div>
-        </a>
-        <div class="nav-links">
-            <button class="btn-secondary" onclick="toggleTheme()" id="themeToggleBtn">🌞</button>
-            <button class="btn-secondary" onclick="toggleLanguage()" id="langToggleBtn" style="font-size: 0.82rem;">🌐 KO</button>
-            <div id="userAuthDisplay" style="font-size: 0.9rem; font-weight: 700; color: var(--text-muted);"></div>
-            <button class="btn" id="authBtn" onclick="handleAuthAction()" data-i18n="login">로그인</button>
-            <button class="btn-secondary" id="myPageBtn" onclick="openMyPage()" style="display:none;" data-i18n="mypage">👤 마이페이지</button>
-            <button class="btn-secondary" onclick="checkAuthAndOpenSubmit()" data-i18n="contribute">➕ 소스 기여하기</button>
-            <button class="btn-secondary" style="padding: 0.6rem;" onclick="openModal('adminLoginModal')">⚙️</button>
-        </div>
-    </header>
+    <div class="background-glow"></div>
 
-    <main>
-        <div class="hero-banner">
-            <div>
-                <h1 data-i18n="hero_title">개발자를 위한 프리미엄 소스 마켓</h1>
-                <p data-i18n="hero_desc">파일, 텍스트 스니펫, 코드 등 다양한 에셋을 공유하고 광고 수익을 5:5로 공정하게 정산받으세요.</p>
-            </div>
-            <button class="btn" onclick="checkAuthAndOpenSubmit()" data-i18n="hero_btn">🚀 내 소스 등록하고 수익 창출</button>
-        </div>
+    <div class="container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">페이지를 이용하려면 아래 보안 인증을 완료해 주세요.</p>
 
-        <div class="ad-banner" id="topBannerArea">
-            📢 [일일 방문자 1,000명 달성 시 광고 및 5:5 정산 활성화 (오늘 방문자 집계 중...)]
-        </div>
-
-        <div class="controls-bar">
-            <h2 data-i18n="section_title">🔥 공유된 소스 및 에셋 목록</h2>
-            <div class="search-container">
-                <div class="search-box">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text-muted); margin-right:10px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" id="searchInput" placeholder="소스, 파일 또는 키워드 검색..." oninput="handleSearchInput()" data-i18n-ph="search_ph">
+        <!-- 구글 공식 reCAPTCHA Enterprise 위젯 -->
+        <form id="demo-form">
+            <div class="recaptcha-wrapper">
+                <div class="g-recaptcha" 
+                     data-sitekey="6LehBLQTAAAAD8mUvYBaJMffG1HY_PGtWV5QFbf"
+                     data-callback="onSubmit"
+                     data-action="submit">
                 </div>
             </div>
-        </div>
+        </form>
 
-        <div class="filter-group">
-            <div class="filter-chips" id="typeFilters">
-                <div class="chip active" onclick="filterType('all', this)" data-i18n="filter_all">전체 보기</div>
-                <div class="chip" onclick="filterType('code', this)" data-i18n="filter_code">💻 코드 스니펫</div>
-                <div class="chip" onclick="filterType('file', this)" data-i18n="filter_file">📁 파일 에셋</div>
-            </div>
-            <div class="filter-chips" id="tagFilters">
-                <div class="chip tag-chip active" onclick="filterTag('all', this)">전체 태그</div>
-                <div class="chip tag-chip" onclick="filterTag('Python', this)">🐍 Python</div>
-                <div class="chip tag-chip" onclick="filterTag('JavaScript', this)">🟨 JavaScript</div>
-                <div class="chip tag-chip" onclick="filterTag('React', this)">⚛️ React</div>
-                <div class="chip tag-chip" onclick="filterTag('HTML/CSS', this)">🌐 HTML/CSS</div>
-                <div class="chip tag-chip" onclick="filterTag('Design', this)">🎨 디자인 에셋</div>
-                <div class="chip tag-chip" onclick="filterTag('Utility', this)">🛠️ 유틸리티</div>
-                <div class="chip tag-chip" onclick="filterTag('Other', this)">기타</div>
-            </div>
-        </div>
+        <div id="success-notice">✓ 인증이 완료되었습니다. 이동이 가능합니다!</div>
 
-        <div class="source-grid" id="sourceGrid">
-            <div style="grid-column: 1/-1; text-align:center; padding: 3rem; color:var(--text-muted);">소스를 불러오는 중입니다...</div>
-        </div>
-
-        <div class="ad-banner" id="bottomBannerArea" style="margin-top: 3rem;">
-            📢 [플랫폼 하단 광고 영역]
-        </div>
-    </main>
-
-    <footer>
-        <div class="footer-links">
-            <a onclick="openModal('supportModal')" data-i18n="footer_support">고객센터</a>
-            <a onclick="openModal('siteReviewModal')" style="color:var(--primary); font-weight:800;" data-i18n="footer_review">⭐ 플랫폼 이용후기</a>
-            <a href="https://www.youtube.com/@geko_snake" target="_blank" style="color:#ef4444; font-weight:800;">게코뱀 유튜브</a>
-            <a href="https://www.youtube.com/@%EA%B2%BD%EC%A4%80tv" target="_blank" style="color:#ef4444; font-weight:800;">경준tv 유튜브</a>
-        </div>
-        <div style="font-size:0.85rem; color:var(--text-muted);">&copy; Gekojoon. All rights reserved.</div>
-    </footer>
-
-    <!-- AI 챗봇 모달 -->
-    <div class="ai-modal-overlay" id="gekojoonAiModal" style="display:none;">
-        <div class="ai-modal-card">
-            <div class="ai-modal-header">
-                <h3>⚡ GekoJoonAI 에게 물어보기</h3>
-                <div style="display:flex; gap:8px;">
-                    <button class="btn-secondary" onclick="openUserAiHistoryModal()" style="padding:4px 10px; font-size:0.8rem;">📜 내 기록</button>
-                    <button style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;" onclick="toggleGekojoonAiModal()">&times;</button>
-                </div>
-            </div>
-            <div class="ai-chat-body" id="gekojoonAiChatBody">
-                <div class="ai-msg bot">
-                    <div class="ai-avatar">🤖</div>
-                    <div class="ai-bubble">안녕하세요! 무엇을 도와드릴까요?</div>
-                </div>
-            </div>
-            <div class="ai-input-area">
-                <input type="text" id="gekojoonAiInput" placeholder="메시지를 입력하세요..." onkeydown="handleAiInputKeyDown(event)">
-                <button class="btn" onclick="sendGekojoonAiMessage()">전송</button>
-            </div>
+        <div class="button-group">
+            <!-- 초기에는 비활성화된 버튼 -->
+            <a id="btn-kyungjun" href="https://youtube.com/@경준tv" target="_blank" class="btn btn-youtube">
+                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                경준tv 바로가기
+            </a>
+            <a id="btn-geko" href="https://youtube.com/@geko_snake" target="_blank" class="btn btn-sub">
+                <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                게코뱀 바로가기
+            </a>
         </div>
     </div>
 
-    <!-- AI 기록 모달 -->
-    <div class="modal" id="userAiHistoryModal" style="z-index: 25000;">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('userAiHistoryModal')">&times;</button>
-            <h2>📜 내 AI 대화 기록</h2>
-            <div id="userAiHistoryContainer" style="margin-top:1rem; max-height:350px; overflow-y:auto;">로딩 중...</div>
-        </div>
-    </div>
-
-    <!-- 이용후기 모달 -->
-    <div class="modal" id="siteReviewModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('siteReviewModal')">&times;</button>
-            <h2>⭐ 플랫폼 이용후기</h2>
-            <form onsubmit="submitSiteReview(event)" style="margin-top:12px;">
-                <select id="siteReviewRating" class="form-control">
-                    <option value="5">⭐⭐⭐⭐⭐ (5점)</option>
-                    <option value="4">⭐⭐⭐⭐ (4점)</option>
-                    <option value="3">⭐⭐⭐ (3점)</option>
-                    <option value="2">⭐⭐ (2점)</option>
-                    <option value="1">⭐ (1점)</option>
-                </select>
-                <textarea id="siteReviewComment" class="form-control" placeholder="후기를 남겨주세요." required style="margin-top:10px;"></textarea>
-                <button type="submit" class="btn" style="margin-top:10px; width:100%;">등록</button>
-            </form>
-            <div id="siteReviewsList" style="margin-top:15px; max-height:220px; overflow-y:auto;"></div>
-        </div>
-    </div>
-
-    <!-- 소스 상세 모달 -->
-    <div class="modal" id="detailModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('detailModal')">&times;</button>
-            <div id="detailIcon" style="font-size:3rem; text-align:center;"></div>
-            <h2 id="detailTitle" style="text-align:center; margin-top:8px;"></h2>
-            <div style="text-align:center; margin-top:6px;">
-                <span id="detailTypeBadge" class="source-type-badge"></span>
-                <span id="detailTagBadge" class="source-tag-badge"></span>
-            </div>
-            <p id="detailDesc" style="margin-top:15px; line-height:1.6; color:var(--text-muted);"></p>
-            <div id="contentSection" style="margin-top:15px;"></div>
-        </div>
-    </div>
-
-    <!-- 마이페이지 모달 -->
-    <div class="modal" id="myPageModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('myPageModal')">&times;</button>
-            <h2>👤 마이페이지</h2>
-            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin:15px 0; text-align:center;">
-                <div style="background:var(--bg-color); padding:12px; border-radius:12px; border:1px solid var(--border-color);">
-                    <b>예상 수익</b><div id="myTotalRevenue" style="color:#2563eb; font-size:1.2rem; font-weight:800; margin-top:4px;">0원</div>
-                </div>
-                <div style="background:var(--bg-color); padding:12px; border-radius:12px; border:1px solid var(--border-color);">
-                    <b>총 조회수</b><div id="myTotalViews" style="color:#059669; font-size:1.2rem; font-weight:800; margin-top:4px;">0회</div>
-                </div>
-                <div style="background:var(--bg-color); padding:12px; border-radius:12px; border:1px solid var(--border-color);">
-                    <b>총 소스 수</b><div id="myTotalDownloads" style="color:#7c3aed; font-size:1.2rem; font-weight:800; margin-top:4px;">0개</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 로그인 모달 -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('loginModal')">&times;</button>
-            <h2 style="margin-bottom:15px;">로그인</h2>
-            <button onclick="loginWithGoogle()" class="btn-secondary" style="width:100%; padding:10px; font-weight:700; margin-bottom:15px;">🌐 Google 계정으로 로그인</button>
-            <form onsubmit="handleEmailLogin(event)">
-                <div class="form-group"><label>이메일</label><input type="email" id="loginEmail" class="form-control" required></div>
-                <div class="form-group"><label>비밀번호</label><input type="password" id="loginPassword" class="form-control" required></div>
-                <button type="submit" class="btn" style="width:100%;">로그인 / 회원가입</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- 소스 등록 및 수정 모달 -->
-    <div class="modal" id="submitModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('submitModal')">&times;</button>
-            <h2 id="submitModalHeaderTitle">🚀 소스 등록</h2>
-            <form onsubmit="handleUserSubmitGame(event)" style="margin-top:15px;">
-                <input type="hidden" id="editingSourceId" value="">
-                <div class="form-group"><label>작성자</label><input type="text" id="subAuthor" class="form-control" readonly></div>
-                <div class="form-group"><label>아이콘 이모지</label><input type="text" id="subIcon" class="form-control" value="📦"></div>
-                <div class="form-group"><label>제목</label><input type="text" id="subTitle" class="form-control" required></div>
-                <div class="form-group"><label>유형</label>
-                    <select id="subContentType" class="form-control">
-                        <option value="code">💻 코드 스니펫</option>
-                        <option value="file">📁 파일 에셋</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>태그</label>
-                    <select id="subTag" class="form-control">
-                        <option value="Python">Python</option><option value="JavaScript">JavaScript</option><option value="React">React</option><option value="HTML/CSS">HTML/CSS</option><option value="Design">디자인 에셋</option><option value="Utility">유틸리티</option><option value="Other" selected>기타</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>설명</label><textarea id="subDesc" class="form-control"></textarea></div>
-                <div class="form-group"><label>코드 본문</label><textarea id="subHtml" class="form-control"></textarea></div>
-                <button type="submit" class="btn" style="width:100%; padding:12px;">제출하기</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- 관리자 인증 및 대시보드 모달 -->
-    <div class="modal" id="adminLoginModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('adminLoginModal')">&times;</button>
-            <h2>⚙️ 관리자 인증</h2>
-            <button onclick="verifyAdminAccess()" class="btn" style="width:100%; margin-top:15px;">관리자 모드 접속</button>
-        </div>
-    </div>
-
-    <div class="modal" id="adminDashboardModal">
-        <div class="modal-content" style="max-width:1100px;">
-            <button class="close-btn" onclick="closeModal('adminDashboardModal')">&times;</button>
-            <h2>⚙️ 최고 관리자 통합 제어 센터</h2>
-            <div style="display:flex; gap:8px; margin-top:1rem; border-bottom:1px solid var(--border-color); padding-bottom:8px; overflow-x:auto;">
-                <button class="btn" onclick="switchAdminTab('sources')">📌 소스 승인/관리</button>
-                <button class="btn-secondary" onclick="switchAdminTab('users')">👥 회원 관리</button>
-                <button class="btn-secondary" onclick="switchAdminTab('visitors')">📊 방문자 IP 추적</button>
-                <button class="btn-secondary" onclick="switchAdminTab('ai')">🤖 AI 로그</button>
-                <button class="btn-secondary" onclick="switchAdminTab('support')">💬 고객센터 및 답장</button>
-            </div>
-            <div id="adminTabContent" style="margin-top:1.5rem;">로딩 중...</div>
-        </div>
-    </div>
-
-    <!-- 고객센터 모달 -->
-    <div class="modal" id="supportModal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('supportModal')">&times;</button>
-            <h2>💬 고객센터</h2>
-            <form onsubmit="handleSupportSubmit(event)" style="margin-top:15px;">
-                <div class="form-group"><label>작성자 이름</label><input type="text" id="supAuthor" class="form-control" required></div>
-                <div class="form-group"><label>문의 내용</label><textarea id="supContent" class="form-control" required></textarea></div>
-                <button type="submit" class="btn" style="width:100%;">접수하기</button>
-            </form>
-        </div>
-    </div>
-
-    <button type="button" class="ai-floating-trigger" onclick="toggleGekojoonAiModal()">⚡ AI</button>
-
+    <!-- 인증 성공 시 버튼을 활성화하는 함수 -->
     <script>
-        let currentLang = 'KO';
-        let isDarkMode = false;
-        const GEKOJOON_GEMINI_KEY = "AQ.Ab8RN6JrwfslGF2YXUt4wuRHYU_UmOfF8zgWtJMcyKFbHnSS-Q";
-
-        const translations = {
-            KO: { login: "로그인", logout: "로그아웃", mypage: "👤 마이페이지", contribute: "➕ 소스 기여하기", hero_title: "개발자를 위한 프리미엄 소스 마켓", hero_desc: "파일, 텍스트 스니펫, 코드 등 다양한 에셋을 공유하고 광고 수익을 5:5로 공정하게 정산받으세요.", hero_btn: "🚀 내 소스 등록하고 수익 창출", section_title: "🔥 공유된 소스 및 에셋 목록", search_ph: "소스, 파일 또는 키워드 검색...", filter_all: "전체 보기", filter_code: "💻 코드 스니펫", filter_file: "📁 파일 에셋", footer_support: "고객센터", footer_review: "⭐ 플랫폼 이용후기" },
-            EN: { login: "Login", logout: "Logout", mypage: "👤 My Page", contribute: "➕ Contribute", hero_title: "Premium Source Market for Developers", hero_desc: "Share files and code assets while earning 5:5 ad revenue shares.", hero_btn: "🚀 Upload Source & Earn", section_title: "🔥 Shared Sources & Assets", search_ph: "Search sources, files...", filter_all: "All", filter_code: "💻 Code", filter_file: "📁 Files", footer_support: "Support Center", footer_review: "⭐ Platform Reviews" }
-        };
-
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            document.body.classList.toggle('dark-mode', isDarkMode);
-            document.getElementById('themeToggleBtn').innerText = isDarkMode ? '🌙' : '🌞';
-            showToast(isDarkMode ? '다크 모드 적용' : '라이트 모드 적용');
+        function onSubmit(token) {
+            console.log("reCAPTCHA Token:", token);
+            
+            // 안내 문구 표시
+            document.getElementById('success-notice').style.display = 'block';
+            
+            // 경준tv 버튼 활성화
+            const btnKyungjun = document.getElementById('btn-kyungjun');
+            btnKyungjun.classList.add('enabled');
+            
+            // 게코뱀 버튼 활성화
+            const btnGeko = document.getElementById('btn-geko');
+            btnGeko.classList.add('enabled');
         }
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'KO' ? 'EN' : 'KO';
-            document.getElementById('langToggleBtn').innerText = currentLang === 'KO' ? '🌐 KO' : '🌐 EN';
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if(translations[currentLang][key]) el.innerText = translations[currentLang][key];
-            });
-            document.querySelectorAll('[data-i18n-ph]').forEach(el => {
-                const key = el.getAttribute('data-i18n-ph');
-                if(translations[currentLang][key]) el.placeholder = translations[currentLang][key];
-            });
-        }
-
-        function showToast(msg) {
-            const container = document.getElementById('toastContainer');
-            if(!container) return;
-            const toast = document.createElement('div');
-            toast.className = 'toast'; toast.innerText = msg;
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 4000);
-        }
-
-        // Firebase 초기화
-        const firebaseConfig = {
-            apiKey: "AIzaSyAo5ETr7hq6HtkmaRfB4LPvARjWiHCRDTQ",
-            authDomain: "gekojoon.firebaseapp.com",
-            projectId: "gekojoon",
-            storageBucket: "gekojoon.firebasestorage.app",
-            messagingSenderId: "222216565551",
-            appId: "1:222216565551:web:db28582ea6428ac52ee7da",
-            measurementId: "G-RFC1EZX9YJ"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        const analytics = firebase.analytics();
-
-        let currentUser = null;
-        let visitorIP = "IP 확인 불가";
-        let estimatedLocation = "Seoul, South Korea";
-        const TARGET_VISITORS = 1000;
-
-        const COLL_SOURCES = "new_sources"; const COLL_PENDING = "new_pending_sources";
-        const COLL_VISITORS = "new_visitors"; const COLL_INQUIRIES = "new_inquiries";
-        const COLL_SITE_REVIEWS = "new_site_reviews"; const COLL_USERS = "new_users";
-        const COLL_AI_LOGS = "new_ai_logs"; const COLL_BANS = "new_banned_ips";
-
-        function getTodayDateStr() {
-            const d = new Date();
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        }
-
-        async function recordAndCheckVisitor() {
-            const todayStr = getTodayDateStr();
-            try {
-                const res = await fetch('https://ipapi.co/json/').catch(() => null);
-                if (res && res.ok) {
-                    const data = await res.json();
-                    visitorIP = data.ip || visitorIP;
-                    if(data.city && data.country_name) estimatedLocation = `${data.city}, ${data.country_name}`;
-                }
-            } catch(e) {}
-
-            if (db && visitorIP !== "IP 확인 불가") {
-                const banCheck = await db.collection(COLL_BANS).doc(visitorIP.replace(/\./g, '_')).get().catch(() => null);
-                if(banCheck && banCheck.exists) {
-                    document.body.innerHTML = `<div style="padding:5rem; text-align:center; color:#ef4444; font-weight:bold; font-size:1.5rem;">🚫 차단된 IP입니다 (${visitorIP}).</div>`;
-                    return;
-                }
-            }
-
-            if (db) {
-                db.collection(COLL_VISITORS).add({ 
-                    ip: visitorIP, location: estimatedLocation, dateStr: todayStr,
-                    userEmail: auth && auth.currentUser ? auth.currentUser.email : '비로그인',
-                    visitedAt: firebase.firestore.FieldValue.serverTimestamp() 
-                }).catch(() => {});
-            }
-            checkVisitorMilestone();
-        }
-        setTimeout(recordAndCheckVisitor, 300);
-
-        function checkVisitorMilestone() {
-            if(!db) return;
-            db.collection(COLL_VISITORS).where("dateStr", "==", getTodayDateStr()).get().then(snap => {
-                const count = snap.size;
-                const topBanner = document.getElementById('topBannerArea');
-                if(topBanner) {
-                    topBanner.innerHTML = count >= TARGET_VISITORS ? `📢 [일일 방문자 1,000명 달성 완료]` : `📢 [일일 방문자 목표 진행 중: ${count}명 / ${TARGET_VISITORS}명]`;
-                }
-            });
-        }
-
-        // 실시간 소스 로드
-        if(db) {
-            db.collection(COLL_SOURCES).onSnapshot((snapshot) => {
-                window.gamesCache = {}; window.allGamesData = [];
-                snapshot.forEach((doc) => {
-                    const game = doc.data(); game.id = doc.id;
-                    window.gamesCache[doc.id] = game; window.allGamesData.push(game);
-                });
-                applyFilterAndSearch();
-            });
-        }
-
-        let currentTypeFilter = 'all'; let currentTagFilter = 'all';
-        function filterType(type, el) { currentTypeFilter = type; document.querySelectorAll('#typeFilters .chip').forEach(c => c.classList.remove('active')); if(el) el.classList.add('active'); applyFilterAndSearch(); }
-        function filterTag(tag, el) { currentTagFilter = tag; document.querySelectorAll('#tagFilters .chip').forEach(c => c.classList.remove('active')); if(el) el.classList.add('active'); applyFilterAndSearch(); }
-        function handleSearchInput() { applyFilterAndSearch(); }
-
-        function applyFilterAndSearch() {
-            const input = document.getElementById('searchInput');
-            const keyword = input ? input.value.trim().toLowerCase() : '';
-            let filtered = window.allGamesData || [];
-            if(currentTypeFilter !== 'all') filtered = filtered.filter(g => g && g.contentType === currentTypeFilter);
-            if(currentTagFilter !== 'all') filtered = filtered.filter(g => g && (g.tag || 'Other') === currentTagFilter);
-            if(keyword) filtered = filtered.filter(g => g && (((g.title||'').toLowerCase().includes(keyword)) || ((g.desc||'').toLowerCase().includes(keyword))));
-            renderSourceGrid(filtered);
-        }
-
-        function renderSourceGrid(games) {
-            const grid = document.getElementById('sourceGrid');
-            if(!grid) return;
-            grid.innerHTML = (games && games.length > 0) ? '' : '<div style="grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-muted);">등록된 소스가 없습니다.</div>';
-            games.forEach((g) => {
-                const card = document.createElement('div'); card.className = 'source-card';
-                card.onclick = () => openDetailModal(g.id);
-                card.innerHTML = `
-                    <div class="source-header">
-                        <div class="source-icon">${g.icon || '📦'}</div>
-                        <div class="source-meta">
-                            <div class="source-title">${g.title}</div>
-                            <span class="source-type-badge">${g.contentType === 'file' ? '📁 파일' : '💻 코드'}</span>
-                            <span class="source-tag-badge">${g.tag || '기타'}</span>
-                        </div>
-                    </div>
-                    <div class="source-body">
-                        <div class="source-desc">${g.desc || ''}</div>
-                        <div class="source-footer-stats"><span>by ${g.author || '관리자'}</span><span>🔥 ${(g.plays || 0)}회</span></div>
-                    </div>`;
-                grid.appendChild(card);
-            });
-        }
-
-        auth.onAuthStateChanged((user) => {
-            currentUser = user;
-            const authBtn = document.getElementById('authBtn');
-            const myPageBtn = document.getElementById('myPageBtn');
-            const userAuthDisplay = document.getElementById('userAuthDisplay');
-            if (user) {
-                authBtn.innerText = translations[currentLang].logout;
-                myPageBtn.style.display = 'inline-flex';
-                userAuthDisplay.innerText = `${user.displayName || user.email.split('@')[0]}님`;
-                db.collection(COLL_USERS).doc(user.uid).set({ email: user.email, displayName: user.displayName || user.email.split('@')[0], uid: user.uid }, { merge: true });
-            } else {
-                authBtn.innerText = translations[currentLang].login;
-                myPageBtn.style.display = 'none';
-                userAuthDisplay.innerText = '';
-            }
-        });
-
-        // 로그인 및 제출 기능
-        function loginWithGoogle() {
-            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => { showToast('로그인 성공!'); closeModal('loginModal'); });
-        }
-
-        function handleEmailLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const pass = document.getElementById('loginPassword').value;
-            auth.signInWithEmailAndPassword(email, pass).then(() => {
-                showToast('로그인 성공!'); closeModal('loginModal');
-            }).catch(() => {
-                auth.createUserWithEmailAndPassword(email, pass).then(() => {
-                    showToast('회원가입 완료 및 로그인!'); closeModal('loginModal');
-                }).catch(err => showToast('오류: ' + err.message));
-            });
-        }
-
-        function handleUserSubmitGame(e) {
-            e.preventDefault();
-            if (!currentUser) return showToast('로그인 필요');
-
-            const editId = document.getElementById('editingSourceId').value;
-            const title = document.getElementById('subTitle').value;
-            const icon = document.getElementById('subIcon').value || '📦';
-            const contentType = document.getElementById('subContentType').value;
-            const tag = document.getElementById('subTag').value;
-            const desc = document.getElementById('subDesc').value;
-            const htmlContent = document.getElementById('subHtml').value;
-
-            if(editId) {
-                db.collection(COLL_SOURCES).doc(editId).update({ title, icon, contentType, tag, desc, htmlContent }).then(() => {
-                    showToast('수정 완료!'); closeModal('submitModal');
-                });
-            } else {
-                db.collection(COLL_PENDING).add({
-                    author: currentUser.displayName || currentUser.email.split('@')[0],
-                    authorEmail: currentUser.email, title, icon, contentType, tag, desc, htmlContent, plays: 0,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    showToast('등록 신청 완료! 관리자 승인 대기'); closeModal('submitModal');
-                });
-            }
-        }
-
-        // 관리자 대시보드
-        function verifyAdminAccess() { closeModal('adminLoginModal'); openModal('adminDashboardModal'); switchAdminTab('sources'); }
-        function switchAdminTab(tab) {
-            const content = document.getElementById('adminTabContent');
-            if(tab === 'sources') {
-                Promise.all([db.collection(COLL_PENDING).get(), db.collection(COLL_SOURCES).get()]).then(([pSnap, sSnap]) => {
-                    let html = `<h3>📌 승인 대기</h3><div class="admin-table-container"><table class="admin-table"><tr><th>제목</th><th>작성자</th><th>관리</th></tr>`;
-                    pSnap.forEach(d => html += `<tr><td>${d.data().title}</td><td>${d.data().author}</td><td><button class="btn" onclick="approveSource('${d.id}')">승인</button></td></tr>`);
-                    html += `</table></div><h3 style="margin-top:1rem;">🔥 게시된 소스</h3><div class="admin-table-container"><table class="admin-table"><tr><th>제목</th><th>작성자</th><th>관리</th></tr>`;
-                    sSnap.forEach(d => html += `<tr><td>${d.data().title}</td><td>${d.data().author}</td><td><button class="btn-danger" onclick="deleteSource('${d.id}')">삭제</button></td></tr>`);
-                    html += `</table></div>`; content.innerHTML = html;
-                });
-            } else if(tab === 'users') {
-                db.collection(COLL_USERS).get().then(snap => {
-                    let html = `<h3>👥 회원 목록</h3><div class="admin-table-container"><table class="admin-table"><tr><th>이메일</th><th>닉네임</th></tr>`;
-                    snap.forEach(d => html += `<tr><td>${d.data().email}</td><td>${d.data().displayName}</td></tr>`);
-                    content.innerHTML = html + `</table></div>`;
-                });
-            } else if(tab === 'visitors') {
-                db.collection(COLL_VISITORS).orderBy("visitedAt", "desc").limit(30).get().then(snap => {
-                    let html = `<h3>📊 방문자 IP</h3><div class="admin-table-container"><table class="admin-table"><tr><th>IP</th><th>위치</th><th>차단</th></tr>`;
-                    snap.forEach(d => html += `<tr><td>${d.data().ip}</td><td>${d.data().location}</td><td><button class="btn-danger" onclick="banIp('${d.data().ip}')">IP차단</button></td></tr>`);
-                    content.innerHTML = html + `</table></div>`;
-                });
-            } else if(tab === 'ai') {
-                db.collection(COLL_AI_LOGS).orderBy("timestamp", "desc").limit(20).get().then(snap => {
-                    let html = `<h3>🤖 AI 로그</h3><div class="admin-table-container"><table class="admin-table"><tr><th>사용자</th><th>질문</th></tr>`;
-                    snap.forEach(d => html += `<tr><td>${d.data().userEmail}</td><td>${d.data().userText}</td></tr>`);
-                    content.innerHTML = html + `</table></div>`;
-                });
-            } else if(tab === 'support') {
-                db.collection(COLL_INQUIRIES).get().then(snap => {
-                    let html = `<h3>💬 고객센터 문의</h3>`;
-                    snap.forEach(d => html += `<div style="background:var(--bg-color); padding:10px; border-radius:8px; margin-bottom:8px;"><b>${d.data().author}:</b> ${d.data().content}</div>`);
-                    content.innerHTML = html;
-                });
-            }
-        }
-
-        function approveSource(id) {
-            db.collection(COLL_PENDING).doc(id).get().then(doc => {
-                if(doc.exists) { db.collection(COLL_SOURCES).add(doc.data()).then(() => { db.collection(COLL_PENDING).doc(id).delete(); switchAdminTab('sources'); showToast('승인 완료'); }); }
-            });
-        }
-        function deleteSource(id) { db.collection(COLL_SOURCES).doc(id).delete().then(() => { switchAdminTab('sources'); showToast('삭제 완료'); }); }
-        function banIp(ip) { db.collection(COLL_BANS).doc(ip.replace(/\./g, '_')).set({ip}).then(() => showToast('IP 차단 완료')); }
-
-        // AI 챗봇 연동
-        function toggleGekojoonAiModal() { const m = document.getElementById('gekojoonAiModal'); m.style.display = m.style.display === 'none' ? 'flex' : 'none'; }
-        function openUserAiHistoryModal() { openModal('userAiHistoryModal'); db.collection(COLL_AI_LOGS).where("userEmail", "==", currentUser ? currentUser.email : '').get().then(s => {
-            let html = ''; s.forEach(d => html += `<div>Q: ${d.data().userText}</div>`); document.getElementById('userAiHistoryContainer').innerHTML = html || '기록 없음';
-        }); }
-
-        async function sendGekojoonAiMessage() {
-            const txt = document.getElementById('gekojoonAiInput').value; if(!txt) return;
-            const body = document.getElementById('gekojoonAiChatBody');
-            body.innerHTML += `<div class="ai-msg user"><div class="ai-bubble">${txt}</div></div>`;
-            document.getElementById('gekojoonAiInput').value = '';
-
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEKOJOON_GEMINI_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: txt }] }] })
-                });
-                if(res.ok) {
-                    const data = await res.json();
-                    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '응답을 받지 못했습니다.';
-                    body.innerHTML += `<div class="ai-msg bot"><div class="ai-avatar">🤖</div><div class="ai-bubble">${reply}</div></div>`;
-                    if(db && currentUser) {
-                        db.collection(COLL_AI_LOGS).add({ userEmail: currentUser.email, userText: txt, aiReply: reply, modelUsed: 'gemini-1.5-flash', timestamp: firebase.firestore.FieldValue.serverTimestamp() });
-                    }
-                } else {
-                    body.innerHTML += `<div class="ai-msg bot"><div class="ai-avatar">🤖</div><div class="ai-bubble">API 통신 오류가 발생했습니다.</div></div>`;
-                }
-            } catch(e) {
-                body.innerHTML += `<div class="ai-msg bot"><div class="ai-avatar">🤖</div><div class="ai-bubble">오류: ${e.message}</div></div>`;
-            }
-            body.scrollTop = body.scrollHeight;
-        }
-
-        function handleAiInputKeyDown(e) { if(e.key === 'Enter') sendGekojoonAiMessage(); }
-
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function handleAuthAction() { if(currentUser) auth.signOut().then(() => showToast('로그아웃')); else openModal('loginModal'); }
-        function checkAuthAndOpenSubmit() { if(currentUser) { document.getElementById('editingSourceId').value=''; openModal('submitModal'); } else openModal('loginModal'); }
-        function openMyPage() { openModal('myPageModal'); }
-        function openDetailModal(id) {
-            const g = window.gamesCache[id]; if(!g) return;
-            document.getElementById('detailTitle').innerText = g.title;
-            document.getElementById('detailDesc').innerText = g.desc;
-            const contentSec = document.getElementById('contentSection');
-            contentSec.innerHTML = g.htmlContent ? `<textarea class="form-control" style="min-height:120px;" readonly>${g.htmlContent}</textarea>` : '';
-            openModal('detailModal');
-        }
-        function submitSiteReview(e) { e.preventDefault(); showToast('이용후기 등록 완료'); closeModal('siteReviewModal'); }
-        function handleSupportSubmit(e) { e.preventDefault(); showToast('문의 접수 완료'); closeModal('supportModal'); }
     </script>
 </body>
 </html>
