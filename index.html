@@ -7,7 +7,7 @@
     <!-- 구글 폰트 (Inter) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- 구글 공식 reCAPTCHA v2 스크립트 추가 -->
+    <!-- 구글 공식 reCAPTCHA v2 스크립트 -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <style>
@@ -163,9 +163,9 @@
         <h1 class="error-code">404</h1>
         <p class="error-message">페이지를 이용하시려면 아래 보안 인증을 완료해 주세요.</p>
 
-        <!-- 방금 발급받은 사이트 키가 적용된 구글 리캡쳐 위젯 -->
+        <!-- 회원님이 알려주신 사이트 키 적용 -->
         <div class="recaptcha-wrapper">
-            <div class="g-recaptcha" data-sitekey="6LczOLQTAAAANU6e49GKtfg6SxzR-a2p8jsQnze" data-callback="verifyCallback"></div>
+            <div class="g-recaptcha" data-sitekey="6LczOLQtAAAAANU6e49GKtfg6SxzR-a2p8jsQnze" data-callback="verifyCallback"></div>
         </div>
 
         <div id="success-notice">✓ 인증이 완료되었습니다. 이동이 가능합니다!</div>
@@ -182,17 +182,12 @@
         </div>
     </div>
 
-    <!-- reCAPTCHA v2 인증 성공 시 호출되는 콜백 함수 -->
+    <!-- 인증 성공 시 호출되는 콜백 함수 -->
     <script>
         function verifyCallback(response) {
             if (response) {
-                // 성공 문구 표시
                 document.getElementById('success-notice').style.display = 'block';
-                
-                // 경준tv 버튼 활성화
                 document.getElementById('btn-kyungjun').classList.add('enabled');
-                
-                // 게코뱀 버튼 활성화
                 document.getElementById('btn-geko').classList.add('enabled');
             }
         }
