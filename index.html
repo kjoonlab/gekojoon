@@ -99,7 +99,7 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
 <textarea id="gekojoonAiInput" placeholder="질문하거나 '그려줘', '이미지 만들어줘'라고 말씀해 보세요..." rows="1" onkeydown="handleAiInputKeyDown(event)"></textarea><button type="button" id="gekojoonAiSendBtn" onclick="sendGekojoonAiMessage()">전송</button></div></div></div>
 <!-- 우측 하단 AI 플로팅 버튼 --><button type="button" class="ai-floating-trigger" onclick="toggleGekojoonAiModal()" title="게코준 AI 호출 (Cmd/Ctrl + 1)">⚡ AI</button>
 
-<!-- 최상단 커스텀 알림/확인/프롬프트 팝업 컨테이너 및 스크립트 -->
+<!-- 최상단 커스텀 알림/확인/프롬프트 팝업 컨테이너 -->
 <div class="modal" id="customPopupModal" style="z-index: 20000; align-items: flex-start; padding-top: 80px;">
   <div class="modal-content" style="max-width: 440px; text-align: center; animation: modalSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);">
     <h3 id="customPopupTitle" style="font-size: 1.2rem; font-weight: 900; margin-bottom: 0.8rem; color: #0f172a;">알림</h3>
@@ -114,7 +114,7 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
   </div>
 </div>
 
-<!-- Firebase 모듈러 초기화 및 브리지 스크립트 -->
+<!-- Firebase 모듈러 SDK 초기화 및 브리지 스크립트 -->
 <script type="module">
   import { initializeApp } from "firebase/app";
   import { getAnalytics } from "firebase/analytics";
@@ -138,7 +138,14 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
   const dbInstance = getFirestore(app);
   const storageInstance = getStorage(app);
 
-  // 전역 브리지 객체 설정 (기존 소스코드와의 호환성 유지)
+  // 모듈러 Firebase User 객체에 updateProfile / updatePassword 호환 메서드 부착
+  function wrapUser(user) {
+    if (!user) return null;
+    user.updateProfile = (profileData) => updateProfile(user, profileData);
+    user.updatePassword = (newPassword) => updatePassword(user, newPassword);
+    return user;
+  }
+
   window.firebase = {
     apps: [app],
     initializeApp: () => app,
@@ -159,11 +166,11 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
   };
 
   window.auth = {
-    currentUser: null,
-    onAuthStateChanged: (cb) => onAuthStateChanged(authInstance, (user) => { window.auth.currentUser = user; cb(user); }),
-    signInWithPopup: (provider) => signInWithPopup(authInstance, provider),
-    signInWithEmailAndPassword: (email, pass) => signInWithEmailAndPassword(authInstance, email, pass),
-    createUserWithEmailAndPassword: (email, pass) => createUserWithEmailAndPassword(authInstance, email, pass),
+    get currentUser() { return wrapUser(authInstance.currentUser); },
+    onAuthStateChanged: (cb) => onAuthStateChanged(authInstance, (user) => { cb(wrapUser(user)); }),
+    signInWithPopup: (provider) => signInWithPopup(authInstance, provider).then(res => { res.user = wrapUser(res.user); return res; }),
+    signInWithEmailAndPassword: (email, pass) => signInWithEmailAndPassword(authInstance, email, pass).then(res => { res.user = wrapUser(res.user); return res; }),
+    createUserWithEmailAndPassword: (email, pass) => createUserWithEmailAndPassword(authInstance, email, pass).then(res => { res.user = wrapUser(res.user); return res; }),
     signOut: () => signOut(authInstance)
   };
 
@@ -326,17 +333,30 @@ function fallbackCopyText(text) {if (navigator.clipboard && navigator.clipboard.
 function execFallback(text) {const textArea = document.createElement("textarea");textArea.value = text;textArea.style.position = "fixed";document.body.appendChild(textArea);textArea.focus();textArea.select();try { document.execCommand('copy'); } catch (err) {}textArea.remove();}
 
 let db = null, auth = null, storage = null, analytics = null;
+
+// Firebase 로드 완료 시그널 수신 및 데이터 로더(불러오기) 초기화
 window.addEventListener('firebase-loaded', () => {
   db = window.db;
   auth = window.auth;
   storage = window.storage;
   analytics = window.analytics;
+
+  // 데이터 불러오기 실시간 리스너 연결
+  if(db) {
+    db.collection(COLL_SOURCES).onSnapshot((snapshot) => {
+      window.gamesCache = {}; 
+      window.allGamesData = [];
+      snapshot.forEach((doc) => {
+        const game = doc.data(); 
+        game.id = doc.id;
+        window.gamesCache[doc.id] = game; 
+        window.allGamesData.push(game);
+      });
+      window.allGamesData.sort((a, b) => (b.plays || 0) - (a.plays || 0));
+      applyFilterAndSearch();
+    }, (err) => console.error("Sources error:", err));
+  }
 });
-setTimeout(() => {
-  if(!db && window.db) db = window.db;
-  if(!auth && window.auth) auth = window.auth;
-  if(!storage && window.storage) storage = window.storage;
-}, 500);
 
 window.gamesCache = {}; window.allGamesData = [];let currentTypeFilter = 'all'; let currentTagFilter = 'all';let currentUser = null; let visitorIP = "IP 확인 불가";let activePlayingGameId = null; let searchDebounceTimer = null;let dmUnreadListener = null;
 const TARGET_VISITORS = 1000;let isAdAndRevenueActive = false;
@@ -358,8 +378,34 @@ if(isAdAndRevenueActive) {if(topBanner) topBanner.innerHTML = `📢 [Gekojoon HU
 
 function syncUserRecord(user, extraPass = "") {if (!db || !user) return;const ref = db.collection(COLL_USERS).doc(user.uid);ref.get().then(doc => {const data = {uid: user.uid,email: user.email || "",displayName: user.displayName || user.email.split('@')[0],updatedAt: firebase.firestore.FieldValue.serverTimestamp()};if (extraPass) data.setPass = extraPass;if (!doc.exists) {data.createdAt = firebase.firestore.FieldValue.serverTimestamp();ref.set(data);} else {ref.update(data);if(doc.data() && doc.data().warningReport) {showToast(`🚨 경고 메시지: ${doc.data().warningReport}`);}}}).catch(() => {});}
 
-if (auth) {auth.onAuthStateChanged((user) => {currentUser = user;const authBtn = document.getElementById('authBtn');const myPageBtn = document.getElementById('myPageBtn');const userDmBtn = document.getElementById('userDmBtn');const userAuthDisplay = document.getElementById('userAuthDisplay');
-if (user) {if(authBtn) { authBtn.innerText = '로그아웃'; authBtn.className = 'btn-secondary'; }if(myPageBtn) myPageBtn.style.display = 'inline-flex';if(userDmBtn) userDmBtn.style.display = 'inline-flex';if(userAuthDisplay) userAuthDisplay.innerText = `${user.displayName || user.email.split('@')[0]}님`;syncUserRecord(user);checkUnreadLetters();checkUnreadDms();} else {if(authBtn) { authBtn.innerText = '로그인'; authBtn.className = 'btn'; }if(myPageBtn) myPageBtn.style.display = 'none';if(userDmBtn) userDmBtn.style.display = 'none';if(userAuthDisplay) userAuthDisplay.innerText = '';if(dmUnreadListener) { dmUnreadListener(); dmUnreadListener = null; }}});}
+// 인증 상태 변화 감지 및 UI 바인딩
+setTimeout(() => {
+  if (auth) {
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      const authBtn = document.getElementById('authBtn');
+      const myPageBtn = document.getElementById('myPageBtn');
+      const userDmBtn = document.getElementById('userDmBtn');
+      const userAuthDisplay = document.getElementById('userAuthDisplay');
+
+      if (user) {
+        if(authBtn) { authBtn.innerText = '로그아웃'; authBtn.className = 'btn-secondary'; }
+        if(myPageBtn) myPageBtn.style.display = 'inline-flex';
+        if(userDmBtn) userDmBtn.style.display = 'inline-flex';
+        if(userAuthDisplay) userAuthDisplay.innerText = `${user.displayName || user.email.split('@')[0]}님`;
+        syncUserRecord(user);
+        checkUnreadLetters();
+        checkUnreadDms();
+      } else {
+        if(authBtn) { authBtn.innerText = '로그인'; authBtn.className = 'btn'; }
+        if(myPageBtn) myPageBtn.style.display = 'none';
+        if(userDmBtn) myPageBtn.style.display = 'none';
+        if(userAuthDisplay) userAuthDisplay.innerText = '';
+        if(dmUnreadListener) { dmUnreadListener(); dmUnreadListener = null; }
+      }
+    });
+  }
+}, 500);
 
 function checkUnreadLetters() {if(!db || !currentUser) return;db.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {let unreadCount = 0;snap.forEach(doc => { if(!doc.data().read) unreadCount++; });const badge = document.getElementById('unreadBadge');if(badge) {if(unreadCount > 0) {badge.innerText = unreadCount;badge.style.display = 'inline-block';} else {badge.style.display = 'none';}}}).catch(() => {});}
 function checkUnreadDms() {if(!db || !currentUser) return;if(dmUnreadListener) dmUnreadListener();
@@ -370,16 +416,21 @@ if(!loginForm || !signupForm || !resetForm) return;
 loginForm.style.display = 'none';signupForm.style.display = 'none';resetForm.style.display = 'none';googleBtn.style.display = 'flex';forgotLink.style.display = 'inline-block';
 document.getElementById('resetStep1').style.display = 'block';document.getElementById('resetStep2').style.display = 'none';
 if (view === 'login') {title.innerText = '로그인';loginForm.style.display = 'block';toggleText.innerText = '계정이 없으신가요?';toggleBtn.innerText = '회원가입';toggleBtn.setAttribute('onclick', "setAuthView('signup')");} else if (view === 'signup') {title.innerText = '전용 회원가입';signupForm.style.display = 'block';forgotLink.style.display = 'none';toggleText.innerText = '이미 계정이 있으신가요?';toggleBtn.innerText = '로그인';toggleBtn.setAttribute('onclick', "setAuthView('login')");document.getElementById('signupStep1').style.display = 'block';document.getElementById('signupStep2').style.display = 'none';} else if (view === 'reset') {title.innerText = '비밀번호 찾기 (인증번호)';resetForm.style.display = 'block';googleBtn.style.display = 'none';forgotLink.style.display = 'none';toggleText.innerText = '기억나셨나요?';toggleBtn.innerText = '로그인';toggleBtn.setAttribute('onclick', "setAuthView('login')");}}
+
 function loginWithGoogle() {if (!auth) return showToast('Firebase 인증 시스템이 연결되지 않았습니다.');auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((res) => {closeModal('loginModal');syncUserRecord(res.user);showToast(`${res.user.displayName || '회원'}님 환영합니다!`);}).catch(err => showToast(getFriendlyAuthError(err)));}
+
 function handleEmailLogin(e) {e.preventDefault();if(!auth) return showToast('Firebase 인증 시스템이 연결되지 않았습니다.');const email = document.getElementById('loginEmail').value.trim();const pass = document.getElementById('loginPassword').value;
 auth.signInWithEmailAndPassword(email, pass).then((res) => {closeModal('loginModal');syncUserRecord(res.user, pass);showToast(`환영합니다!`);}).catch(err => showToast(getFriendlyAuthError(err)));}
+
 let generatedSignupOtp = "";let signupPendingData = { nickname: '', email: '', password: '' };
 function sendSignupOtpCode() {const nickname = document.getElementById('signupNickname').value.trim();const email = document.getElementById('signupEmail').value.trim();const password = document.getElementById('signupPassword').value;
 if(!nickname) return showToast('닉네임을 입력해주세요.');if(!email) return showToast('이메일을 입력해주세요.');if(!password || password.length < 6) return showToast('비밀번호는 최소 6자 이상이어야 합니다.');
 signupPendingData = { nickname, email, password };generatedSignupOtp = Math.floor(100000 + Math.random() * 900000).toString();showToast('인증번호 발송 중...');
 emailjs.send("service_udgdg1y", "template_ax6m1qi", {to_email: email,to_name: nickname,otp_code: generatedSignupOtp}).then(() => {showToast('6자리 인증번호가 이메일로 발송되었습니다!');document.getElementById('signupStep1').style.display = 'none';document.getElementById('signupStep2').style.display = 'block';}).catch(() => {showToast('메일 발송 실패: 이메일 주소를 올바르게 입력했는지 확인해주세요.');});}
+
 function verifySignupOtpAndRegister() {const userOtp = document.getElementById('signupOtpInput').value.trim();if(!userOtp) return showToast('인증번호를 입력해주세요.');if(userOtp !== generatedSignupOtp) return showToast('인증번호가 일치하지 않습니다.');if(!auth) return showToast('Firebase 인증 시스템이 연결되지 않았습니다.');
 showToast('회원가입 진행 중...');auth.createUserWithEmailAndPassword(signupPendingData.email, signupPendingData.password).then((res) => res.user.updateProfile({ displayName: signupPendingData.nickname }).then(() => {closeModal('loginModal');syncUserRecord(res.user, signupPendingData.password);showToast(`${signupPendingData.nickname}님 회원가입이 완료되었습니다!`);document.getElementById('emailSignupForm').reset();document.getElementById('signupStep1').style.display = 'block';document.getElementById('signupStep2').style.display = 'none';})).catch(err => showToast(getFriendlyAuthError(err)));}
+
 let generatedOtp = "";let targetResetEmail = "";
 function sendOtpCode() {const email = document.getElementById('resetEmail').value.trim();if(!email) return showToast('가입 이메일을 입력해주세요.');targetResetEmail = email;generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();showToast('인증번호 발송 중...');
 emailjs.send("service_udgdg1y", "template_ax6m1qi", {to_email: email,to_name: email.split('@')[0],otp_code: generatedOtp}).then(() => {showToast('6자리 인증번호가 이메일로 발송되었습니다!');document.getElementById('resetStep1').style.display = 'none';document.getElementById('resetStep2').style.display = 'block';}).catch(() => {showToast('메일 발송 실패: EmailJS 설정을 확인해주세요.');});}
@@ -421,9 +472,6 @@ function loadUserLetters() {if(!db || !currentUser) return;const lettersEl = doc
 db.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {if(snap.empty) {lettersEl.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">받은 편지나 고객센터 답변이 없습니다.</div>';return;}let html = '';snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '';html += `<div class="letter-item ${d.read ? '' : 'unread'}"><div class="letter-header"><span>💌 ${d.title || '운영진 메시지'} (보낸이: ${d.sender || '관리자'})</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">${dateStr}</span></div><div class="letter-body">${d.content}</div></div>`;if(!d.read) {db.collection(COLL_LETTERS).doc(doc.id).update({ read: true }).catch(() => {});}});lettersEl.innerHTML = html;checkUnreadLetters();}).catch(() => {});}
 function updateMyNickname() {if(!currentUser) return showToast('로그인이 필요합니다.');const newName = document.getElementById('myPageNicknameInput').value.trim();if(!newName) return showToast('변경할 닉네임을 입력해주세요.');currentUser.updateProfile({ displayName: newName }).then(() => {showToast('닉네임 변경 완료!');syncUserRecord(currentUser);const authDisp = document.getElementById('userAuthDisplay');if(authDisp) authDisp.innerText = `${newName}님`;}).catch(err => showToast(getFriendlyAuthError(err)));}
 function updateMyPassword() {if(!currentUser) return showToast('로그인이 필요합니다.');const newPass = document.getElementById('myPagePasswordInput').value;if(!newPass || newPass.length < 6) return showToast('비밀번호는 최소 6자 이상이어야 합니다.');currentUser.updatePassword(newPass).then(() => {showToast('비밀번호가 성공적으로 변경되었습니다!');syncUserRecord(currentUser, newPass);document.getElementById('myPagePasswordInput').value = '';}).catch(err => {if(err.code === 'auth/requires-recent-login') {showToast('보안을 위해 다시 로그인한 후 비밀번호를 설정해주세요.');} else {showToast(getFriendlyAuthError(err));}});}
-
-if(db) {db.collection(COLL_SOURCES).onSnapshot((snapshot) => {window.gamesCache = {}; window.allGamesData = [];snapshot.forEach((doc) => {const game = doc.data(); game.id = doc.id;window.gamesCache[doc.id] = game; window.allGamesData.push(game);});window.allGamesData.sort((a, b) => (b.plays || 0) - (a.plays || 0));applyFilterAndSearch();}, (err) => console.error("Sources error:", err));}
-setTimeout(() => {if(!db && window.db) {window.db.collection(COLL_SOURCES).onSnapshot((snapshot) => {window.gamesCache = {}; window.allGamesData = [];snapshot.forEach((doc) => {const game = doc.data(); game.id = doc.id;window.gamesCache[doc.id] = game; window.allGamesData.push(game);});window.allGamesData.sort((a, b) => (b.plays || 0) - (a.plays || 0));applyFilterAndSearch();});}}, 1000);
 
 function filterType(type, el) {currentTypeFilter = type;document.querySelectorAll('#typeFilters .chip').forEach(c => c.classList.remove('active'));if(el) el.classList.add('active');applyFilterAndSearch();}function filterTag(tag, el) {currentTagFilter = tag;document.querySelectorAll('#tagFilters .chip').forEach(c => c.classList.remove('active'));if(el) el.classList.add('active');applyFilterAndSearch();}
 function handleSearchInput() {clearTimeout(searchDebounceTimer);const keyword = document.getElementById('searchInput').value.trim();const clearBtn = document.getElementById('clearSearchBtn');if(clearBtn) clearBtn.style.display = keyword ? 'flex' : 'none';searchDebounceTimer = setTimeout(() => {applyFilterAndSearch();const dropdown = document.getElementById('searchDropdown');if(!dropdown) return;if(keyword.length > 0) {const lower = keyword.toLowerCase();const filtered = (window.allGamesData || []).filter(g => g && (g.title || '').toLowerCase().includes(lower));if(filtered.length > 0) {dropdown.innerHTML = filtered.slice(0,5).map(i => `<div class="search-dropdown-item" onclick="selectSearchDropdownItem('${i.id}', '${escapeJsStr(i.title)}')"><span>${i.icon||'🆕'}</span> <b>${i.title||''}</b></div>`).join('');dropdown.style.display = 'block';} else dropdown.style.display = 'none';} else dropdown.style.display = 'none';}, 300);}
