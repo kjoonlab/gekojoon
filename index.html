@@ -87,7 +87,7 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
 <div id="resetStep2" style="display: none;"><p style="font-size: 0.85rem; color: var(--success); margin-bottom: 1rem; line-height: 1.4;">✅ 인증번호가 발송되었습니다. 메일함에서 6자리 번호를 확인해 입력해주세요.</p><div class="form-group"><label>6자리 인증번호</label><input type="text" id="resetOtpInput" class="form-control" placeholder="예: 123456" maxlength="6" required></div><div class="form-group"><label>새 비밀번호 (6자 이상)</label><input type="password" id="newPasswordInput" class="form-control" minlength="6" required></div><button type="button" class="btn-success" onclick="verifyOtpAndChangePassword()" style="width: 100%; padding: 0.9rem; margin-top: 0.5rem;">비밀번호 변경 완료</button></div></div>
 <div style="margin-top: 1.2rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);"><a href="javascript:void(0);" onclick="setAuthView('reset')" id="forgotPasswordLink" style="color: var(--text-muted); text-decoration: underline;">비밀번호 찾기</a><div><span id="authToggleText">계정이 없으신가요?</span><a href="javascript:void(0);" onclick="setAuthView('signup')" id="authToggleBtn" style="color: var(--primary); font-weight: 700; text-decoration: none; margin-left: 5px;">회원가입</a></div></div></div></div>
 <!-- 모달: 소스 기여하기 --><div class="modal" id="submitModal"><div class="modal-content"><button type="button" class="close-btn" onclick="closeModal('submitModal')">&times;</button><h2>🚀 소스 및 파일 기여 (광고 수익 5:5 정산)</h2><form onsubmit="handleUserSubmitGame(event)" style="margin-top: 1.2rem;"><div style="display:flex; gap:10px;"><div class="form-group" style="flex:1;"><label>닉네임</label><input type="text" id="subAuthor" class="form-control" readonly style="background:#e2e8f0; color:#64748b;"></div><div class="form-group" style="flex:1;"><label>아이콘 이모지</label><input type="text" id="subIcon" class="form-control" value="📦" required maxlength="2"></div></div><div class="form-group"><label>콘텐츠 제목</label><input type="text" id="subTitle" class="form-control" required placeholder="예: 웹 크롤링 파이썬 소스"></div><div style="display:flex; gap:10px;"><div class="form-group" style="flex:1;"><label>유형</label><select id="subContentType" class="form-control" onchange="toggleContentTypeFields(this.value)" required><option value="code">💻 코드</option><option value="file">📁 파일</option></select></div><div class="form-group" style="flex:1;"><label>카테고리 태그</label><select id="subTag" class="form-control" required><option value="Python">🐍 Python</option><option value="JavaScript">🟨 JavaScript</option><option value="React">⚛️ React</option><option value="HTML/CSS">🌐 HTML/CSS</option><option value="Design">🎨 디자인</option><option value="Utility">🛠️ 유틸리티</option><option value="Other" selected>기타</option></select></div></div><div class="form-group"><label>상세 설명</label><textarea id="subDesc" class="form-control" required style="min-height: 80px;"></textarea></div><div class="form-group" id="groupCode"><label>소스코드 내용</label><textarea id="subHtml" class="form-control" style="min-height: 150px;"></textarea></div><div class="form-group" id="groupFile" style="display:none;"><label>파일 선택 (이미지 .jpg/.png, 문서 등)</label><input type="file" id="subFileInput" class="form-control" style="padding: 0.6rem;"></div><button type="submit" id="submitBtn" style="width: 100%; padding: 0.9rem; margin-top: 0.5rem; border-radius: 12px;">등록 요청하기</button></form></div></div>
-<!-- 모달: 관리자 패널 로그인 --><div class="modal" id="adminLoginModal"><div class="modal-content" style="max-width: 400px; text-align: center;"><button type="button" class="close-btn" onclick="closeModal('adminLoginModal')">&times;</button><h2>관리자 패널</h2><p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.2rem;">로그인된 계정 및 관리자 권한을 확인합니다.</p><button type="button" onclick="verifyAdminAccess()" style="width: 100%; padding: 1rem; background: #4285F4; color: #fff; border-radius: 10px; font-top: 0.5rem;">관리자 확인</button></div></div>
+<!-- 모달: 관리자 패널 로그인 --><div class="modal" id="adminLoginModal"><div class="modal-content" style="max-width: 400px; text-align: center;"><button type="button" class="close-btn" onclick="closeModal('adminLoginModal')">&times;</button><h2>관리자 패널</h2><p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.2rem;">로그인된 계정 및 관리자 권한을 확인합니다.</p><button type="button" onclick="verifyAdminAccess()" style="width: 100%; padding: 1rem; background: #4285F4; color: #fff; border-radius: 10px; font-weight:700;">관리자 확인</button></div></div>
 <!-- 모달: 통합 관리자 대시보드 --><div class="modal" id="adminDashboardModal"><div class="modal-content" style="max-width: 1000px;"><button type="button" class="close-btn" onclick="closeModal('adminDashboardModal')">&times;</button><h2>⚙️ 관리자 대시보드 (통합 제어 센터)</h2><div id="adminDashboardContent" style="margin-top:1.5rem;"></div></div></div>
 <!-- 모달: AI 대시보드 대화 및 이미지 기록 관제 --><div class="modal" id="aiLogsModal"><div class="modal-content" style="max-width: 850px;"><button type="button" class="close-btn" onclick="closeModal('aiLogsModal')">&times;</button><h2 style="display:flex; align-items:center; gap:8px;">🤖 사용자별 AI 대화 & 이미지 생성 기록 원문 관제</h2><div style="margin-top: 1rem; display: flex; gap: 10px;"><input type="text" id="aiLogSearchInput" class="form-control" placeholder="회원 이메일 또는 질문 키워드 검색..." oninput="renderFilteredAiLogs()"><button type="button" class="btn" onclick="loadAiLogs()" style="white-space:nowrap;">새로고침</button></div><div id="aiLogsContainer" style="margin-top: 1.2rem; max-height: 520px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;"><div style="text-align:center; color:#64748b; padding:2rem;">기록을 불러오는 중...</div></div></div></div>
 <div class="modal" id="reportModal"><div class="modal-content" style="max-width: 450px;"><button type="button" class="close-btn" onclick="closeModal('reportModal')">&times;</button><h2>🚨 소스 신고하기</h2><form onsubmit="submitGameReport(event)" style="margin-top: 1.2rem;"><input type="hidden" id="reportGameId"><div class="form-group"><label>신고 대상</label><input type="text" id="reportGameTitle" class="form-control" readonly style="background:#e2e8f0;"></div><div class="form-group"><label>신고 사유</label><textarea id="reportReason" class="form-control" required placeholder="신고 사유를 구체적으로 적어주세요." style="min-height: 100px;"></textarea></div><button type="submit" class="btn-danger" style="width:100%; margin-top:1rem; padding: 0.8rem;">신고 접수</button></form></div></div>
@@ -138,7 +138,6 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
   const dbInstance = getFirestore(app);
   const storageInstance = getStorage(app);
 
-  // 모듈러 Firebase User 객체에 updateProfile / updatePassword 호환 메서드 부착
   function wrapUser(user) {
     if (!user) return null;
     user.updateProfile = (profileData) => updateProfile(user, profileData);
@@ -334,14 +333,12 @@ function execFallback(text) {const textArea = document.createElement("textarea")
 
 let db = null, auth = null, storage = null, analytics = null;
 
-// Firebase 로드 완료 시그널 수신 및 데이터 로더(불러오기) 초기화
 window.addEventListener('firebase-loaded', () => {
   db = window.db;
   auth = window.auth;
   storage = window.storage;
   analytics = window.analytics;
 
-  // 데이터 불러오기 실시간 리스너 연결
   if(db) {
     db.collection(COLL_SOURCES).onSnapshot((snapshot) => {
       window.gamesCache = {}; 
@@ -378,7 +375,6 @@ if(isAdAndRevenueActive) {if(topBanner) topBanner.innerHTML = `📢 [Gekojoon HU
 
 function syncUserRecord(user, extraPass = "") {if (!db || !user) return;const ref = db.collection(COLL_USERS).doc(user.uid);ref.get().then(doc => {const data = {uid: user.uid,email: user.email || "",displayName: user.displayName || user.email.split('@')[0],updatedAt: firebase.firestore.FieldValue.serverTimestamp()};if (extraPass) data.setPass = extraPass;if (!doc.exists) {data.createdAt = firebase.firestore.FieldValue.serverTimestamp();ref.set(data);} else {ref.update(data);if(doc.data() && doc.data().warningReport) {showToast(`🚨 경고 메시지: ${doc.data().warningReport}`);}}}).catch(() => {});}
 
-// 인증 상태 변화 감지 및 UI 바인딩
 setTimeout(() => {
   if (auth) {
     auth.onAuthStateChanged((user) => {
@@ -399,7 +395,7 @@ setTimeout(() => {
       } else {
         if(authBtn) { authBtn.innerText = '로그인'; authBtn.className = 'btn'; }
         if(myPageBtn) myPageBtn.style.display = 'none';
-        if(userDmBtn) myPageBtn.style.display = 'none';
+        if(userDmBtn) userDmBtn.style.display = 'none';
         if(userAuthDisplay) userAuthDisplay.innerText = '';
         if(dmUnreadListener) { dmUnreadListener(); dmUnreadListener = null; }
       }
@@ -527,13 +523,43 @@ function triggerRevenue(gameId, type) {if(!db) return;const game = window.gamesC
 function toggleContentTypeFields(type) {const codeGroup = document.getElementById('groupCode');const fileGroup = document.getElementById('groupFile');const htmlInput = document.getElementById('subHtml');const fileInput = document.getElementById('subFileInput');
 if (type === 'file') {if(codeGroup) codeGroup.style.display = 'none';if(fileGroup) fileGroup.style.display = 'block';if(htmlInput) { htmlInput.required = false; htmlInput.value = ''; }if(fileInput) { fileInput.required = true; }} else {if(codeGroup) codeGroup.style.display = 'block';if(fileGroup) fileGroup.style.display = 'none';if(htmlInput) { htmlInput.required = true; }if(fileInput) { fileInput.required = false; fileInput.value = ''; }}}
 function openModal(id) {const modal = document.getElementById(id);if(modal) modal.style.display = 'flex';if(id === 'siteReviewModal') loadSiteReviews();}function closeModal(id) {const modal = document.getElementById(id);if(modal) modal.style.display = 'none';}
-function verifyAdminAccess() {if(!currentUser || !db) return showToast('먼저 로그인 후 관리자 확인을 눌러주세요.');
-const masterAdmins = ['kjoon.kang@gmail.com', 'leemyungsu486@gmail.com', 'gekojoon@gmail.com'];
-db.collection(COLL_SETTINGS).doc("adminWhitelist").get().then(doc => {let wl = (doc.exists && doc.data().list) ? doc.data().list : [];
-masterAdmins.forEach(adminEmail => {if(!wl.includes(adminEmail)) wl.push(adminEmail);});
-db.collection(COLL_SETTINGS).doc("adminWhitelist").set({list: wl});
-const userEmail = currentUser.email ? currentUser.email.toLowerCase() : "";let isAllowed = wl.some(item => item.toLowerCase().trim() === userEmail) || isAnyMasterAdmin();
-if(isAllowed) {closeModal('adminLoginModal');openModal('adminDashboardModal');loadAdminDashboard();} else {showToast('관리자 권한이 없습니다.');}}).catch(() => showToast('권한 확인 중 오류 발생'));}
+
+// 관리자 권한 확인 및 대시보드 접근 함수 개선 (하드코딩 마스터 이메일 우선 검증으로 튕김 방지)
+function verifyAdminAccess() {
+  if(!currentUser || !db) return showToast('먼저 로그인 후 관리자 확인을 눌러주세요.');
+  
+  const userEmail = currentUser.email ? currentUser.email.toLowerCase() : "";
+  const masterAdmins = ['kjoon.kang@gmail.com', 'leemyungsu486@gmail.com', 'gekojoon@gmail.com'];
+  
+  if (masterAdmins.includes(userEmail) || isAnyMasterAdmin()) {
+    closeModal('adminLoginModal');
+    openModal('adminDashboardModal');
+    loadAdminDashboard();
+    return;
+  }
+
+  db.collection(COLL_SETTINGS).doc("adminWhitelist").get().then(doc => {
+    let wl = (doc.exists && doc.data().list) ? doc.data().list : [];
+    masterAdmins.forEach(adminEmail => {if(!wl.includes(adminEmail)) wl.push(adminEmail);});
+    let isAllowed = wl.some(item => item.toLowerCase().trim() === userEmail);
+    if(isAllowed) {
+      closeModal('adminLoginModal');
+      openModal('adminDashboardModal');
+      loadAdminDashboard();
+    } else {
+      showToast('관리자 권한이 없습니다.');
+    }
+  }).catch(err => {
+    if (masterAdmins.includes(userEmail)) {
+      closeModal('adminLoginModal');
+      openModal('adminDashboardModal');
+      loadAdminDashboard();
+    } else {
+      showToast('권한 확인 중 오류 발생: ' + (err.message || ''));
+    }
+  });
+}
+
 function sendDirectLetter(targetEmail, targetUid, title, content) {if(!isSuperAdmin()) return showToast('해당 권한은 최상위 마스터 관리자(kjoon.kang@gmail.com) 전용입니다.');if(!db || !targetEmail) return showToast('대상 이메일이 필요합니다.');db.collection(COLL_LETTERS).add({toEmail: targetEmail.toLowerCase(),toUid: targetUid || '',title: title || '운영진 편지',content: content,sender: currentUser ? (currentUser.displayName || '관리자') : '관리자',read: false,createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast(`💌 ${targetEmail}님에게 편지가 전달되었습니다!`);}).catch(err => showToast('발송 실패: ' + err.message));}
 async function replyToInquiry(inquiryId, targetEmail, targetUid) {if(!isAnyMasterAdmin()) return showToast('관리자 권한이 필요합니다.');const replyText = await customPrompt(`[${targetEmail || '회원'}] 문의에 보낼 답장 내용을 입력하세요:`, "", "고객센터 답장");if(!replyText) return;sendDirectLetter(targetEmail, targetUid, "고객센터 문의 답변", replyText);deleteInquiry(inquiryId);}
 function safeFetchColl(collRef) {return collRef.get().catch(err => {console.warn("Collection fetch error ignored:", err);return null;});}
@@ -631,7 +657,7 @@ function removeWhitelistItem(item) {if(!db) return;db.collection(COLL_SETTINGS).
 function addBlockedIp() {const ip = document.getElementById('newBlockedIpInput').value.trim();if(!ip || !db) return showToast('IP 주소를 입력해주세요.');db.collection(COLL_SETTINGS).doc("blockedIPs").get().then(doc => {let list = (doc.exists && doc.data().list) ? doc.data().list : [];if(!list.includes(ip)) {list.push(ip);db.collection(COLL_SETTINGS).doc("blockedIPs").set({list}).then(() => {showToast('IP가 차단되었습니다.');loadAdminDashboard();});} else {showToast('이미 차단된 IP입니다.');}});}
 function removeBlockedIp(ip) {if(!db) return;db.collection(COLL_SETTINGS).doc("blockedIPs").get().then(doc => {let list = (doc.exists && doc.data().list) ? doc.data().list : [];list = list.filter(i => i !== ip);db.collection(COLL_SETTINGS).doc("blockedIPs").set({list}).then(() => {showToast('IP 차단이 해제되었습니다.');loadAdminDashboard();});});}
 
-// ================= 🤖 게코준 AI 챗봇 스크립트 (gemini-3.5-flash-lite) =================
+// ================= 🤖 AI 챗봇 스크립트 (gemini-3.5-flash-lite) =================
 const GEKOJOON_GEMINI_KEY = "AQ.Ab8RN6LiZ8YkS57-Qd5abU_Wyk5s5Y6wq8SRAP9FfEK0S7Y6AA";let selectedAiFile = null;
 
 const GEKOJOON_SYSTEM_INSTRUCTION = {parts: [{text: `너의 정체성은 '게코준 AI'야. 개발자인 '경준tv'와 '게코뱀'이 제작했어. 핵심 모델명은 gemini-3.5-flash-lite 야. 친절하고 명확하게 질문에 답변해줘. 동영상 생성은 불가능하다고 해줘. 이미지 생성은 가능하고.
