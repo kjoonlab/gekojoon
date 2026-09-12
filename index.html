@@ -351,11 +351,11 @@ window.addEventListener('firebase-loaded', () => {
       });
       window.allGamesData.sort((a, b) => (b.plays || 0) - (a.plays || 0));
       applyFilterAndSearch();
-    }, (err) => console.error("Sources error:", err));
+    }, (err) => console.warn("Sources snapshot warning:", err));
   }
 });
 
-window.gamesCache = {}; window.allGamesData = [];let currentTypeFilter = 'all'; let currentTagFilter = 'all';let currentUser = null; let visitorIP = "IP 확인 불가";let activePlayingGameId = null; let searchDebounceTimer = null;let dmUnreadListener = null;
+window.gamesCache = {}; window.allGamesData = [];let currentTypeFilter = 'all'; let currentTagFilter = 'all';let currentUser = null; let visitorIP = "127.0.0.1";let activePlayingGameId = null; let searchDebounceTimer = null;let dmUnreadListener = null;
 const TARGET_VISITORS = 1000;let isAdAndRevenueActive = false;
 const COLL_SOURCES = "new_sources"; const COLL_PENDING = "new_pending_sources";const COLL_SETTINGS = "new_settings"; const COLL_EARNINGS = "new_earnings";const COLL_REPORTS = "new_reports"; const COLL_VISITORS = "new_visitors";const COLL_DELETED = "new_deleted_sources"; const COLL_INQUIRIES = "new_inquiries";const COLL_REVIEWS = "new_reviews"; const COLL_SITE_REVIEWS = "new_site_reviews";const COLL_LETTERS = "new_letters"; const COLL_USERS = "new_users";const COLL_AI_LOGS = "new_ai_logs"; const COLL_DMS = "new_dms";
 
@@ -364,16 +364,94 @@ function isSubMasterAdmin() {if(!currentUser || !currentUser.email) return false
 function isAnyMasterAdmin() {return isSuperAdmin() || isSubMasterAdmin();}
 function getTodayDateStr() {const d = new Date();const year = d.getFullYear();const month = String(d.getMonth() + 1).padStart(2, '0');const day = String(d.getDate()).padStart(2, '0');return `${year}-${month}-${day}`;;}
 
-async function recordAndCheckVisitor() {const todayStr = getTodayDateStr();try {const res = await fetch('https://api.ipify.org?format=json').catch(() => null);if (res && res.ok) {const data = await res.json();visitorIP = data.ip || visitorIP;}} catch(e) {}
-if (db) {try {const blockDoc = await db.collection(COLL_SETTINGS).doc("blockedIPs").get().catch(() => null);if (blockDoc && blockDoc.exists && (blockDoc.data().list || []).includes(visitorIP)) {document.body.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100vh; font-size:1.5rem; color:#ef4444;">🚨 차단된 IP입니다.</div>';return;}
-await db.collection(COLL_VISITORS).add({ip: visitorIP,dateStr: todayStr,userEmail: auth && auth.currentUser ? auth.currentUser.email : '비로그인 방문자',visitedAt: firebase.firestore.FieldValue.serverTimestamp()}).catch(() => {});} catch(e) {}}checkVisitorMilestone();}
-setTimeout(() => { recordAndCheckVisitor(); }, 600);
+async function recordAndCheckVisitor() {
+  try {
+    const res = await fetch('https://api.ipify.org?format=json').catch(() => null);
+    if (res && res.ok) {
+      const data = await res.json();
+      visitorIP = data.ip || visitorIP;
+    }
+  } catch(e) {}
 
-function checkVisitorMilestone() {if(!db) return;const todayStr = getTodayDateStr();db.collection(COLL_VISITORS).where("dateStr", "==", todayStr).get().then(snap => {const dailyVisitorCount = snap.size;isAdAndRevenueActive = dailyVisitorCount >= TARGET_VISITORS;
-const topBanner = document.getElementById('topBannerArea');const bottomBanner = document.getElementById('bottomBannerArea');const detailNotice = document.getElementById('detailNoticeBox');const milestoneNotice = document.getElementById('revenueMilestoneNotice');
-if(isAdAndRevenueActive) {if(topBanner) topBanner.innerHTML = `📢 [Gekojoon HUB 실광고 영역 - 오늘 방문자 1,000명 달성으로 활성화됨]`;if(bottomBanner) bottomBanner.innerHTML = `📢 [하단 광고 영역 활성화 완료]`;if(detailNotice) detailNotice.innerHTML = `📢 오늘 목표(1,000명) 달성 완료! 다운로드 및 복사 시 5:5 정산이 실시간 반영됩니다.`;if(milestoneNotice) milestoneNotice.style.display = 'none';} else {const progressPercent = Math.min(100, Math.floor((dailyVisitorCount / TARGET_VISITORS) * 100));if(topBanner) topBanner.innerHTML = `📢 [일일 방문자 1,000명 달성 시 광고 및 5:5 정산 활성화] (오늘 방문자: ${dailyVisitorCount}명 / ${TARGET_VISITORS}명 - ${progressPercent}%)`;if(bottomBanner) bottomBanner.innerHTML = `📢 [오늘 목표 달성률 ${progressPercent}% 진행 중]`;if(detailNotice) detailNotice.innerHTML = `⏳ 일일 방문자 1,000명 달성 전까지는 정산 대기 상태입니다. (오늘 ${dailyVisitorCount}명 / 1,000명)`;if(milestoneNotice) {milestoneNotice.style.display = 'block';milestoneNotice.innerText = `⏳ 오늘 방문자 ${dailyVisitorCount}명 / 1,000명 (달성 시 수익 정산 확정)`;}}}).catch(err => console.error("Visitor query error:", err));}
+  if (db) {
+    try {
+      const blockDoc = await db.collection(COLL_SETTINGS).doc("blockedIPs").get().catch(() => null);
+      if (blockDoc && blockDoc.exists && (blockDoc.data().list || []).includes(visitorIP)) {
+        document.body.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100vh; font-size:1.5rem; color:#ef4444;">🚨 차단된 IP입니다.</div>';
+        return;
+      }
+      await db.collection(COLL_VISITORS).add({
+        ip: visitorIP,
+        dateStr: getTodayDateStr(),
+        userEmail: auth && auth.currentUser ? auth.currentUser.email : '비로그인 방문자',
+        visitedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(err => console.warn("Visitor log write skipped/failed:", err));
+    } catch(e) {}
+  }
+  checkVisitorMilestone();
+}
+setTimeout(() => { recordAndCheckVisitor(); }, 500);
 
-function syncUserRecord(user, extraPass = "") {if (!db || !user) return;const ref = db.collection(COLL_USERS).doc(user.uid);ref.get().then(doc => {const data = {uid: user.uid,email: user.email || "",displayName: user.displayName || user.email.split('@')[0],updatedAt: firebase.firestore.FieldValue.serverTimestamp()};if (extraPass) data.setPass = extraPass;if (!doc.exists) {data.createdAt = firebase.firestore.FieldValue.serverTimestamp();ref.set(data);} else {ref.update(data);if(doc.data() && doc.data().warningReport) {showToast(`🚨 경고 메시지: ${doc.data().warningReport}`);}}}).catch(() => {});}
+function checkVisitorMilestone() {
+  if(!db) return;
+  const todayStr = getTodayDateStr();
+  db.collection(COLL_VISITORS).where("dateStr", "==", todayStr).get().then(snap => {
+    const dailyVisitorCount = snap.size;
+    isAdAndRevenueActive = dailyVisitorCount >= TARGET_VISITORS;
+    updateBannerState(dailyVisitorCount);
+  }).catch(err => {
+    // Fallback if rules block reading visitors
+    console.warn("Visitor milestone read error, using local fallback:", err);
+    updateBannerState(1);
+  });
+}
+
+function updateBannerState(dailyVisitorCount) {
+  const topBanner = document.getElementById('topBannerArea');
+  const bottomBanner = document.getElementById('bottomBannerArea');
+  const detailNotice = document.getElementById('detailNoticeBox');
+  const milestoneNotice = document.getElementById('revenueMilestoneNotice');
+  isAdAndRevenueActive = dailyVisitorCount >= TARGET_VISITORS;
+  
+  if(isAdAndRevenueActive) {
+    if(topBanner) topBanner.innerHTML = `📢 [Gekojoon HUB 실광고 영역 - 오늘 방문자 1,000명 달성으로 활성화됨]`;
+    if(bottomBanner) bottomBanner.innerHTML = `📢 [하단 광고 영역 활성화 완료]`;
+    if(detailNotice) detailNotice.innerHTML = `📢 오늘 목표(1,000명) 달성 완료! 다운로드 및 복사 시 5:5 정산이 실시간 반영됩니다.`;
+    if(milestoneNotice) milestoneNotice.style.display = 'none';
+  } else {
+    const progressPercent = Math.min(100, Math.floor((dailyVisitorCount / TARGET_VISITORS) * 100));
+    if(topBanner) topBanner.innerHTML = `📢 [일일 방문자 1,000명 달성 시 광고 및 5:5 정산 활성화] (오늘 방문자: ${dailyVisitorCount}명 / ${TARGET_VISITORS}명 - ${progressPercent}%)`;
+    if(bottomBanner) bottomBanner.innerHTML = `📢 [오늘 목표 달성률 ${progressPercent}% 진행 중]`;
+    if(detailNotice) detailNotice.innerHTML = `⏳ 일일 방문자 1,000명 달성 전까지는 정산 대기 상태입니다. (오늘 ${dailyVisitorCount}명 / 1,000명)`;
+    if(milestoneNotice) {
+      milestoneNotice.style.display = 'block';
+      milestoneNotice.innerText = `⏳ 오늘 방문자 ${dailyVisitorCount}명 / 1,000명 (달성 시 수익 정산 확정)`;
+    }
+  }
+}
+
+function syncUserRecord(user, extraPass = "") {
+  if (!db || !user) return;
+  const ref = db.collection(COLL_USERS).doc(user.uid);
+  ref.get().then(doc => {
+    const data = {
+      uid: user.uid,
+      email: user.email || "",
+      displayName: user.displayName || user.email.split('@')[0],
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    if (extraPass) data.setPass = extraPass;
+    if (!doc.exists) {
+      data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      ref.set(data).catch(() => {});
+    } else {
+      ref.update(data).catch(() => {});
+      if(doc.data() && doc.data().warningReport) {
+        showToast(`🚨 경고 메시지: ${doc.data().warningReport}`);
+      }
+    }
+  }).catch(() => {});
+}
 
 setTimeout(() => {
   if (auth) {
@@ -405,7 +483,7 @@ setTimeout(() => {
 
 function checkUnreadLetters() {if(!db || !currentUser) return;db.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {let unreadCount = 0;snap.forEach(doc => { if(!doc.data().read) unreadCount++; });const badge = document.getElementById('unreadBadge');if(badge) {if(unreadCount > 0) {badge.innerText = unreadCount;badge.style.display = 'inline-block';} else {badge.style.display = 'none';}}}).catch(() => {});}
 function checkUnreadDms() {if(!db || !currentUser) return;if(dmUnreadListener) dmUnreadListener();
-dmUnreadListener = db.collection(COLL_DMS).where("receiverEmail", "==", currentUser.email.toLowerCase()).onSnapshot(snap => {let unreadCount = 0;snap.forEach(doc => { if(!doc.data().read) unreadCount++; });const badge = document.getElementById('unreadDmBadge');if(badge) {if(unreadCount > 0) {badge.innerText = unreadCount;badge.style.display = 'inline-block';} else {badge.style.display = 'none';}}}, err => console.error("DM listener error:", err));}
+dmUnreadListener = db.collection(COLL_DMS).where("receiverEmail", "==", currentUser.email.toLowerCase()).onSnapshot(snap => {let unreadCount = 0;snap.forEach(doc => { if(!doc.data().read) unreadCount++; });const badge = document.getElementById('unreadDmBadge');if(badge) {if(unreadCount > 0) {badge.innerText = unreadCount;badge.style.display = 'inline-block';} else {badge.style.display = 'none';}}}, err => {});}
 function getFriendlyAuthError(err) {const errorString = (typeof err === 'object' ? JSON.stringify(err) + (err.message || '') + (err.code || '') : String(err)).toLowerCase();if (errorString.includes('unauthorized-domain')) return '도메인 승인 오류: 파이어베이스 콘솔에 현재 도메인을 추가해주세요.';if (errorString.includes('invalid_login_credentials') || errorString.includes('invalid-credential') || errorString.includes('user-not-found') || errorString.includes('wrong-password')) return '이메일 또는 비밀번호가 올바르지 않습니다.';if (errorString.includes('email-already-in-use')) return '이미 사용 중인 이메일 주소입니다.';if (errorString.includes('weak-password')) return '비밀번호는 최소 6자리 이상이어야 합니다.';return '입력하신 로그인 정보를 다시 확인해주세요.';}
 function setAuthView(view) {const title = document.getElementById('authModalTitle');const loginForm = document.getElementById('emailLoginForm');const signupForm = document.getElementById('emailSignupForm');const resetForm = document.getElementById('emailResetForm');const googleBtn = document.getElementById('googleLoginBtn');const forgotLink = document.getElementById('forgotPasswordLink');const toggleText = document.getElementById('authToggleText');const toggleBtn = document.getElementById('authToggleBtn');
 if(!loginForm || !signupForm || !resetForm) return;
@@ -444,7 +522,7 @@ btnSend.className = tab === 'send' ? 'btn' : 'btn-secondary';btnInbox.className 
 sendForm.style.display = tab === 'send' ? 'block' : 'none';inboxArea.style.display = tab === 'inbox' ? 'block' : 'none';sentArea.style.display = tab === 'sent' ? 'block' : 'none';
 if(tab === 'inbox') loadMyInboxDms();if(tab === 'sent') loadMySentDms();}
 function loadMemberListForDm() {if(!db || !currentUser) return;const selectEl = document.getElementById('dmRecipientSelect');if(!selectEl) return;
-db.collection(COLL_USERS).get().then(snap => {selectEl.innerHTML = '<option value="">-- 메시지를 받을 회원을 선택하세요 --</option>';snap.forEach(doc => {const u = doc.data();if(u.email && u.email.toLowerCase() !== currentUser.email.toLowerCase()) {const name = u.displayName || u.email.split('@')[0];selectEl.innerHTML += `<option value="${u.email.toLowerCase()}|${u.uid || ''}|${escapeJsStr(name)}">${name} (${u.email})</option>`;}});}).catch(() => {selectEl.innerHTML = '<option value="">회원 목록 로드 실패</option>';});}
+db.collection(COLL_USERS).get().then(snap => {selectEl.innerHTML = '<option value="">-- 메시지를 받을 회원을 선택하세요 --</option>';snap.forEach(doc => {const u = doc.data();if(u.email && u.email.toLowerCase() !== currentUser.email.toLowerCase()) {const name = u.displayName || u.email.split('@')[0];selectEl.innerHTML += `<option value="${u.email.toLowerCase()}|${u.uid || ''}|${escapeJsStr(name)}">${name} (${u.email})</option>`;}});}).catch(() => {selectEl.innerHTML = '<option value="">회원 목록 로드 실패 (권한 확인 필요)</option>';});}
 function sendUserDm(e) {e.preventDefault();if(!currentUser || !db) return showToast('로그인이 필요합니다.');
 const recipientVal = document.getElementById('dmRecipientSelect').value;const title = document.getElementById('dmTitleInput').value.trim();const content = document.getElementById('dmContentInput').value.trim();
 if(!recipientVal) return showToast('메시지를 받을 회원을 선택해주세요.');if(!title || !content) return showToast('제목과 내용을 모두 작성해주세요.');
@@ -465,7 +543,7 @@ const editBtn = document.createElement('button');editBtn.type = 'button';editBtn
 itemDiv.appendChild(rightDiv);list.appendChild(itemDiv);});}).catch(() => {});
 openModal('myPageModal');}
 function loadUserLetters() {if(!db || !currentUser) return;const lettersEl = document.getElementById('myLettersList');if(!lettersEl) return;
-db.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {if(snap.empty) {lettersEl.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">받은 편지나 고객센터 답변이 없습니다.</div>';return;}let html = '';snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '';html += `<div class="letter-item ${d.read ? '' : 'unread'}"><div class="letter-header"><span>💌 ${d.title || '운영진 메시지'} (보낸이: ${d.sender || '관리자'})</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">${dateStr}</span></div><div class="letter-body">${d.content}</div></div>`;if(!d.read) {db.collection(COLL_LETTERS).doc(doc.id).update({ read: true }).catch(() => {});}});lettersEl.innerHTML = html;checkUnreadLetters();}).catch(() => {});}
+db.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {if(snap.empty) {lettersEl.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">받은 메시지가 없습니다.</div>';return;}let html = '';snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '';html += `<div class="letter-item ${d.read ? '' : 'unread'}"><div class="letter-header"><span>💌 ${d.title || '운영진 메시지'} (보낸이: ${d.sender || '관리자'})</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">${dateStr}</span></div><div class="letter-body">${d.content}</div></div>`;if(!d.read) {db.collection(COLL_LETTERS).doc(doc.id).update({ read: true }).catch(() => {});}});lettersEl.innerHTML = html;checkUnreadLetters();}).catch(() => {});}
 function updateMyNickname() {if(!currentUser) return showToast('로그인이 필요합니다.');const newName = document.getElementById('myPageNicknameInput').value.trim();if(!newName) return showToast('변경할 닉네임을 입력해주세요.');currentUser.updateProfile({ displayName: newName }).then(() => {showToast('닉네임 변경 완료!');syncUserRecord(currentUser);const authDisp = document.getElementById('userAuthDisplay');if(authDisp) authDisp.innerText = `${newName}님`;}).catch(err => showToast(getFriendlyAuthError(err)));}
 function updateMyPassword() {if(!currentUser) return showToast('로그인이 필요합니다.');const newPass = document.getElementById('myPagePasswordInput').value;if(!newPass || newPass.length < 6) return showToast('비밀번호는 최소 6자 이상이어야 합니다.');currentUser.updatePassword(newPass).then(() => {showToast('비밀번호가 성공적으로 변경되었습니다!');syncUserRecord(currentUser, newPass);document.getElementById('myPagePasswordInput').value = '';}).catch(err => {if(err.code === 'auth/requires-recent-login') {showToast('보안을 위해 다시 로그인한 후 비밀번호를 설정해주세요.');} else {showToast(getFriendlyAuthError(err));}});}
 
@@ -477,16 +555,67 @@ card.innerHTML = `<div class="source-header"><div class="source-icon">${g.icon |
 function clearSearchInput() {document.getElementById('searchInput').value = '';document.getElementById('clearSearchBtn').style.display = 'none';document.getElementById('searchDropdown').style.display = 'none';applyFilterAndSearch();}
 function selectSearchDropdownItem(id, title) {document.getElementById('searchInput').value = title;document.getElementById('searchDropdown').style.display = 'none';openDetailModal(id);}document.addEventListener('click', e => { if(!e.target.closest('.search-container')) { const drop = document.getElementById('searchDropdown'); if(drop) drop.style.display = 'none'; } });
 
-async function handleUserSubmitGame(e) {e.preventDefault();if(!currentUser || !db) return showToast('로그인이 필요합니다.');
-const submitBtn = document.getElementById('submitBtn');const originalBtnText = submitBtn ? submitBtn.innerText : '등록 요청하기';
-const title = document.getElementById('subTitle').value;const desc = document.getElementById('subDesc').value;const cType = document.getElementById('subContentType').value;const tag = document.getElementById('subTag').value;const icon = document.getElementById('subIcon').value;const html = document.getElementById('subHtml').value;let fileUrl = "";let fileName = "";
-if(cType === 'file') {const fileInput = document.getElementById('subFileInput');if(!fileInput.files.length) return showToast('업로드할 파일(.jpg, .png 등)을 선택해주세요.');if(!storage) return showToast('Firebase Storage가 연결되지 않았습니다.');
-const file = fileInput.files[0];fileName = file.name;
-if(submitBtn) submitBtn.disabled = true;
-try {const safeStorageName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9_.-]/g, '_')}`;const ref = storage.ref().child(`uploads/${safeStorageName}`);const uploadTask = ref.put(file);
-await new Promise((resolve, reject) => {uploadTask.on('state_changed',(snapshot) => {const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);if(submitBtn) submitBtn.innerText = `⏳ 파일 업로드 중... ${progress}%`;},(error) => reject(error),async () => {fileUrl = await uploadTask.snapshot.ref.getDownloadURL();resolve();});});} catch(err) {console.error("Storage upload error:", err);if(submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalBtnText; }return showToast('업로드 실패: Storage 권한을 확인해주세요.');}}
-if(submitBtn) { submitBtn.disabled = true; submitBtn.innerText = '⏳ 데이터 등록 중...'; }
-db.collection(COLL_PENDING).add({author: currentUser.displayName || currentUser.email.split('@')[0],authorUid: currentUser.uid,email: currentUser.email,title, desc, contentType: cType, tag, icon, html, fileUrl, fileName,createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('기여 완료! 검토 후 승인됩니다.');closeModal('submitModal');e.target.reset();}).catch(err => {showToast('등록 중 오류 발생: ' + err.message);}).finally(() => {if(submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalBtnText; }});}
+async function handleUserSubmitGame(e) {
+  e.preventDefault();
+  if(!currentUser || !db) return showToast('로그인이 필요합니다.');
+  const submitBtn = document.getElementById('submitBtn');
+  const originalBtnText = submitBtn ? submitBtn.innerText : '등록 요청하기';
+  const title = document.getElementById('subTitle').value;
+  const desc = document.getElementById('subDesc').value;
+  const cType = document.getElementById('subContentType').value;
+  const tag = document.getElementById('subTag').value;
+  const icon = document.getElementById('subIcon').value;
+  const html = document.getElementById('subHtml').value;
+  let fileUrl = ""; let fileName = "";
+
+  if(cType === 'file') {
+    const fileInput = document.getElementById('subFileInput');
+    if(!fileInput.files.length) return showToast('업로드할 파일(.jpg, .png 등)을 선택해주세요.');
+    if(!storage) return showToast('Firebase Storage가 연결되지 않았습니다.');
+    const file = fileInput.files[0];
+    fileName = file.name;
+    if(submitBtn) submitBtn.disabled = true;
+    try {
+      const safeStorageName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9_.-]/g, '_')}`;
+      const ref = storage.ref().child(`uploads/${safeStorageName}`);
+      const uploadTask = ref.put(file);
+      await new Promise((resolve, reject) => {
+        uploadTask.on('state_changed',
+          (snapshot) => {
+            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            if(submitBtn) submitBtn.innerText = `⏳ 파일 업로드 중... ${progress}%`;
+          },
+          (error) => reject(error),
+          async () => {
+            fileUrl = await uploadTask.snapshot.ref.getDownloadURL();
+            resolve();
+          }
+        );
+      });
+    } catch(err) {
+      console.error("Storage upload error:", err);
+      if(submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalBtnText; }
+      return showToast('업로드 실패: Storage 권한(Rules)을 확인해주세요.');
+    }
+  }
+
+  if(submitBtn) { submitBtn.disabled = true; submitBtn.innerText = '⏳ 데이터 등록 중...'; }
+  db.collection(COLL_PENDING).add({
+    author: currentUser.displayName || currentUser.email.split('@')[0],
+    authorUid: currentUser.uid,
+    email: currentUser.email,
+    title, desc, contentType: cType, tag, icon, html, fileUrl, fileName,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    showToast('기여 완료! 검토 후 승인됩니다.');
+    closeModal('submitModal');
+    e.target.reset();
+  }).catch(err => {
+    showToast('등록 중 오류 발생 (Firestore Rules 권한 확인 필요): ' + err.message);
+  }).finally(() => {
+    if(submitBtn) { submitBtn.disabled = false; submitBtn.innerText = originalBtnText; }
+  });
+}
 
 function previewCode(gameId) {const game = window.gamesCache[gameId];if(!game || !game.html) return showToast('미리보기할 코드가 없습니다.');const previewWindow = window.open('', '_blank');if(previewWindow) {previewWindow.document.open();previewWindow.document.write(game.html);previewWindow.document.close();showToast('코드 미리보기가 실행되었습니다!');} else {showToast('팝업 차단을 해제해주세요.');}}
 function downloadSnippet(gameId) {const game = window.gamesCache[gameId];if(!game || !game.html) return showToast('다운로드할 소스 코드가 없습니다.');
@@ -562,41 +691,147 @@ function verifyAdminAccess() {
 
 function sendDirectLetter(targetEmail, targetUid, title, content) {if(!isSuperAdmin()) return showToast('해당 권한은 최상위 마스터 관리자(kjoon.kang@gmail.com) 전용입니다.');if(!db || !targetEmail) return showToast('대상 이메일이 필요합니다.');db.collection(COLL_LETTERS).add({toEmail: targetEmail.toLowerCase(),toUid: targetUid || '',title: title || '운영진 편지',content: content,sender: currentUser ? (currentUser.displayName || '관리자') : '관리자',read: false,createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast(`💌 ${targetEmail}님에게 편지가 전달되었습니다!`);}).catch(err => showToast('발송 실패: ' + err.message));}
 async function replyToInquiry(inquiryId, targetEmail, targetUid) {if(!isAnyMasterAdmin()) return showToast('관리자 권한이 필요합니다.');const replyText = await customPrompt(`[${targetEmail || '회원'}] 문의에 보낼 답장 내용을 입력하세요:`, "", "고객센터 답장");if(!replyText) return;sendDirectLetter(targetEmail, targetUid, "고객센터 문의 답변", replyText);deleteInquiry(inquiryId);}
-function safeFetchColl(collRef) {return collRef.get().catch(err => {console.warn("Collection fetch error ignored:", err);return null;});}
+function safeFetchColl(collRef) {return collRef.get().catch(err => {console.warn("Collection fetch fallback:", err);return null;});}
 
 // ================= ⚙️ 관리자 대시보드 =================
-function loadAdminDashboard() {const container = document.getElementById('adminDashboardContent');if(!container || !db) return;container.innerHTML = '<div style="text-align:center; padding:2rem; color:#64748b;">데이터를 불러오는 중...</div>';
-const isSuper = isSuperAdmin(); const isSub = isSubMasterAdmin();
-const promises = [safeFetchColl(db.collection(COLL_USERS)),safeFetchColl(db.collection(COLL_VISITORS)),safeFetchColl(db.collection(COLL_PENDING)),safeFetchColl(db.collection(COLL_SOURCES)),safeFetchColl(db.collection(COLL_REPORTS)),safeFetchColl(db.collection(COLL_INQUIRIES)),safeFetchColl(db.collection(COLL_SETTINGS).doc("adminWhitelist")),safeFetchColl(db.collection(COLL_SETTINGS).doc("blockedIPs")),isSuper ? safeFetchColl(db.collection(COLL_DMS)) : Promise.resolve(null),isSuper ? safeFetchColl(db.collection(COLL_LETTERS)) : Promise.resolve(null)];
-Promise.all(promises).then((results) => {const usersSnap = results[0];const visitorsSnap = results[1];const pendingSnap = results[2];const sourcesSnap = results[3];const reportsSnap = results[4];const inquiriesSnap = results[5];const whitelistDoc = results[6];const blockedIpDoc = results[7];const dmsSnap = results[8];const lettersSnap = results[9];
-const userIpMap = {};if (visitorsSnap && !visitorsSnap.empty) {visitorsSnap.forEach(doc => {const v = doc.data();if (v.userEmail && v.ip && v.userEmail !== '비로그인 방문자') {userIpMap[v.userEmail.toLowerCase()] = v.ip;}});}
-let html = '';
-html += `<div style="background:linear-gradient(135deg, #1e1b4b, #312e81); padding:1.2rem; border-radius:14px; margin-bottom:20px; color:#fff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;"><div><h3 style="margin:0; font-size:1.15rem; color:#c7d2fe;">🛡️ 마스터 관리자 통합 관제 센터 (${currentUser.email})</h3><p style="margin:4px 0 0 0; font-size:0.8rem; color:#a5b4fc;">${isSuper ? '최상위 마스터 권한 (전체 기능 및 DM/편지 전체 제어 가능)' : '마스터 관리자 권한 (기존 관리자 기능 + 회원 정보 및 AI 대화/이미지 관제)'}</p></div><button type="button" class="btn" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none;" onclick="openAiLogsModal()">🤖 AI 대화/이미지 기록 원문 관제</button></div>`;
-html += `<h3 style="margin-bottom:10px; color:#1e293b;">👥 전체 회원 정보 관제 (${usersSnap ? usersSnap.size : 0}명)</h3>`;html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:280px; overflow-y:auto;">`;
-if (usersSnap && !usersSnap.empty) {usersSnap.forEach(doc => {const u = doc.data();const uEmail = escapeJsStr(u.email || '이메일 없음');const uNick = escapeJsStr(u.displayName || '이름없음');const uIp = userIpMap[uEmail.toLowerCase()] || u.ip || '최근 IP 기록 없음';const hasWarning = !!u.warningReport;
-html += `<div style="padding:10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem; background:#ffffff; border-radius:8px; margin-bottom:6px;"><div><b style="color:#0f172a;">👤 닉네임: ${uNick}</b> | <span style="color:var(--primary); font-size:0.82rem;">📧 이메일: <code>${uEmail}</code></span><br><span style="color:#64748b; font-size:0.78rem;">비밀번호: <b>${isSuper ? (u.setPass || '구글 계정') : '🔒 암호화됨'}</b></span>${hasWarning ? `<span style="color:#ef4444; font-size:0.75rem; font-weight:bold; margin-left:6px;">⚠️ 경고: ${u.warningReport}</span>` : ''}</div><div style="display:flex; align-items:center; gap:8px;"><span style="background:#e2e8f0; color:#334155; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:0.8rem;">🌐 IP: ${uIp}</span><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#0284c7;" onclick="openAiLogsModal('${uEmail}')">AI기록</button>${isSuper ? `<button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="adminEditUser('${doc.id}', '${uNick}', '${escapeJsStr(u.setPass||'')}')">수정</button><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#8b5cf6;" onclick="adminSendLetterPrompt('${uEmail}', '${u.uid}')">편지</button>${hasWarning ? `<button type="button" class="btn-success" style="padding:3px 8px; font-size:0.75rem;" onclick="adminClearWarningUser('${doc.id}')">해제</button>` : `<button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="adminReportWarningUser('${doc.id}', '${uNick}')">경고</button>`}<button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem; background:#991b1b;" onclick="adminDeleteUser('${doc.id}')">삭제</button>` : ''}</div></div>`;});} else {html += `<div style="text-align:center; color:#94a3b8; padding:1.5rem;">등록된 회원 정보가 없습니다.</div>`;}html += `</div>`;
+function loadAdminDashboard() {
+  const container = document.getElementById('adminDashboardContent');
+  if(!container || !db) return;
+  container.innerHTML = '<div style="text-align:center; padding:2rem; color:#64748b;">데이터를 불러오는 중...</div>';
+  
+  const isSuper = isSuperAdmin();
+  const promises = [
+    safeFetchColl(db.collection(COLL_USERS)),
+    safeFetchColl(db.collection(COLL_VISITORS)),
+    safeFetchColl(db.collection(COLL_PENDING)),
+    safeFetchColl(db.collection(COLL_SOURCES)),
+    safeFetchColl(db.collection(COLL_REPORTS)),
+    safeFetchColl(db.collection(COLL_INQUIRIES)),
+    safeFetchColl(db.collection(COLL_SETTINGS).doc("adminWhitelist")),
+    safeFetchColl(db.collection(COLL_SETTINGS).doc("blockedIPs")),
+    isSuper ? safeFetchColl(db.collection(COLL_DMS)) : Promise.resolve(null),
+    isSuper ? safeFetchColl(db.collection(COLL_LETTERS)) : Promise.resolve(null)
+  ];
 
-if (isSuper && dmsSnap) {let dmsArr = [];dmsSnap.forEach(doc => { const dm = doc.data(); dm.id = doc.id; dmsArr.push(dm); });dmsArr.sort((a,b) => (b.createdAt ? (b.createdAt.seconds || 0) : 0) - (a.createdAt ? (a.createdAt.seconds || 0) : 0));
-html += `<h3 style="margin-bottom:10px; color:#1e293b;">👑 [최고마스터 전용] 전체 회원 1:1 DM 관제센터 (${dmsArr.length}건)</h3>`;if(dmsArr.length === 0) {html += `<p style="color:#64748b; margin-bottom:20px; font-size:0.9rem;">전송된 유저 간 DM 내역이 없습니다.</p>`;} else {html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:250px; overflow-y:auto;">`;dmsArr.forEach(dm => {const timeStr = dm.createdAt ? new Date(dm.createdAt.toDate()).toLocaleString() : '방금 전';const safeTitle = escapeJsStr(dm.title || '');const safeContent = escapeJsStr(dm.content || '');const safeSenderName = escapeJsStr(dm.senderName || dm.senderEmail);const safeReceiverName = escapeJsStr(dm.receiverName || dm.receiverEmail);
-html += `<div style="background:#ffffff; border:1px solid #e2e8f0; padding:12px; border-radius:8px; margin-bottom:8px; font-size:0.85rem;"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;"><div><b style="color:var(--primary);">[발신: ${dm.senderName} (${dm.senderEmail})]</b> ➔ <b style="color:var(--accent);">[수신: ${dm.receiverName} (${dm.receiverEmail})]</b><span style="font-size:0.75rem; color:${dm.read ? '#10b981' : '#ef4444'}; background:${dm.read ? '#ecfdf5' : '#fef2f2'}; padding:2px 6px; border-radius:4px; margin-left:6px; font-weight:bold;">${dm.read ? '✓ 수신확인' : '✉ 안읽음'}</span></div><span style="font-size:0.75rem; color:#64748b;">${timeStr}</span></div><div style="font-weight:700; color:#0f172a; margin-bottom:4px;">제목: ${dm.title || '제목 없음'}</div><div style="color:#334155; white-space:pre-wrap; background:#f1f5f9; padding:8px; border-radius:6px; margin-bottom:8px;">${dm.content || ''}</div><div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;"><button type="button" class="btn" style="padding:4px 10px; font-size:0.75rem; background:#3b82f6;" onclick="adminReadDmDetail('${safeTitle}', '${safeSenderName}', '${safeReceiverName}', '${safeContent}')">🔍 전문 읽기</button><button type="button" class="btn" style="padding:4px 10px; font-size:0.75rem; background:#8b5cf6;" onclick="adminEditDm('${dm.id}', '${safeTitle}', '${safeContent}')">✏️ 수정</button><button type="button" class="btn-danger" style="padding:4px 10px; font-size:0.75rem; background:#dc2626;" onclick="adminReportDm('${escapeJsStr(dm.senderEmail)}', '${dm.senderUid||''}')">🚨 발신자 경고</button><button type="button" class="btn-danger" style="padding:4px 10px; font-size:0.75rem; background:#991b1b;" onclick="adminDeleteDm('${dm.id}')">🗑️ DM 삭제</button></div></div>`;});html += `</div>`;}}
+  Promise.all(promises).then((results) => {
+    const usersSnap = results[0];
+    const visitorsSnap = results[1];
+    const pendingSnap = results[2];
+    const sourcesSnap = results[3];
+    const reportsSnap = results[4];
+    const inquiriesSnap = results[5];
+    const whitelistDoc = results[6];
+    const blockedIpDoc = results[7];
+    const dmsSnap = results[8];
+    const lettersSnap = results[9];
 
-html += `<h3 style="margin-bottom:10px; color:#1e293b;">📌 승인 대기 소스 목록 (${pendingSnap ? pendingSnap.size : 0}건)</h3>`;html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;if (pendingSnap && !pendingSnap.empty) {pendingSnap.forEach(doc => {const p = doc.data();html += `<div style="background:#fff; border:1px solid #e2e8f0; padding:10px; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem;"><div><b>${p.icon || '📦'} ${p.title}</b> (${p.contentType === 'file' ? '📁 파일' : '💻 코드'})<br><span style="font-size:0.8rem; color:#64748b;">작성자: ${p.author} (${p.email})</span></div><div style="display:flex; gap:6px;"><button type="button" class="btn-success" style="padding:4px 10px; font-size:0.78rem;" onclick="approvePendingSource('${doc.id}')">승인</button><button type="button" class="btn-danger" style="padding:4px 10px; font-size:0.78rem;" onclick="rejectPendingSource('${doc.id}')">거절</button></div></div>`;});} else {html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">대기 중인 소스가 없습니다.</div>`;}html += `</div>`;
+    let userIpMap = {};
+    let allVisitorsList = [];
+    if (visitorsSnap && !visitorsSnap.empty) {
+      visitorsSnap.forEach(doc => {
+        const v = doc.data();
+        allVisitorsList.push({ id: doc.id, ...v });
+        if (v.userEmail && v.ip && v.userEmail !== '비로그인 방문자') {
+          userIpMap[v.userEmail.toLowerCase()] = v.ip;
+        }
+      });
+      allVisitorsList.sort((a,b) => (b.visitedAt ? (b.visitedAt.seconds || 0) : 0) - (a.visitedAt ? (a.visitedAt.seconds || 0) : 0));
+    }
 
-html += `<h3 style="margin-bottom:10px; color:#1e293b;">📂 승인된 전체 소스 관리 (${sourcesSnap ? sourcesSnap.size : 0}개)</h3>`;html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;if (sourcesSnap && !sourcesSnap.empty) {sourcesSnap.forEach(doc => {const s = doc.data();html += `<div style="background:#fff; border:1px solid #e2e8f0; padding:8px 12px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem;"><span>${s.icon || '📦'} <b>${s.title}</b> (by ${s.author})</span><button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="deleteSourceAdmin('${doc.id}')">삭제</button></div>`;});} else {html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">등록된 소스가 없습니다.</div>`;}html += `</div>`;
+    let html = '';
+    html += `<div style="background:linear-gradient(135deg, #1e1b4b, #312e81); padding:1.2rem; border-radius:14px; margin-bottom:20px; color:#fff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;"><div><h3 style="margin:0; font-size:1.15rem; color:#c7d2fe;">🛡️ 마스터 관리자 통합 관제 센터 (${currentUser.email})</h3><p style="margin:4px 0 0 0; font-size:0.8rem; color:#a5b4fc;">${isSuper ? '최상위 마스터 권한 (전체 기능 및 DM/편지 전체 제어 가능)' : '마스터 관리자 권한 (회원 및 AI/방문자 관제)'}</p></div><button type="button" class="btn" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none;" onclick="openAiLogsModal()">🤖 AI 대화/이미지 기록 원문 관제</button></div>`;
 
-html += `<h3 style="margin-bottom:10px; color:#1e293b;">🚨 신고 접수 내역 (${reportsSnap ? reportsSnap.size : 0}건)</h3>`;html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:200px; overflow-y:auto;">`;if (reportsSnap && !reportsSnap.empty) {reportsSnap.forEach(doc => {const r = doc.data();html += `<div style="background:#fff; border:1px solid #fca5a5; padding:10px; border-radius:8px; margin-bottom:8px; font-size:0.85rem;"><div><b>대응 소스:</b> ${r.gameTitle} | <b>신고자:</b> ${r.reporter}</div><div style="color:#ef4444; margin-top:4px;"><b>사유:</b> ${r.reason}</div><div style="text-align:right; margin-top:6px;"><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="dismissReport('${doc.id}')">신고 처리 완료 (삭제)</button></div></div>`;});} else {html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">신고 내역이 없습니다.</div>`;}html += `</div>`;
+    // 1. 전체 회원 정보
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">👥 전체 회원 정보 관제 (${usersSnap && !usersSnap.empty ? usersSnap.size : 0}명)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:260px; overflow-y:auto;">`;
+    if (usersSnap && !usersSnap.empty) {
+      usersSnap.forEach(doc => {
+        const u = doc.data();
+        const uEmail = escapeJsStr(u.email || '이메일 없음');
+        const uNick = escapeJsStr(u.displayName || '이름없음');
+        const uIp = userIpMap[uEmail.toLowerCase()] || u.ip || '최근 IP 기록 없음';
+        const hasWarning = !!u.warningReport;
+        html += `<div style="padding:10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem; background:#ffffff; border-radius:8px; margin-bottom:6px;"><div><b style="color:#0f172a;">👤 닉네임: ${uNick}</b> | <span style="color:var(--primary); font-size:0.82rem;">📧 이메일: <code>${uEmail}</code></span><br><span style="color:#64748b; font-size:0.78rem;">비밀번호: <b>${isSuper ? (u.setPass || '구글 계정') : '🔒 암호화됨'}</b></span>${hasWarning ? `<span style="color:#ef4444; font-size:0.75rem; font-weight:bold; margin-left:6px;">⚠️ 경고: ${u.warningReport}</span>` : ''}</div><div style="display:flex; align-items:center; gap:8px;"><span style="background:#e2e8f0; color:#334155; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:0.8rem;">🌐 IP: ${uIp}</span><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#0284c7;" onclick="openAiLogsModal('${uEmail}')">AI기록</button>${isSuper ? `<button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="adminEditUser('${doc.id}', '${uNick}', '${escapeJsStr(u.setPass||'')}')">수정</button><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#8b5cf6;" onclick="adminSendLetterPrompt('${uEmail}', '${u.uid}')">편지</button>${hasWarning ? `<button type="button" class="btn-success" style="padding:3px 8px; font-size:0.75rem;" onclick="adminClearWarningUser('${doc.id}')">해제</button>` : `<button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="adminReportWarningUser('${doc.id}', '${uNick}')">경고</button>`}<button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem; background:#991b1b;" onclick="adminDeleteUser('${doc.id}')">삭제</button>` : ''}</div></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1.5rem;">회원 목록이 비어있거나 Firestore Rules 권한 확인이 필요합니다.</div>`;
+    }
+    html += `</div>`;
 
-html += `<h3 style="margin-bottom:10px; color:#1e293b;">💬 고객센터 문의 내역 (${inquiriesSnap ? inquiriesSnap.size : 0}건)</h3>`;html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;if (inquiriesSnap && !inquiriesSnap.empty) {inquiriesSnap.forEach(doc => {const inq = doc.data();html += `<div style="background:#fff; border:1px solid #e2e8f0; padding:10px; border-radius:8px; margin-bottom:8px; font-size:0.85rem;"><div><b>작성자:</b> ${inq.author} (${inq.userEmail || '익명'})</div><div style="color:#334155; margin-top:4px; white-space:pre-wrap;">${inq.content}</div><div style="text-align:right; margin-top:6px; display:flex; gap:6px; justify-content:flex-end;"><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="replyToInquiry('${doc.id}', '${escapeJsStr(inq.userEmail||'')}', '${inq.userUid||''}')">답장 전송</button><button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="deleteInquiry('${doc.id}')">삭제</button></div></div>`;});} else {html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">접수된 문의가 없습니다.</div>`;}html += `</div>`;
+    // 2. 모든 방문자 IP 로그 및 즉시 차단 섹션
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">🌐 모든 방문자 IP 기록 관제 및 즉시 차단 (${allVisitorsList.length}건 기록)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:240px; overflow-y:auto;">`;
+    if(allVisitorsList.length > 0) {
+      allVisitorsList.slice(0, 100).forEach(v => {
+        const timeStr = v.visitedAt ? new Date(v.visitedAt.toDate()).toLocaleString() : '방금 전';
+        html += `<div style="background:#ffffff; border:1px solid #e2e8f0; padding:8px 12px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.85rem;"><div><span>🌐 IP: <b>${v.ip || '알 수 없음'}</b></span> | <span style="color:#64748b;">${v.userEmail || '비로그인 방문자'} (${v.dateStr || ''})</span> <span style="font-size:0.75rem; color:#94a3b8; margin-left:6px;">${timeStr}</span></div><button type="button" class="btn-danger" style="padding:3px 10px; font-size:0.75rem;" onclick="adminBlockIpDirectly('${v.ip}')">🚫 IP 즉시 차단</button></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">기록된 방문자 IP가 없습니다.</div>`;
+    }
+    html += `</div>`;
 
-if (isSuper && lettersSnap) {let lettersArr = [];lettersSnap.forEach(doc => { const l = doc.data(); l.id = doc.id; lettersArr.push(l); });lettersArr.sort((a,b) => (b.createdAt ? (b.createdAt.seconds || 0) : 0) - (a.createdAt ? (a.createdAt.seconds || 0) : 0));
-html += `<h3 style="margin-bottom:10px; color:#1e293b;">💌 [최고마스터 전용] 전체 편지/답장 관제 (${lettersArr.length}건)</h3>`;if(lettersArr.length === 0) {html += `<p style="color:#64748b; margin-bottom:20px; font-size:0.9rem;">발송되거나 접수된 편지/답장이 없습니다.</p>`;} else {html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;lettersArr.forEach(l => {const timeStr = l.createdAt ? new Date(l.createdAt.toDate()).toLocaleString() : '방금 전';const safeTitle = escapeJsStr(l.title || '');const safeContent = escapeJsStr(l.content || '');const safeSender = escapeJsStr(l.sender || '관리자');const safeToEmail = escapeJsStr(l.toEmail || '');
-html += `<div style="background:#ffffff; border:1px solid #e2e8f0; padding:10px; border-radius:8px; margin-bottom:8px; font-size:0.85rem;"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;"><b>[보낸이: ${l.sender || '관리자'}] ➔ [수신: ${l.toEmail || '전체'}]</b><span style="font-size:0.75rem; color:#64748b;">${timeStr}</span></div><div><b>제목:</b> ${l.title || '제목 없음'}</div><div style="display:flex; gap:6px; justify-content:flex-end; margin-top:6px;"><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="adminReadDetailLetter('${safeTitle}', '${safeSender}', '${safeToEmail}', '${safeContent}')">전문 읽기</button><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="adminEditLetter('${l.id}', '${safeTitle}', '${safeContent}')">수정</button><button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="adminDeleteLetter('${l.id}')">삭제</button></div></div>`;});html += `</div>`;}}
+    // 3. 승인 대기 소스
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">📌 승인 대기 소스 목록 (${pendingSnap && !pendingSnap.empty ? pendingSnap.size : 0}건)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;
+    if (pendingSnap && !pendingSnap.empty) {
+      pendingSnap.forEach(doc => {
+        const p = doc.data();
+        html += `<div style="background:#fff; border:1px solid #e2e8f0; padding:10px; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem;"><div><b>${p.icon || '📦'} ${p.title}</b> (${p.contentType === 'file' ? '📁 파일' : '💻 코드'})<br><span style="font-size:0.8rem; color:#64748b;">작성자: ${p.author} (${p.email})</span></div><div style="display:flex; gap:6px;"><button type="button" class="btn-success" style="padding:4px 10px; font-size:0.78rem;" onclick="approvePendingSource('${doc.id}')">승인</button><button type="button" class="btn-danger" style="padding:4px 10px; font-size:0.78rem;" onclick="rejectPendingSource('${doc.id}')">거절</button></div></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">대기 중인 소스가 없습니다.</div>`;
+    }
+    html += `</div>`;
 
-let whitelistArr = (whitelistDoc && whitelistDoc.exists && whitelistDoc.data().list) ? whitelistDoc.data().list : [];html += `<h3 style="margin-bottom:10px; color:#1e293b;">👑 관리자 화이트리스트</h3>`;html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px;"><div style="display:flex; gap:8px; margin-bottom:10px;"><input type="text" id="newWhitelistInput" class="form-control" placeholder="이메일 또는 유튜브 채널" style="flex:1;"><button type="button" class="btn" onclick="addWhitelistItem()" style="padding:0.5rem 1rem; white-space:nowrap;">추가</button></div><div style="display:flex; flex-wrap:wrap; gap:8px;">`;if(whitelistArr.length === 0) {html += `<span style="font-size:0.85rem; color:#64748b;">등록된 항목이 없습니다.</span>`;} else {whitelistArr.forEach(item => {html += `<span style="background:#e0e7ff; color:#1e3a8a; padding:4px 10px; border-radius:20px; font-size:0.85rem; font-weight:600; display:inline-flex; align-items:center; gap:6px;">📺 ${item} <button type="button" onclick="removeWhitelistItem('${item}')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">&times;</button></span>`;});}html += `</div></div>`;
+    // 4. 승인된 전체 소스
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">📂 승인된 전체 소스 관리 (${sourcesSnap && !sourcesSnap.empty ? sourcesSnap.size : 0}개)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:200px; overflow-y:auto;">`;
+    if (sourcesSnap && !sourcesSnap.empty) {
+      sourcesSnap.forEach(doc => {
+        const s = doc.data();
+        html += `<div style="background:#fff; border:1px solid #e2e8f0; padding:8px 12px; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem;"><span>${s.icon || '📦'} <b>${s.title}</b> (by ${s.author})</span><button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="deleteSourceAdmin('${doc.id}')">삭제</button></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">등록된 소스가 없습니다.</div>`;
+    }
+    html += `</div>`;
 
-let blockedIpArr = (blockedIpDoc && blockedIpDoc.exists && blockedIpDoc.data().list) ? blockedIpDoc.data().list : [];html += `<h3 style="margin-bottom:10px; color:#1e293b;">🚨 IP 차단 관리</h3>`;html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px;"><div style="display:flex; gap:8px; margin-bottom:10px;"><input type="text" id="newBlockedIpInput" class="form-control" placeholder="차단할 IP 입력" style="flex:1;"><button type="button" class="btn-danger" onclick="addBlockedIp()" style="padding:0.5rem 1rem; white-space:nowrap;">IP 차단</button></div><div style="display:flex; flex-wrap:wrap; gap:8px;">`;if(blockedIpArr.length === 0) {html += `<span style="font-size:0.85rem; color:#64748b;">차단된 IP가 없습니다.</span>`;} else {blockedIpArr.forEach(ip => {html += `<span style="background:#fee2e2; color:#b91c1c; padding:4px 10px; border-radius:20px; font-size:0.85rem; font-weight:600; display:inline-flex; align-items:center; gap:6px;">🚫 ${ip} <button type="button" onclick="removeBlockedIp('${ip}')" style="background:none; border:none; color:#b91c1c; cursor:pointer; font-weight:bold;">&times;</button></span>`;});}html += `</div></div>`;
+    // 5. 신고 내역 및 고객센터 문의
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">🚨 신고 접수 내역 (${reportsSnap && !reportsSnap.empty ? reportsSnap.size : 0}건)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:200px; overflow-y:auto;">`;
+    if (reportsSnap && !reportsSnap.empty) {
+      reportsSnap.forEach(doc => {
+        const r = doc.data();
+        html += `<div style="background:#fff; border:1px solid #fca5a5; padding:10px; border-radius:8px; margin-bottom:8px; font-size:0.85rem;"><div><b>대응 소스:</b> ${r.gameTitle} | <b>신고자:</b> ${r.reporter}</div><div style="color:#ef4444; margin-top:4px;"><b>사유:</b> ${r.reason}</div><div style="text-align:right; margin-top:6px;"><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="dismissReport('${doc.id}')">신고 처리 완료 (삭제)</button></div></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">신고 내역이 없습니다.</div>`;
+    }
+    html += `</div>`;
 
-container.innerHTML = html;}).catch(err => {container.innerHTML = `<div style="color:red; text-align:center; padding:2rem;">데이터 로드 실패: ${err.message}</div>`;});}
+    // 6. 관리자 화이트리스트 & IP 차단 관리
+    let whitelistArr = (whitelistDoc && whitelistDoc.exists && whitelistDoc.data().list) ? whitelistDoc.data().list : [];
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">👑 관리자 화이트리스트</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px;"><div style="display:flex; gap:8px; margin-bottom:10px;"><input type="text" id="newWhitelistInput" class="form-control" placeholder="이메일 또는 유튜브 채널" style="flex:1;"><button type="button" class="btn" onclick="addWhitelistItem()" style="padding:0.5rem 1rem; white-space:nowrap;">추가</button></div><div style="display:flex; flex-wrap:wrap; gap:8px;">`;
+    if(whitelistArr.length === 0) { html += `<span style="font-size:0.85rem; color:#64748b;">등록된 항목이 없습니다.</span>`; } else {
+      whitelistArr.forEach(item => { html += `<span style="background:#e0e7ff; color:#1e3a8a; padding:4px 10px; border-radius:20px; font-size:0.85rem; font-weight:600; display:inline-flex; align-items:center; gap:6px;">📺 ${item} <button type="button" onclick="removeWhitelistItem('${item}')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">&times;</button></span>`; });
+    }
+    html += `</div></div>`;
+
+    let blockedIpArr = (blockedIpDoc && blockedIpDoc.exists && blockedIpDoc.data().list) ? blockedIpDoc.data().list : [];
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">🚨 IP 차단 관리</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px;"><div style="display:flex; gap:8px; margin-bottom:10px;"><input type="text" id="newBlockedIpInput" class="form-control" placeholder="차단할 IP 입력" style="flex:1;"><button type="button" class="btn-danger" onclick="addBlockedIp()" style="padding:0.5rem 1rem; white-space:nowrap;">IP 차단</button></div><div style="display:flex; flex-wrap:wrap; gap:8px;">`;
+    if(blockedIpArr.length === 0) { html += `<span style="font-size:0.85rem; color:#64748b;">차단된 IP가 없습니다.</span>`; } else {
+      blockedIpArr.forEach(ip => { html += `<span style="background:#fee2e2; color:#b91c1c; padding:4px 10px; border-radius:20px; font-size:0.85rem; font-weight:600; display:inline-flex; align-items:center; gap:6px;">🚫 ${ip} <button type="button" onclick="removeBlockedIp('${ip}')" style="background:none; border:none; color:#b91c1c; cursor:pointer; font-weight:bold;">&times;</button></span>`; });
+    }
+    html += `</div></div>`;
+
+    container.innerHTML = html;
+  }).catch(err => {
+    container.innerHTML = `<div style="color:red; text-align:center; padding:2rem;">데이터 로드 실패: ${err.message}<br><br>💡 Firebase Console -> Firestore Database -> 규칙(Rules) 탭에서 인증된 사용자 및 관리자에게 read/write 권한이 허용되어 있는지 확인해주세요.</div>`;
+  });
+}
 
 function approvePendingSource(id) {if(!db) return;db.collection(COLL_PENDING).doc(id).get().then(doc => {if(!doc.exists) return;const data = doc.data();data.plays = 0;data.approvedAt = firebase.firestore.FieldValue.serverTimestamp();
 db.collection(COLL_SOURCES).add(data).then(() => {db.collection(COLL_PENDING).doc(id).delete();showToast('소스가 최종 승인되어 게시되었습니다!');loadAdminDashboard();});});}
@@ -608,21 +843,22 @@ async function deleteSourceAdmin(id) {if(!db) return;if(!(await customConfirm("�
 function dismissReport(id) {if(!db) return;db.collection(COLL_REPORTS).doc(id).delete().then(() => {showToast('신고 내역이 처리(삭제)되었습니다.');loadAdminDashboard();});}
 function deleteInquiry(id) {if(!db) return;db.collection(COLL_INQUIRIES).doc(id).delete().then(() => {showToast('문의 내역이 삭제되었습니다.');loadAdminDashboard();});}
 
-function adminReadDmDetail(title, sender, receiver, content) {if(!isSuperAdmin()) return showToast('해당 기능은 kjoon.kang@gmail.com 마스터 계정 전용입니다.');customAlert(`[1:1 DM 상세보기]\n\n보낸 사람: ${sender}\n받는 사람: ${receiver}\n제목: ${title}\n\n내용:\n${content}`, "DM 상세");}
-
-async function adminEditDm(dmId, curTitle, curContent) {if(!isSuperAdmin()) return showToast('해당 기능은 kjoon.kang@gmail.com 마스터 계정 전용입니다.');const newTitle = await customPrompt("수정할 DM 제목:", curTitle, "DM 수정");if(newTitle === null) return;const newContent = await customPrompt("수정할 DM 내용:", curContent, "DM 수정");if(newContent === null) return;
-db.collection(COLL_DMS).doc(dmId).update({title: newTitle, content: newContent, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("DM 메시지가 수정되었습니다."); loadAdminDashboard(); });}
-
-async function adminReportDm(senderEmail, senderUid) {if(!isSuperAdmin()) return showToast('해당 기능은 kjoon.kang@gmail.com 마스터 계정 전용입니다.');const warningMsg = await customPrompt(`[${senderEmail}] 회원 경고 사유 입력:`, "부적절한 DM 전송으로 경고 조치 되었습니다.", "회원 경고");if(!warningMsg) return;if(senderUid) {db.collection(COLL_USERS).doc(senderUid).update({warningReport: warningMsg, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("경고 처리가 완료되었습니다."); loadAdminDashboard(); });}}
-
-async function adminDeleteDm(dmId) {if(!isSuperAdmin()) return showToast('해당 기능은 kjoon.kang@gmail.com 마스터 계정 전용입니다.');if(!(await customConfirm("정말 이 DM 메시지를 삭제하시겠습니까?"))) return;db.collection(COLL_DMS).doc(dmId).delete().then(() => { showToast("DM 메시지가 삭제되었습니다."); loadAdminDashboard(); });}
-
-function adminReadDetailLetter(title, sender, toEmail, content) {customAlert(`[편지 전문 상세보기]\n\n보낸 사람: ${sender}\n받는 사람: ${toEmail}\n제목: ${title}\n\n내용:\n${content}`, "편지 전문");}
-
-async function adminEditLetter(letterId, curTitle, curContent) {if(!isSuperAdmin()) return showToast('해당 기능은 kjoon.kang@gmail.com 마스터 계정 전용입니다.');const newTitle = await customPrompt("수정할 편지 제목:", curTitle, "편지 수정");if(newTitle === null) return;const newContent = await customPrompt("수정할 편지 내용:", curContent, "편지 수정");if(newContent === null) return;
-db.collection(COLL_LETTERS).doc(letterId).update({title: newTitle, content: newContent, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("편지가 수정되었습니다."); loadAdminDashboard(); });}
-
-async function adminDeleteLetter(letterId) {if(!isSuperAdmin()) return showToast('해당 기능은 kjoon.kang@gmail.com 마스터 계정 전용입니다.');if(!(await customConfirm("정말 이 편지를 삭제하시겠습니까?"))) return;db.collection(COLL_LETTERS).doc(letterId).delete().then(() => { showToast("편지가 삭제되었습니다."); loadAdminDashboard(); });}
+async function adminBlockIpDirectly(ipToBlock) {
+  if(!db) return;
+  if(!ipToBlock || ipToBlock === '알 수 없음') return showToast('차단할 유효한 IP가 아닙니다.');
+  if(!(await customConfirm(`[${ipToBlock}] IP를 즉시 차단하시겠습니까?`))) return;
+  const docRef = db.collection(COLL_SETTINGS).doc("blockedIPs");
+  const docSnap = await docRef.get().catch(() => null);
+  let list = (docSnap && docSnap.exists && docSnap.data().list) ? docSnap.data().list : [];
+  if(!list.includes(ipToBlock)) {
+    list.push(ipToBlock);
+    await docRef.set({ list }).catch(err => showToast('IP 차단 저장 실패: ' + err.message));
+    showToast(`[${ipToBlock}] IP가 성공적으로 차단되었습니다.`);
+    loadAdminDashboard();
+  } else {
+    showToast('이미 차단된 IP입니다.');
+  }
+}
 
 async function adminEditUser(uid, currentNick, currentPass) {if(!isSuperAdmin()) return showToast('해당 기능은 kjoon.kang@gmail.com 마스터 계정 전용입니다.');const newNick = await customPrompt("변경할 닉네임:", currentNick, "회원 수정");if(newNick === null) return;const newPass = await customPrompt("변경할 비밀번호:", currentPass, "회원 수정");if(newPass === null) return;db.collection(COLL_USERS).doc(uid).update({displayName: newNick, setPass: newPass, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("회원 정보 수정 완료"); loadAdminDashboard(); });}
 
@@ -637,8 +873,22 @@ async function adminDeleteUser(uid) {if(!isSuperAdmin()) return showToast('해�
 // ================= 🤖 AI 대화 및 이미지 로그 관제 =================
 let rawAiLogsCache = [];
 function openAiLogsModal(filterEmail = '') {if(!isAnyMasterAdmin()) return showToast('마스터 관리자 권한이 필요합니다.');openModal('aiLogsModal');const searchInput = document.getElementById('aiLogSearchInput');if(searchInput) searchInput.value = filterEmail || '';loadAiLogs();}
-function loadAiLogs() {if(!db || !isAnyMasterAdmin()) return;const container = document.getElementById('aiLogsContainer');if(container) container.innerHTML = '<div style="text-align:center; color:#64748b; padding:2rem;">AI 기록 로딩 중...</div>';
-db.collection(COLL_AI_LOGS).get().then(snap => {rawAiLogsCache = [];if(snap && !snap.empty) {snap.forEach(doc => { const d = doc.data(); d.id = doc.id; rawAiLogsCache.push(d); });rawAiLogsCache.sort((a, b) => (b.timestamp ? (b.timestamp.seconds || 0) : 0) - (a.timestamp ? (a.timestamp.seconds || 0) : 0));}renderFilteredAiLogs();}).catch(err => {if(container) container.innerHTML = `<div style="color:red; text-align:center; padding:2rem;">로그 로드 실패: ${err.message}</div>`;});}
+function loadAiLogs() {
+  if(!db || !isAnyMasterAdmin()) return;
+  const container = document.getElementById('aiLogsContainer');
+  if(container) container.innerHTML = '<div style="text-align:center; color:#64748b; padding:2rem;">AI 기록 로딩 중...</div>';
+
+  db.collection(COLL_AI_LOGS).get().then(snap => {
+    rawAiLogsCache = [];
+    if(snap && !snap.empty) {
+      snap.forEach(doc => { const d = doc.data(); d.id = doc.id; rawAiLogsCache.push(d); });
+      rawAiLogsCache.sort((a, b) => (b.timestamp ? (b.timestamp.seconds || 0) : 0) - (a.timestamp ? (a.timestamp.seconds || 0) : 0));
+    }
+    renderFilteredAiLogs();
+  }).catch(err => {
+    if(container) container.innerHTML = `<div style="color:red; text-align:center; padding:2rem;">로그 로드 실패 (${err.message})<br><br>💡 Firestore Rules에서 new_ai_logs 컬렉션 읽기 권한을 확인해주세요.</div>`;
+  });
+}
 
 async function deleteAiLog(id) {if(!isSuperAdmin()) return showToast('기록 삭제는 kjoon.kang 마스터 계정만 가능합니다.');if(!(await customConfirm("이 AI 기록을 삭제하시겠습니까?"))) return;if(!db) return;db.collection(COLL_AI_LOGS).doc(id).delete().then(() => {showToast("AI 기록이 삭제되었습니다.");loadAiLogs();}).catch(err => showToast("삭제 실패: " + err.message));}
 
@@ -700,7 +950,7 @@ if (isImageRequest(userText) || imgPromptMatch) {const promptText = imgPromptMat
 if (imgResult.url) {renderedHtml += `<div style="margin-top:14px; text-align:center; background:rgba(15,23,42,0.6); padding:12px; border-radius:16px; border:1px solid rgba(139,92,246,0.3);"><img src="${imgResult.url}" alt="AI Generated Image" style="width:100%; max-width:420px; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1);" loading="lazy" onload="document.getElementById('gekojoonAiChatBody').scrollTop = document.getElementById('gekojoonAiChatBody').scrollHeight;"><div style="margin-top:8px; font-size:0.75rem; color:#38bdf8;">✨ 모델: ${imgResult.engine}</div><div style="margin-top:10px; display:flex; justify-content:center; gap:8px;"><button type="button" onclick="downloadAiImage('${imgResult.url}')" class="btn" style="padding:6px 14px; font-size:0.8rem; border-radius:8px; background:linear-gradient(135deg, #a855f7, #3b82f6); border:none; cursor:pointer;">📥 고화질 원본 파일 저장</button></div></div>`;} else {renderedHtml += `<br><span style="color:#ef4444; font-size:0.85rem;">⚠️ 이미지 생성 결과가 비어있습니다. ${imgResult.err ? '(' + imgResult.err + ')' : '다시 시도해주세요.'}</span>`;}}
 if(loadingEl) loadingEl.querySelector('.ai-bubble').innerHTML = renderedHtml;
 let compressedGenImg = finalGeneratedImageUrl ? await compressBase64Image(finalGeneratedImageUrl) : '';let compressedAttImg = rawAttachedBase64 ? await compressBase64Image(rawAttachedBase64) : '';
-if (db) {db.collection(COLL_AI_LOGS).add({userEmail: currentUser ? currentUser.email : '비로그인 방문자',userUid: currentUser ? currentUser.uid : 'anonymous',userText: userText || '(파일 첨부 질문)',aiReply: cleanText,generatedImage: compressedGenImg,attachedImage: compressedAttImg,fileName: currentFileName,timestamp: firebase.firestore.FieldValue.serverTimestamp()}).catch(err => console.error("Firestore AI Log save error:", err));}
+if (db) {db.collection(COLL_AI_LOGS).add({userEmail: currentUser ? currentUser.email : '비로그인 방문자',userUid: currentUser ? currentUser.uid : 'anonymous',userText: userText || '(파일 첨부 질문)',aiReply: cleanText,generatedImage: compressedGenImg,attachedImage: compressedAttImg,fileName: currentFileName,timestamp: firebase.firestore.FieldValue.serverTimestamp()}).catch(err => console.warn("Firestore AI Log save error:", err));}
 } catch (err) {console.error("Gemini AI Processing Error:", err);const loadingEl = document.getElementById(loadingId);if(loadingEl) loadingEl.querySelector('.ai-bubble').innerText = 'AI 처리 중 오류가 발생했습니다. 질문을 다시 입력해 주세요.';} finally {clearAiAttachedFile();sendBtn.disabled = false;sendBtn.innerText = '전송';chatBody.scrollTop = chatBody.scrollHeight;}}
 
 async function downloadAiImage(url) {showToast('이미지 저장 중...');try {if (url.startsWith('data:')) {const a = document.createElement('a');a.href = url;a.download = `gekojoon_ai_image_${Date.now()}.png`;document.body.appendChild(a);a.click();document.body.removeChild(a);showToast('이미지가 저장되었습니다!');} else {const res = await fetch(url);const blob = await res.blob();const blobUrl = URL.createObjectURL(blob);const a = document.createElement('a');a.href = blobUrl;a.download = `gekojoon_ai_image_${Date.now()}.jpg`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(blobUrl);showToast('이미지가 저장되었습니다!');}} catch(e) {window.open(url, '_blank');}}
