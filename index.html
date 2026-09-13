@@ -53,7 +53,7 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
 .letter-item, .dm-item { background: #f8fafc; border: 1px solid var(--border-color); padding: 1.1rem; border-radius: 14px; margin-bottom: 0.8rem; }.letter-item.unread, .dm-item.unread { border-left: 4px solid var(--primary); background: #eff6ff; }.letter-header, .dm-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; font-size: 0.88rem; font-weight: 800; color: #1e293b; }.letter-body, .dm-body { font-size: 0.92rem; color: #334155; line-height: 1.55; white-space: pre-wrap; }
 @media (max-width: 768px) {header { padding: 0.7rem 1rem; } .logo-title { font-size: 1.2rem; } .hero-banner { padding: 2rem 1.5rem; } .hero-banner h1 { font-size: 1.7rem; } .controls-bar { flex-direction: column; align-items: stretch; } .search-container { width: 100%; } .modal-content { padding: 1.5rem; max-width: 95vw; margin: 0.5rem; } .ai-modal-card { height: 85vh; max-width: 98vw; } }</style></head><body><!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PZR7MB6D"height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><!-- End Google Tag Manager (noscript) -->
 <div id="toastContainer"></div>
-<!-- 헤더 영역 --><header><a href="#" class="logo-container" onclick="location.reload()"><div class="logo-box"></div><div><span class="logo-title" id="headerTitle">GEKOJOON</span><span class="logo-subtitle">HUB</span></div></a><div class="nav-links" id="customNavLinksContainer"><button class="btn-success" id="installAppBtn" onclick="installPWA()" style="display:inline-flex; padding: 0.5rem 1rem; font-size: 0.85rem;">📥 앱 패키지 다운로드</button><div id="userAuthDisplay" style="font-size: 0.9rem; font-weight: 700; color: var(--text-muted); margin-left: 5px;"></div><button class="btn" id="authBtn" onclick="handleAuthAction()">로그인</button>
+<!-- 헤더 영역 --><header><a href="#" class="logo-container" onclick="location.reload()"><div class="logo-box"></div><div><span class="logo-title" id="headerTitle">GEKOJOON</span><span class="logo-subtitle">HUB</span></div></a><div class="nav-links" id="customNavLinksContainer"><button class="btn-success" id="installAppBtn" onclick="installPWA()" style="display:inline-flex; padding: 0.5rem 1rem; font-size: 0.85rem;">📥 앱 설치하기</button><div id="userAuthDisplay" style="font-size: 0.9rem; font-weight: 700; color: var(--text-muted); margin-left: 5px;"></div><button class="btn" id="authBtn" onclick="handleAuthAction()">로그인</button>
 <button class="btn-secondary" id="userDmBtn" onclick="openUserDmModal()" style="display:none; position:relative;">✉️ DM 보내기<span id="unreadDmBadge" style="display:none; position:absolute; top:-10px; right:-8px; background:#ef4444; color:#ffffff; font-size:0.85rem; font-weight:800; min-width:22px; height:22px; line-height:22px; text-align:center; border-radius:11px; padding:0 6px; border:2px solid #ffffff; box-shadow:0 3px 8px rgba(239,68,68,0.5);">0</span></button>
 <button class="btn-secondary" id="myPageBtn" onclick="openMyPage()" style="display:none;">👤 마이페이지 <span id="unreadBadge" style="display:none; background:#ef4444; color:#fff; border-radius:10px; padding:1px 6px; font-size:0.75rem; margin-left:4px;">N</span></button><button class="btn-secondary" onclick="checkAuthAndOpenSubmit()">➕ 소스 기여하기</button><button class="btn-secondary" style="padding: 0.6rem;" onclick="openModal('adminLoginModal')">⚙️</button></div></header>
 <!-- 메인 컨텐츠 영역 --><main><div class="hero-banner"><div><h1 id="heroTitleText">개발자를 위한 프리미엄 소스 마켓</h1><p id="heroDescText">파일, 텍스트 스니펫, 코드 등 다양한 에셋을 공유하고 광고 수익을 5:5로 공정하게 정산받으세요.</p></div><button class="btn" onclick="checkAuthAndOpenSubmit()">🚀 내 소스 등록하고 수익 창출</button></div>
@@ -231,8 +231,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
   deferredPrompt = e; 
 });
 
-// [앱 패키지 파일 다운로드 및 PWA 설치 최적화 함수]
-// Mac 및 삼성/안드로이드 기기에서 디스크 이미지 오류 없이 정상 작동하도록 브라우저 네이티브 설치 및 맞춤 파일 형식을 적용합니다.
+// [네이티브 앱 독립 설치 실행 함수]
+// 맥 및 삼성 핸드폰(안드로이드) 등에서 브라우저 탭 형태가 아닌 '독립된 앱 창'으로 바로 설치되도록 처리합니다.
 function installPWA() { 
   if (deferredPrompt) { 
     deferredPrompt.prompt(); 
@@ -245,27 +245,31 @@ function installPWA() {
     return;
   }
   
-  const appPackageHtml = document.documentElement.outerHTML;
-  const blob = new Blob([appPackageHtml], { type: 'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  
-  // 기기 환경 감지 (Mac은 .html 앱 파일로 다운로드하여 마운트 오류 방지, 삼성/안드로이드는 .abs 파일 적용)
+  // 브라우저가 자동 설치 팝업을 지원하지 않을 때 잘못된 파일 다운로드(디스크 이미지 오류)를 방지하고,
+  // 기기 환경별로 정확한 독립형 네이티브 앱 설치 방법을 안내합니다.
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
   if (/Macintosh|MacIntel|MacPPC|Mac68K/.test(userAgent)) {
-    a.download = 'Gekojoon_HUB.html';
+    customAlert(
+      "💻 맥북(Mac)에서 독립된 네이티브 앱으로 설치하는 방법:\n\n" +
+      "1. 크롬(Chrome) 주소창 우측 끝의 [설치 아이콘(모니터+화살표 모양)] 또는 주소창 오른쪽 상단 메뉴(⋮)를 클릭하세요.\n" +
+      "2. [Gekojoon HUB 설치...] 또는 [앱 저장...]을 선택하세요.\n" +
+      "3. 맥 독(Dock)바와 응용 프로그램(Applications) 폴더에 독립된 실행 앱으로 완벽하게 등록됩니다!",
+      "macOS 앱 설치 안내"
+    );
   } else if (/android|samsung/i.test(userAgent)) {
-    a.download = 'Gekojoon_HUB.abs';
+    customAlert(
+      "📱 삼성 및 안드로이드 기기에서 앱으로 설치하는 방법:\n\n" +
+      "1. 삼성 인터넷 또는 크롬 브라우저 우측 상단의 메뉴(⋮) 버튼을 누르세요.\n" +
+      "2. [홈 화면에 추가] 또는 [앱 설치]를 선택하세요.\n" +
+      "3. 스마트폰 홈 화면에 전용 앱 아이콘이 생성되어 독립 실행됩니다!",
+      "모바일 앱 설치 안내"
+    );
   } else {
-    a.download = 'Gekojoon_HUB_App.html';
+    customAlert(
+      "🌐 브라우저 메뉴(⋮)에서 [Gekojoon HUB 설치]를 선택하시면 웹 브라우저 창이 아닌 독립된 실행형 앱으로 완벽하게 설치됩니다.",
+      "앱 설치 안내"
+    );
   }
-
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast('📦 앱 실행 파일이 다운로드되었습니다! 브라우저에서 열어 실행하세요.');
 }
 
 document.addEventListener('contextmenu', e => e.preventDefault());document.addEventListener('keydown', e => {if (e.key === 'F12') { e.preventDefault(); return false; }if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) { e.preventDefault(); return false; }if ((e.ctrlKey || e.metaKey) && ['U', 'u', 'S', 's', 'A', 'a'].includes(e.key)) { e.preventDefault(); return false; }if (e.metaKey && e.altKey && ['I', 'i', 'J', 'j', 'C', 'c', 'U', 'u'].includes(e.key)) { e.preventDefault(); return false; }if (e.metaKey && ['U', 'u', 'S', 's'].includes(e.key)) { e.preventDefault(); return false; }});
