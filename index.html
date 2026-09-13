@@ -53,7 +53,7 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
 .letter-item, .dm-item { background: #f8fafc; border: 1px solid var(--border-color); padding: 1.1rem; border-radius: 14px; margin-bottom: 0.8rem; }.letter-item.unread, .dm-item.unread { border-left: 4px solid var(--primary); background: #eff6ff; }.letter-header, .dm-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; font-size: 0.88rem; font-weight: 800; color: #1e293b; }.letter-body, .dm-body { font-size: 0.92rem; color: #334155; line-height: 1.55; white-space: pre-wrap; }
 /* 모바일 반응형 완벽 보완 스타일 */@media (max-width: 768px) {header { padding: 0.7rem 1rem; } .logo-title { font-size: 1.2rem; } .hero-banner { padding: 2rem 1.5rem; } .hero-banner h1 { font-size: 1.7rem; } .controls-bar { flex-direction: column; align-items: stretch; } .search-container { width: 100%; } .modal-content { padding: 1.5rem; max-width: 95vw; margin: 0.5rem; } .ai-modal-card { height: 85vh; max-width: 98vw; } }</style></head><body><!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PZR7MB6D"height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><!-- End Google Tag Manager (noscript) -->
 <div id="toastContainer"></div>
-<!-- 헤더 영역 --><header><a href="#" class="logo-container" onclick="location.reload()"><div class="logo-box"></div><div><span class="logo-title" id="headerTitle">GEKOJOON</span><span class="logo-subtitle">HUB</span></div></a><div class="nav-links" id="customNavLinksContainer"><button class="btn-success" id="installAppBtn" onclick="installPWA()" style="display:inline-flex; padding: 0.5rem 1rem; font-size: 0.85rem;">📱 앱 설치</button><div id="userAuthDisplay" style="font-size: 0.9rem; font-weight: 700; color: var(--text-muted); margin-left: 5px;"></div><button class="btn" id="authBtn" onclick="handleAuthAction()">로그인</button>
+<!-- 헤더 영역 --><header><a href="#" class="logo-container" onclick="location.reload()"><div class="logo-box"></div><div><span class="logo-title" id="headerTitle">GEKOJOON</span><span class="logo-subtitle">HUB</span></div></a><div class="nav-links" id="customNavLinksContainer"><button class="btn-success" id="installAppBtn" onclick="installPWA()" style="display:inline-flex; padding: 0.5rem 1rem; font-size: 0.85rem;">📱 앱 설치 (바로가기)</button><div id="userAuthDisplay" style="font-size: 0.9rem; font-weight: 700; color: var(--text-muted); margin-left: 5px;"></div><button class="btn" id="authBtn" onclick="handleAuthAction()">로그인</button>
 <!-- DM 버튼 및 빨간색 카운팅 배지 --><button class="btn-secondary" id="userDmBtn" onclick="openUserDmModal()" style="display:none; position:relative;">✉️ DM 보내기<span id="unreadDmBadge" style="display:none; position:absolute; top:-10px; right:-8px; background:#ef4444; color:#ffffff; font-size:0.85rem; font-weight:800; min-width:22px; height:22px; line-height:22px; text-align:center; border-radius:11px; padding:0 6px; border:2px solid #ffffff; box-shadow:0 3px 8px rgba(239,68,68,0.5);">0</span></button>
 <button class="btn-secondary" id="myPageBtn" onclick="openMyPage()" style="display:none;">👤 마이페이지 <span id="unreadBadge" style="display:none; background:#ef4444; color:#fff; border-radius:10px; padding:1px 6px; font-size:0.75rem; margin-left:4px;">N</span></button><button class="btn-secondary" onclick="checkAuthAndOpenSubmit()">➕ 소스 기여하기</button><button class="btn-secondary" style="padding: 0.6rem;" onclick="openModal('adminLoginModal')">⚙️</button></div></header>
 <!-- 메인 컨텐츠 영역 --><main><div class="hero-banner"><div><h1 id="heroTitleText">개발자를 위한 프리미엄 소스 마켓</h1><p id="heroDescText">파일, 텍스트 스니펫, 코드 등 다양한 에셋을 공유하고 광고 수익을 5:5로 공정하게 정산받으세요.</p></div><button class="btn" onclick="checkAuthAndOpenSubmit()">🚀 내 소스 등록하고 수익 창출</button></div>
@@ -94,10 +94,6 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
 <!-- 모달: AI 대시보드 대화 및 이미지 기록 관제 --><div class="modal" id="aiLogsModal"><div class="modal-content" style="max-width: 850px;"><button type="button" class="close-btn" onclick="closeModal('aiLogsModal')">&times;</button><h2 style="display:flex; align-items:center; gap:8px;">🤖 사용자별 AI 대화 & 이미지 생성 기록 원문 관제</h2><div style="margin-top: 1rem; display: flex; gap: 10px;"><input type="text" id="aiLogSearchInput" class="form-control" placeholder="회원 이메일 또는 질문 키워드 검색..." oninput="renderFilteredAiLogs()"><button type="button" class="btn" onclick="loadAiLogs()" style="white-space:nowrap;">새로고침</button></div><div id="aiLogsContainer" style="margin-top: 1.2rem; max-height: 520px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;"><div style="text-align:center; color:#64748b; padding:2rem;">기록을 불러오는 중...</div></div></div></div>
 <div class="modal" id="reportModal"><div class="modal-content" style="max-width: 450px;"><button type="button" class="close-btn" onclick="closeModal('reportModal')">&times;</button><h2>🚨 소스 신고하기</h2><form onsubmit="submitGameReport(event)" style="margin-top: 1.2rem;"><input type="hidden" id="reportGameId"><div class="form-group"><label>신고 대상</label><input type="text" id="reportGameTitle" class="form-control" readonly style="background:#e2e8f0;"></div><div class="form-group"><label>신고 사유</label><textarea id="reportReason" class="form-control" required placeholder="신고 사유를 구체적으로 적어주세요." style="min-height: 100px;"></textarea></div><button type="submit" class="btn-danger" style="width:100%; margin-top:1rem; padding: 0.8rem;">신고 접수</button></form></div></div>
 <div class="modal" id="supportModal"><div class="modal-content" style="max-width: 500px;"><button type="button" class="close-btn" onclick="closeModal('supportModal')">&times;</button><h2>💬 고객센터 문의</h2><form onsubmit="handleSupportSubmit(event)" style="margin-top: 1.2rem;"><div class="form-group"><label>닉네임 / 작성자</label><input type="text" id="supAuthor" class="form-control" required placeholder="닉네임 입력"></div><div class="form-group"><label>문의 내용</label><textarea id="supContent" class="form-control" required placeholder="문의하실 내용을 입력해주세요." style="min-height: 120px;"></textarea></div><button type="submit" class="btn" style="width:100%; margin-top:1rem; padding: 0.8rem;">문의 접수하기</button></form></div></div>
-
-<!-- 모달: 기기별 맞춤 앱 설치 안내 가이드 -->
-<div class="modal" id="pwaInstallGuideModal"><div class="modal-content" style="max-width: 480px; text-align: center;"><button type="button" class="close-btn" onclick="closeModal('pwaInstallGuideModal')">&times;</button><div style="font-size: 2.8rem; margin-bottom: 0.5rem;">📱</div><h2 style="margin-bottom: 0.8rem; font-size: 1.35rem;">Gekojoon HUB 앱 설치 안내</h2><p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.5rem;">사용 중이신 기기에서 네이티브 앱처럼 바로 실행할 수 있도록 설치를 진행해 드립니다!</p>
-<div id="pwaGuideContentBox" style="background: #f8fafc; border: 1px solid var(--border-color); padding: 1.2rem; border-radius: 14px; text-align: left; font-size: 0.9rem; line-height: 1.6; color: #1e293b; margin-bottom: 1.5rem;"></div><button type="button" class="btn" onclick="closeModal('pwaInstallGuideModal')" style="width: 100%; padding: 0.8rem; border-radius: 12px;">확인 완료</button></div></div>
 
 <!-- 🤖 게코준 AI 챗봇 모달 UI --><div class="ai-modal-overlay" id="gekojoonAiModal" style="display:none;"><div class="ai-modal-card"><div class="ai-modal-header"><div class="ai-brand-title"><span class="ai-sparkle-icon">⚡</span><div><h3>게코준 AI 챗봇</h3><span class="ai-status-badge">Google Gemini gemini-3.5-flash-lite</span></div></div><div style="display:flex; align-items:center; gap:8px;"><span class="ai-shortcut-badge">⌘ + 1 / Ctrl + 1</span><button type="button" class="ai-close-btn" onclick="toggleGekojoonAiModal()">&times;</button></div></div>
 <div class="ai-chat-body" id="gekojoonAiChatBody"><div class="ai-msg bot"><div class="ai-avatar">🤖</div><div class="ai-bubble">안녕하세요! 게코준 AI(gemini-3.5-flash-lite)입니다. 질문 답변, 파일 분석, 코드 해설을 지원하며 '그려줘'라고 입력하시면 고화질 이미지도 생성해 드립니다!</div></div></div>
@@ -245,6 +241,13 @@ const manifestData = {
 const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
 document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(manifestBlob)}">`);
 
+// 서비스 워커 등록 (PWA 설치 프롬프트가 정상적으로 뜨도록 활성화)
+if ('serviceWorker' in navigator) {
+  const swCode = `self.addEventListener('fetch', function(event) {});`;
+  const swBlob = new Blob([swCode], { type: 'text/javascript' });
+  navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+}
+
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => { 
   e.preventDefault(); 
@@ -261,21 +264,18 @@ function installPWA() {
       deferredPrompt = null; 
     }); 
   } else {
-    // 기기 환경을 자동 판별하여 최적의 설치 가이드 안내 모달 띄우기
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const guideBox = document.getElementById('pwaGuideContentBox');
-    
-    if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
-      // iOS 사파리
-      guideBox.innerHTML = `<b>🍏 iOS (아이폰 / 아이패드) 앱 설치 방법</b><br><br>1. Safari 브라우저 하단의 <b>[공유 버튼 (□↗)]</b>을 누르세요.<br>2. 메뉴를 아래로 내려 <b>[홈 화면에 추가]</b>를 선택하세요.<br>3. 우측 상단의 <b>[추가]</b>를 누르면 바탕화면에 앱이 생성됩니다!`;
-    } else if (/Macintosh|MacIntel|MacPPC|Mac68K/.test(ua) && !window.MSStream) {
-      // 맥북
-      guideBox.innerHTML = `<b>💻 macOS (맥북) 앱 설치 방법</b><br><br>1. Chrome 또는 Edge 브라우저 주소창 우측의 <b>[설치 아이콘 (💻+)]</b>을 클릭하세요.<br>2. 또는 브라우저 우측 상단 <b>[세 점 메뉴 (⋮)]</b> ➡️ <b>[Gekojoon HUB 설치...]</b>를 클릭하세요.`;
-    } else {
-      // 윈도우 / 안드로이드
-      guideBox.innerHTML = `<b>💻🖥️ Windows / Android 앱 설치 방법</b><br><br>1. 브라우저 우측 상단 <b>[메뉴 (⋮ 또는 세 줄)]</b> 버튼을 누르세요.<br>2. <b>[앱 설치]</b> 또는 <b>[홈 화면에 추가]</b>를 클릭하여 설치를 완료하세요!`;
-    }
-    openModal('pwaInstallGuideModal');
+    // deferredPrompt가 아직 준비되지 않은 경우, 컴퓨터/모바일에서 바로 실행 가능한 윈도우 바탕화면 바로가기 파일(.url)을 파일처럼 즉시 다운로드 제공
+    const shortcutContent = `[InternetShortcut]\nURL=https://gekojoon.com/\nIDList=\nIconIndex=0\nIconFile=https://gekojoon.com/IMG_1702website.png`;
+    const blob = new Blob([shortcutContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Gekojoon HUB.url';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('💾 바탕화면 바로가기 파일이 다운로드되었습니다! 더블 클릭 시 앱처럼 실행됩니다.');
   }
 }
 
