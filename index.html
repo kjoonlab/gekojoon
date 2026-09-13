@@ -231,13 +231,18 @@ window.addEventListener('beforeinstallprompt', (e) => {
   deferredPrompt = e; 
 });
 
-// 사용자가 [앱 패키지 파일 다운로드] 클릭 시 Mac은 .dmg, 삼성/안드로이드는 .abs 파일로 즉시 다운로드되는 함수
+// [앱 패키지 파일 다운로드 및 PWA 설치 최적화 함수]
+// Mac 및 삼성/안드로이드 기기에서 디스크 이미지 오류 없이 정상 작동하도록 브라우저 네이티브 설치 및 맞춤 파일 형식을 적용합니다.
 function installPWA() { 
   if (deferredPrompt) { 
     deferredPrompt.prompt(); 
     deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        showToast('🎉 Gekojoon HUB 앱이 기기에 성공적으로 설치되었습니다!');
+      }
       deferredPrompt = null; 
     }); 
+    return;
   }
   
   const appPackageHtml = document.documentElement.outerHTML;
@@ -246,10 +251,10 @@ function installPWA() {
   const a = document.createElement('a');
   a.href = url;
   
-  // 기기 환경 감지 후 Mac은 .dmg, 삼성/안드로이드는 .abs 파일명 지정
+  // 기기 환경 감지 (Mac은 .html 앱 파일로 다운로드하여 마운트 오류 방지, 삼성/안드로이드는 .abs 파일 적용)
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
   if (/Macintosh|MacIntel|MacPPC|Mac68K/.test(userAgent)) {
-    a.download = 'Gekojoon_HUB.dmg';
+    a.download = 'Gekojoon_HUB.html';
   } else if (/android|samsung/i.test(userAgent)) {
     a.download = 'Gekojoon_HUB.abs';
   } else {
@@ -260,7 +265,7 @@ function installPWA() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  showToast('📦 요청하신 형식(.dmg 또는 .abs)으로 앱 패키지 파일이 다운로드되었습니다!');
+  showToast('📦 앱 실행 파일이 다운로드되었습니다! 브라우저에서 열어 실행하세요.');
 }
 
 document.addEventListener('contextmenu', e => e.preventDefault());document.addEventListener('keydown', e => {if (e.key === 'F12') { e.preventDefault(); return false; }if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) { e.preventDefault(); return false; }if ((e.ctrlKey || e.metaKey) && ['U', 'u', 'S', 's', 'A', 'a'].includes(e.key)) { e.preventDefault(); return false; }if (e.metaKey && e.altKey && ['I', 'i', 'J', 'j', 'C', 'c', 'U', 'u'].includes(e.key)) { e.preventDefault(); return false; }if (e.metaKey && ['U', 'u', 'S', 's'].includes(e.key)) { e.preventDefault(); return false; }});
