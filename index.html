@@ -1,5 +1,7 @@
 <!DOCTYPE html><html lang="ko"><head><!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-PZR7MB6D');</script><!-- End Google Tag Manager -->
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"><title>Gekojoon HUB | 프리미엄 소스 마켓 & 개발자 플랫폼</title>
+<!-- 실제 manifest.json 파일 연결 -->
+<link rel="manifest" href="manifest.json">
 <!-- 크로스플랫폼 앱 설치 및 모바일 홈화면 추가 설정 (iOS, Android, Windows, Mac) --><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Gekojoon HUB"><meta name="theme-color" content="#3b82f6"><meta name="msapplication-TileColor" content="#3b82f6"><meta name="msapplication-TileImage" content="IMG_1702website.png">
 <!-- 구글 서치 콘솔 소유권 확인 태그 --><meta name="google-site-verification" content="DNlT8QvnWOtqtAg-3swbzZFeRQBt-toW5FlQCs8wb0w" /><meta name="naver-site-verification" content="gekojoon-search-console-verification-placeholder" />
 <!-- 고급 SEO 메타 태그 --><meta name="description" content="Gekojoon HUB - 파일, 텍스트 스니펫, 코드 등 다양한 에셋을 공유하고 광고 수익을 5:5로 공정하게 정산받는 프리미엄 개발자 플랫폼입니다."><meta name="keywords" content="Gekojoon, 경준tv, 게코뱀, 소스 공유, 오픈소스, 파일 공유, 텍스트 스니펫, 코드 스니펫, 수익배분, 파이썬, 리액트, 중대부초미디어센터, 중대부초 소스공유 플랫폼"><link rel="canonical" href="https://gekojoon.com/">
@@ -204,24 +206,10 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
 </script>
 
 <script>
-const manifestData = {
-  "name": "Gekojoon HUB",
-  "short_name": "Gekojoon",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#3b82f6",
-  "icons": [
-    { "src": "IMG_1702website.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "IMG_1702website.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
-  ]
-};
-const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
-document.head.insertAdjacentHTML('beforeend', `<link rel="manifest" href="${URL.createObjectURL(manifestBlob)}">`);
-
+// 실제 sw.js 파일 연동
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",function(e){});').catch(() => {});
+    navigator.serviceWorker.register('sw.js').catch(() => {});
   });
 }
 
@@ -231,7 +219,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   deferredPrompt = e; 
 });
 
-// [버튼 클릭 시 브라우저 네이티브 앱 설치 창이 즉시 뜨도록 개선된 함수]
+// [모바일에서 즉시 앱 설치 창이 뜨도록 하는 함수]
 function installPWA() { 
   if (deferredPrompt) { 
     deferredPrompt.prompt(); 
@@ -565,7 +553,7 @@ function sendUserDm(e) {e.preventDefault();if(!currentUser || !db) return showTo
 const recipientVal = document.getElementById('dmRecipientSelect').value;const title = document.getElementById('dmTitleInput').value.trim();const content = document.getElementById('dmContentInput').value.trim();
 if(!recipientVal) return showToast('메시지를 받을 회원을 선택해주세요.');if(!title || !content) return showToast('제목과 내용을 모두 작성해주세요.');
 const [recEmail, recUid, recName] = recipientVal.split('|');
-db.collection(COLL_DMS).add({senderEmail: currentUser.email.toLowerCase(),senderUid: currentUser.uid,senderName: currentUser.displayName || currentUser.email.split('@')[0],receiverEmail: recEmail.toLowerCase(),receiverUid: recUid || '',receiverName: recName || recEmail,title: title,content: content,read: false,createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast(`💌 [${recName}] 회원에게 DM이 발송되었습니다!`);document.getElementById('dmTitleInput').value = '';document.getElementById('dmContentInput').value = '';switchDmTab('sent');}).catch(err => err => showToast('DM 전송 실패: ' + err.message));}
+db.collection(COLL_DMS).add({senderEmail: currentUser.email.toLowerCase(),senderUid: currentUser.uid,senderName: currentUser.displayName || currentUser.email.split('@')[0],receiverEmail: recEmail.toLowerCase(),receiverUid: recUid || '',receiverName: recName || recEmail,title: title,content: content,read: false,createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast(`💌 [${recName}] 회원에게 DM이 발송되었습니다!`);document.getElementById('dmTitleInput').value = '';document.getElementById('dmContentInput').value = '';switchDmTab('sent');}).catch(err => showToast('DM 전송 실패: ' + err.message));}
 function loadMyInboxDms() {if(!db || !currentUser) return;const inboxArea = document.getElementById('dmInboxArea');if(!inboxArea) return;
 db.collection(COLL_DMS).where("receiverEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {if(snap.empty) {inboxArea.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:2rem;">받은 DM 메시지가 없습니다.</div>';return;}let html = '';snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '방금 전';html += `<div class="dm-item ${d.read ? '' : 'unread'}"><div class="dm-header"><span>💬 보낸 사람: ${d.senderName || d.senderEmail} (${d.senderEmail})</span><span style="font-size:0.75rem; color:#64748b;">${dateStr}</span></div><div style="font-weight:700; color:#0f172a; margin-bottom:4px;">제목: ${d.title}</div><div class="dm-body">${d.content}</div></div>`;if(!d.read) {db.collection(COLL_DMS).doc(doc.id).update({ read: true }).catch(() => {});}});inboxArea.innerHTML = html;}).catch(() => {});}
 function loadMySentDms() {if(!db || !currentUser) return;const sentArea = document.getElementById('dmSentArea');if(!sentArea) return;
