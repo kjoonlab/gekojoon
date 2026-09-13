@@ -231,8 +231,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   deferredPrompt = e; 
 });
 
-// [네이티브 앱 독립 설치 실행 함수]
-// 맥 및 삼성 핸드폰(안드로이드) 등에서 브라우저 탭 형태가 아닌 '독립된 앱 창'으로 바로 설치되도록 처리합니다.
+// [최적화된 앱 설치 실행 함수]
 function installPWA() { 
   if (deferredPrompt) { 
     deferredPrompt.prompt(); 
@@ -245,28 +244,24 @@ function installPWA() {
     return;
   }
   
-  // 브라우저가 자동 설치 팝업을 지원하지 않을 때 잘못된 파일 다운로드(디스크 이미지 오류)를 방지하고,
-  // 기기 환경별로 정확한 독립형 네이티브 앱 설치 방법을 안내합니다.
   const userAgent = navigator.userAgent || navigator.vendor || window.opera;
   if (/Macintosh|MacIntel|MacPPC|Mac68K/.test(userAgent)) {
     customAlert(
-      "💻 맥북(Mac)에서 독립된 네이티브 앱으로 설치하는 방법:\n\n" +
-      "1. 크롬(Chrome) 주소창 우측 끝의 [설치 아이콘(모니터+화살표 모양)] 또는 주소창 오른쪽 상단 메뉴(⋮)를 클릭하세요.\n" +
-      "2. [Gekojoon HUB 설치...] 또는 [앱 저장...]을 선택하세요.\n" +
-      "3. 맥 독(Dock)바와 응용 프로그램(Applications) 폴더에 독립된 실행 앱으로 완벽하게 등록됩니다!",
+      "💻 맥북(Mac) 앱 설치 방법:\n\n" +
+      "1. 크롬 주소창 우측 끝의 [설치 아이콘(모니터+화살표)]을 클릭하세요.\n" +
+      "2. 또는 우측 상단 메뉴(⋮) ➔ [Gekojoon HUB 설치...]를 선택하시면 맥 독(Dock)바에 앱으로 등록됩니다!",
       "macOS 앱 설치 안내"
     );
   } else if (/android|samsung/i.test(userAgent)) {
     customAlert(
-      "📱 삼성 및 안드로이드 기기에서 앱으로 설치하는 방법:\n\n" +
-      "1. 삼성 인터넷 또는 크롬 브라우저 우측 상단의 메뉴(⋮) 버튼을 누르세요.\n" +
-      "2. [홈 화면에 추가] 또는 [앱 설치]를 선택하세요.\n" +
-      "3. 스마트폰 홈 화면에 전용 앱 아이콘이 생성되어 독립 실행됩니다!",
+      "📱 삼성 / 안드로이드 기기 앱 설치 방법:\n\n" +
+      "1. 브라우저 우측 상단 메뉴(⋮)를 누르세요.\n" +
+      "2. [홈 화면에 추가] 또는 [앱 설치]를 선택하면 홈 화면에 앱이 생성됩니다!",
       "모바일 앱 설치 안내"
     );
   } else {
     customAlert(
-      "🌐 브라우저 메뉴(⋮)에서 [Gekojoon HUB 설치]를 선택하시면 웹 브라우저 창이 아닌 독립된 실행형 앱으로 완벽하게 설치됩니다.",
+      "🌐 브라우저 메뉴(⋮)에서 [Gekojoon HUB 설치]를 선택하시면 독립된 앱으로 설치됩니다.",
       "앱 설치 안내"
     );
   }
