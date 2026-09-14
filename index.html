@@ -853,6 +853,19 @@ function loadAdminDashboard() {
       html += `</div>`;
     }
 
+    // 전체 방문자 IP 로그 관제 섹션 추가
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">🌐 전체 방문자 IP 기록 로그 (${allVisitorsList.length}건)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:180px; overflow-y:auto;">`;
+    if (allVisitorsList.length > 0) {
+      allVisitorsList.slice(0, 50).forEach(v => {
+        const timeStr = v.visitedAt ? new Date(v.visitedAt.toDate()).toLocaleString() : '최근';
+        html += `<div style="padding:6px 10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; background:#ffffff; border-radius:6px; margin-bottom:4px;"><span>📍 IP: <b>${v.ip}</b> (${v.userEmail || '비로그인'})</span><span style="color:#64748b;">${timeStr}</span></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">방문자 기록이 없습니다.</div>`;
+    }
+    html += `</div>`;
+
     html += `<h3 style="margin-bottom:10px; color:#1e293b;">👥 전체 회원 정보 관제 (${usersSnap && !usersSnap.empty ? usersSnap.size : 0}명)</h3>`;
     html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;
     if (usersSnap && !usersSnap.empty) {
@@ -983,7 +996,15 @@ const GEKOJOON_GEMINI_KEY = "AQ.Ab8RN6LiZ8YkS57-Qd5abU_Wyk5s5Y6wq8SRAP9FfEK0S7Y6
 function toggleGekojoonAiModal() {const modal = document.getElementById('gekojoonAiModal');if(!modal) return;modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';}
 function handleAiFileSelect(e) {selectedAiFile = e.target.files[0];}
 function clearAiAttachedFile() {selectedAiFile = null;}
-function handleAiInputKeyDown(e) {if (e.key === 'Enter' && !e.shiftKey) {e.preventDefault();sendGekojoonAiMessage();}}
+
+// 한글 중복 입력 방지 (IME composition 체크)
+function handleAiInputKeyDown(e) {
+  if (e.isComposing) return;
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendGekojoonAiMessage();
+  }
+}
 
 async function sendGekojoonAiMessage() {
   const inputEl = document.getElementById('gekojoonAiInput');
