@@ -841,14 +841,25 @@ function loadAdminDashboard() {
     }
 
     let blockedList = (blockedIpDoc && blockedIpDoc.exists && blockedIpDoc.data().list) ? blockedIpDoc.data().list : [];
-    let whitelistArr = (whitelistDoc && whitelistDoc.exists && whitelistDoc.data().list) ? whitelistDoc.data().list : [];
+    const defaultMasters = ['kjoon.kang@gmail.com', 'leemyungsu486@gmail.com', 'gekojoon@gmail.com'];
+    let whitelistArr = (whitelistDoc && whitelistDoc.exists && whitelistDoc.data().list) ? whitelistDoc.data().list : defaultMasters;
+    // 기본 마스터가 빠져있다면 보장
+    defaultMasters.forEach(m => { if(!whitelistArr.includes(m)) whitelistArr.push(m); });
 
     let html = '';
     html += `<div style="background:linear-gradient(135deg, #1e1b4b, #312e81); padding:1.2rem; border-radius:14px; margin-bottom:20px; color:#fff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;"><div><h3 style="margin:0; font-size:1.15rem; color:#c7d2fe;">🛡️ 마스터 관리자 통합 관제 센터 (${currentUser.email})</h3><p style="margin:4px 0 0 0; font-size:0.8rem; color:#a5b4fc;">${isSuper ? '최상위 마스터 권한 (전체 기능 및 IP/화이트리스트 제어 가능)' : '마스터 관리자 권한 (회원 및 소스 관제)'}</p></div><button type="button" class="btn" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none;" onclick="openAiLogsModal()">🤖 AI 대화/이미지 기록 원문 관제</button></div>`;
 
     if(isSuper) {
       html += `<div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">`;
-      html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px;"><h4>🔒 관리자 화이트리스트 (${whitelistArr.length}명)</h4><div style="margin:8px 0; max-height:100px; overflow-y:auto; font-size:0.85rem;">${whitelistArr.join('<br>')}</div><div style="display:flex; gap:6px;"><input type="text" id="adminWhitelistInput" class="form-control" placeholder="추가할 관리자 이메일" style="padding:0.4rem; font-size:0.85rem;"><button type="button" class="btn" style="padding:0.4rem 0.8rem; font-size:0.75rem;" onclick="addAdminWhitelist()">추가</button></div></div>`;
+      
+      // 화이트리스트 관리 UI (기본 마스터 외 삭제 가능)
+      let whitelistUiHtml = '';
+      whitelistArr.forEach(item => {
+        const isDefaultMaster = defaultMasters.includes(item.toLowerCase().trim());
+        whitelistUiHtml += `<div style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid #e2e8f0; font-size:0.85rem;"><span>${item}</span>${isDefaultMaster ? '<span style="color:#64748b; font-size:0.75rem;">(기본 보호)</span>' : `<button type="button" class="btn-danger" style="padding:2px 8px; font-size:0.7rem;" onclick="removeAdminWhitelist('${item}')">삭제</button>`}</div>`;
+      });
+      html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px;"><h4>🔒 관리자 화이트리스트 (${whitelistArr.length}명)</h4><div style="margin:8px 0; max-height:100px; overflow-y:auto;">${whitelistUiHtml}</div><div style="display:flex; gap:6px;"><input type="text" id="adminWhitelistInput" class="form-control" placeholder="추가할 관리자 이메일" style="padding:0.4rem; font-size:0.85rem;"><button type="button" class="btn" style="padding:0.4rem 0.8rem; font-size:0.75rem;" onclick="addAdminWhitelist()">추가</button></div></div>`;
+      
       html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px;"><h4>🚨 IP 차단 관리 (${blockedList.length}개)</h4><div style="margin:8px 0; max-height:100px; overflow-y:auto; font-size:0.85rem;">${blockedList.length ? blockedList.join('<br>') : '차단된 IP 없음'}</div><div style="display:flex; gap:6px;"><input type="text" id="adminBlockIpInput" class="form-control" placeholder="차단할 IP 입력" style="padding:0.4rem; font-size:0.85rem;"><button type="button" class="btn-danger" style="padding:0.4rem 0.8rem; font-size:0.75rem;" onclick="addBlockedIp()">차단</button></div></div>`;
       html += `</div>`;
     }
@@ -957,6 +968,24 @@ async function addAdminWhitelist() {
   let list = (docSnap && docSnap.exists && docSnap.data().list) ? docSnap.data().list : ['kjoon.kang@gmail.com', 'leemyungsu486@gmail.com', 'gekojoon@gmail.com'];
   if(!list.includes(email)) list.push(email);
   await ref.set({ list }).then(() => { showToast(`관리자 화이트리스트에 ${email} 추가 완료`); emailInput.value = ''; loadAdminDashboard(); });
+}
+
+async function removeAdminWhitelist(email) {
+  const activeDb = db || window.db;
+  if(!activeDb || !isSuperAdmin()) return showToast('최상위 관리자 권한이 필요합니다.');
+  const defaultMasters = ['kjoon.kang@gmail.com', 'leemyungsu486@gmail.com', 'gekojoon@gmail.com'];
+  if(defaultMasters.includes(email.toLowerCase().trim())) {
+    return showToast('기본 마스터 관리자 이메일은 삭제할 수 없습니다.');
+  }
+  if(!(await customConfirm(`[${email}] 화이트리스트에서 삭제하시겠습니까?`))) return;
+  const ref = activeDb.collection(COLL_SETTINGS).doc("adminWhitelist");
+  const docSnap = await ref.get().catch(() => null);
+  let list = (docSnap && docSnap.exists && docSnap.data().list) ? docSnap.data().list : defaultMasters;
+  list = list.filter(item => item.toLowerCase().trim() !== email.toLowerCase().trim());
+  await ref.set({ list }).then(() => {
+    showToast(`${email} 삭제 완료`);
+    loadAdminDashboard();
+  });
 }
 
 async function addBlockedIp() {
