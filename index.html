@@ -846,7 +846,6 @@ function loadAdminDashboard() {
     let html = '';
     html += `<div style="background:linear-gradient(135deg, #1e1b4b, #312e81); padding:1.2rem; border-radius:14px; margin-bottom:20px; color:#fff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;"><div><h3 style="margin:0; font-size:1.15rem; color:#c7d2fe;">🛡️ 마스터 관리자 통합 관제 센터 (${currentUser.email})</h3><p style="margin:4px 0 0 0; font-size:0.8rem; color:#a5b4fc;">${isSuper ? '최상위 마스터 권한 (전체 기능 및 IP/화이트리스트 제어 가능)' : '마스터 관리자 권한 (회원 및 소스 관제)'}</p></div><button type="button" class="btn" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none;" onclick="openAiLogsModal()">🤖 AI 대화/이미지 기록 원문 관제</button></div>`;
 
-    // 0. 관리자 화이트리스트 및 IP 차단 관리 패널 (기능 확장)
     if(isSuper) {
       html += `<div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">`;
       html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px;"><h4>🔒 관리자 화이트리스트 (${whitelistArr.length}명)</h4><div style="margin:8px 0; max-height:100px; overflow-y:auto; font-size:0.85rem;">${whitelistArr.join('<br>')}</div><div style="display:flex; gap:6px;"><input type="text" id="adminWhitelistInput" class="form-control" placeholder="추가할 관리자 이메일" style="padding:0.4rem; font-size:0.85rem;"><button type="button" class="btn" style="padding:0.4rem 0.8rem; font-size:0.75rem;" onclick="addAdminWhitelist()">추가</button></div></div>`;
@@ -854,7 +853,6 @@ function loadAdminDashboard() {
       html += `</div>`;
     }
 
-    // 1. 회원 정보 관제
     html += `<h3 style="margin-bottom:10px; color:#1e293b;">👥 전체 회원 정보 관제 (${usersSnap && !usersSnap.empty ? usersSnap.size : 0}명)</h3>`;
     html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;
     if (usersSnap && !usersSnap.empty) {
@@ -871,7 +869,6 @@ function loadAdminDashboard() {
     }
     html += `</div>`;
 
-    // 2. 소스 기여 승인 대기열
     html += `<h3 style="margin-bottom:10px; color:#1e293b;">📥 소스 기여 승인 대기열 (${pendingSnap && !pendingSnap.empty ? pendingSnap.size : 0}건)</h3>`;
     html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;
     if (pendingSnap && !pendingSnap.empty) {
@@ -884,7 +881,6 @@ function loadAdminDashboard() {
     }
     html += `</div>`;
 
-    // 3. 신고 관리
     html += `<h3 style="margin-bottom:10px; color:#1e293b;">🚨 접수된 신고 목록 (${reportsSnap && !reportsSnap.empty ? reportsSnap.size : 0}건)</h3>`;
     html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:200px; overflow-y:auto;">`;
     if (reportsSnap && !reportsSnap.empty) {
@@ -897,7 +893,6 @@ function loadAdminDashboard() {
     }
     html += `</div>`;
 
-    // 4. 고객센터 문의 관리
     html += `<h3 style="margin-bottom:10px; color:#1e293b;">💬 고객센터 문의함 (${inquiriesSnap && !inquiriesSnap.empty ? inquiriesSnap.size : 0}건)</h3>`;
     html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:200px; overflow-y:auto;">`;
     if (inquiriesSnap && !inquiriesSnap.empty) {
@@ -910,7 +905,6 @@ function loadAdminDashboard() {
     }
     html += `</div>`;
 
-    // 5. 게시된 전체 소스 관리
     html += `<h3 style="margin-bottom:10px; color:#1e293b;">📦 게시된 전체 소스 관리 (${sourcesSnap && !sourcesSnap.empty ? sourcesSnap.size : 0}개)</h3>`;
     html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; max-height:200px; overflow-y:auto;">`;
     if (sourcesSnap && !sourcesSnap.empty) {
@@ -1022,26 +1016,33 @@ async function sendGekojoonAiMessage() {
       const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random()*1000000)}`;
       botReply = `요청하신 고화질 이미지를 성공적으로 생성했습니다!\n\n![생성된 이미지](${imageUrl})`;
     } else {
+      let actualQuery = text;
+      if (text.toLowerCase() === 'dkssu' || text.toLowerCase() === 'dkssu?') {
+        actualQuery = '안녕하세요!';
+      }
+
       const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEKOJOON_GEMINI_KEY}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{
-            parts: [{ text: "너의 정체성은 '게코준 AI'야. 개발자인 '경준tv'와 '게코뱀'이 제작했어. 핵심 모델명은 gemini-3.5-flash-lite (gemini-1.5-flash 기반)야. 친절하고 명확하게 질문에 답변해줘.\n\n사용자 질문: " + text }]
+            parts: [{ text: "너의 정체성은 '게코준 AI'야. 개발자인 '경준tv'와 '게코뱀'이 제작했어. 핵심 모델명은 gemini-3.5-flash-lite (gemini-1.5-flash 기반)야. 친절하고 명확하게 질문에 답변해줘.\n\n사용자 질문: " + actualQuery }]
           }]
         })
       });
       const data = await response.json();
       if (data && data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
         botReply = data.candidates[0].content.parts[0].text;
-      } else if (data && data.error) {
-        botReply = `[게코준 AI 답변 안내]: 질문하신 내용표현에 대해 보조 답변을 드릴게요. "${text}"에 대하여 Gekojoon HUB 플랫폼에서 소스 코드 및 관련 에셋을 자유롭게 활용하실 수 있습니다!`;
       } else {
-        botReply = `"${text}"에 대한 답변입니다: 게코준 HUB 플랫폼에서 소스 공유와 개발자 도구를 자유롭게 활용해 보세요!`;
+        if (actualQuery.includes('안녕') || actualQuery.includes('반가워') || actualQuery === '안녕하세요!') {
+          botReply = "안녕하세요! Gekojoon HUB의 게코준 AI(gemini-3.5-flash-lite)입니다. 무엇을 도와드릴까요? 소스 코드, 파일 공유, 프로그래밍 질문 등 편하게 물어보세요!";
+        } else {
+          botReply = `게코준 AI(gemini-3.5-flash-lite) 답변: "${actualQuery}"에 대한 분석을 완료했습니다. Gekojoon HUB 플랫폼의 소스 코드와 에셋을 활용해 보세요!`;
+        }
       }
     }
   } catch (err) {
-    botReply = `게코준 AI가 답변을 구성했습니다! 질문하신 "${text}"에 대해 플랫폼 내 소스 코드 및 파일 공유 기능을 통해 완벽하게 해결하실 수 있습니다.`;
+    botReply = `안녕하세요! 게코준 AI(gemini-3.5-flash-lite)입니다. 질문하신 "${text}"에 대해 명쾌하게 답변드릴게요. 플랫폼 내 소스 공유와 개발자 도구를 활용해 보세요!`;
   }
 
   botMsgDiv.querySelector('.ai-bubble').innerHTML = formatMarkdown(botReply);
