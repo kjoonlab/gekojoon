@@ -48,7 +48,7 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
 .modal {display: none;position: fixed;top: 0; left: 0;width: 100%; height: 100%;background-color: rgba(15, 23, 42, 0.55);z-index: 1000;justify-content: center;align-items: center;padding: 1.2rem;backdrop-filter: blur(8px);-webkit-backdrop-filter: blur(8px);animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;}@keyframes modalFadeIn {from { opacity: 0; }to { opacity: 1; }}.modal-content {background-color: #ffffff;border: 1px solid var(--border-color);padding: 2.4rem;border-radius: 24px;width: 100%;max-width: 750px;position: relative;max-height: 90vh;overflow-y: auto;box-shadow: var(--shadow-lg), 0 25px 50px -12px rgba(0,0,0,0.15);animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;}@keyframes modalSlideUp {from { opacity: 0; transform: translateY(18px) scale(0.96); }to { opacity: 1; transform: translateY(0) scale(1); }}.close-btn {position: absolute;top: 1.3rem; right: 1.3rem;background: #f1f5f9;border: none;color: var(--text-muted);width: 38px; height: 38px;border-radius: 12px;font-size: 1.3rem;display: flex; align-items: center; justify-content: center;cursor: pointer;z-index: 10;transition: all 0.2s;}.close-btn:hover { background: #e2e8f0; color: #0f172a; transform: rotate(90deg); }
 .form-group { margin-bottom: 1.3rem; }.form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 700; color: #334155; }.form-control {width: 100%;padding: 0.85rem 1.1rem;background-color: #f8fafc;border: 1.5px solid var(--border-color);border-radius: 12px;color: var(--text-color);font-size: 0.95rem;outline: none;transition: all 0.2s;font-weight: 500;}.form-control:focus { border-color: var(--primary); background-color: #fff; box-shadow: 0 0 0 4px var(--primary-glow); }textarea.form-control { resize: vertical; min-height: 120px; line-height: 1.55; font-family: monospace; }
 .rev-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }.rev-card { background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 18px; text-align: center; }.rev-card.primary { background: linear-gradient(135deg, #eff6ff, #dbeafe); border-color: #bfdbfe; }.rev-value { font-size: 1.85rem; font-weight: 900; color: #0f172a; margin-top: 0.5rem; letter-spacing: -0.5px; }.rev-value.primary { color: var(--primary); }
-#detailModal .modal-content { max-width: 900px; }#adminDashboardModal .modal-content { max-width: 1000px; }#myPageModal .modal-content { max-width: 750px; }#userDmModal .modal-content { max-width: 750px; }
+#detailModal .modal-content { max-width: 900px; }#adminDashboardModal .modal-content { max-width: 1100px; }#myPageModal .modal-content { max-width: 750px; }#userDmModal .modal-content { max-width: 750px; }
 #toastContainer { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }.toast {background: rgba(15, 23, 42, 0.92);backdrop-filter: blur(12px);border: 1px solid rgba(255,255,255,0.15);color: white;padding: 0.95rem 1.5rem;border-radius: 14px;font-weight: 700;font-size: 0.92rem;box-shadow: 0 16px 32px rgba(0,0,0,0.25);pointer-events: auto;display: flex; align-items: center; justify-content: space-between; gap: 14px;min-width: 300px;animation: toastBounce 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;}@keyframes toastBounce {from { opacity: 0; transform: translateY(-20px) scale(0.9); }to { opacity: 1; transform: translateY(0) scale(1); }}.toast-copy-btn { background: rgba(255,255,255,0.18); border: none; color: white; padding: 5px 10px; border-radius: 8px; cursor: pointer; font-size: 0.82rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; transition: background 0.2s; }.toast-copy-btn:hover { background: rgba(255,255,255,0.32); }
 .ai-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); z-index: 10000; display: flex; justify-content: center; align-items: center; padding: 1rem; animation: aiFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1); }@keyframes aiFadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }.ai-modal-card { width: 100%; max-width: 720px; height: 630px; background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(139, 92, 246, 0.4); border-radius: 28px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(139, 92, 246, 0.3); display: flex; flex-direction: column; overflow: hidden; color: #f8fafc; }.ai-modal-header { padding: 1.3rem 1.6rem; background: rgba(30, 41, 59, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; }.ai-brand-title { display: flex; align-items: center; gap: 12px; }.ai-sparkle-icon { font-size: 1.6rem; background: linear-gradient(135deg, #a855f7, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }.ai-brand-title h3 { font-size: 1.2rem; font-weight: 900; color: #ffffff; letter-spacing: -0.5px; }.ai-status-badge { font-size: 0.73rem; color: #38bdf8; font-weight: 600; }.ai-shortcut-badge { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.15); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; color: #cbd5e1; font-family: monospace; }.ai-close-btn { background: transparent; border: none; color: #94a3b8; font-size: 1.8rem; cursor: pointer; line-height: 1; transition: color 0.2s; }.ai-close-btn:hover { color: #ffffff; }.ai-chat-body { flex: 1; padding: 1.6rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.1rem; scroll-behavior: smooth; }.ai-msg { display: flex; gap: 12px; max-width: 86%; }.ai-msg.bot { align-self: flex-start; }.ai-msg.user { align-self: flex-end; flex-direction: row-reverse; }.ai-avatar { width: 38px; height: 38px; border-radius: 14px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3); }.ai-bubble { background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.08); padding: 0.95rem 1.25rem; border-radius: 18px; font-size: 0.94rem; line-height: 1.65; color: #e2e8f0; white-space: pre-wrap; word-break: break-word; }.ai-msg.user .ai-bubble { background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%); color: #ffffff; border: none; box-shadow: 0 4px 18px rgba(99, 102, 241, 0.35); }.ai-input-area { padding: 1.1rem 1.6rem; background: rgba(30, 41, 59, 0.85); border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; gap: 10px; align-items: flex-end; }#gekojoonAiInput { flex: 1; background: rgba(15, 23, 42, 0.85); border: 1.5px solid rgba(139, 92, 246, 0.35); border-radius: 16px; padding: 0.8rem 1.1rem; color: #ffffff; font-size: 0.95rem; outline: none; resize: none; max-height: 120px; font-family: inherit; transition: border-color 0.2s; }#gekojoonAiInput:focus { border-color: #a855f7; box-shadow: 0 0 16px rgba(168, 85, 247, 0.35); }#gekojoonAiSendBtn { background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%); color: white; border: none; padding: 0.8rem 1.4rem; border-radius: 16px; font-weight: 800; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4); white-space: nowrap; }#gekojoonAiSendBtn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(168, 85, 247, 0.6); }
 .ai-floating-trigger {position: fixed;bottom: 28px;right: 28px;background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);color: white;border: 1px solid rgba(255, 255, 255, 0.4);padding: 13px 22px;border-radius: 30px;font-weight: 800;font-size: 0.95rem;cursor: pointer;box-shadow: 0 8px 25px rgba(139, 92, 246, 0.45);z-index: 999;transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);animation: pulseGlow 3s infinite;}@keyframes pulseGlow {0%, 100% { box-shadow: 0 8px 25px rgba(139, 92, 246, 0.45); }50% { box-shadow: 0 8px 35px rgba(139, 92, 246, 0.75), 0 0 15px rgba(59, 130, 246, 0.5); }}.ai-floating-trigger:hover { transform: scale(1.08) translateY(-3px); box-shadow: 0 12px 35px rgba(139, 92, 246, 0.65); }
@@ -247,7 +247,6 @@ window.addEventListener('appinstalled', () => {
   deferredPrompt = null;
 });
 
-// [모바일/맥북 앱 설치 및 실행 함수]
 function installPWA() { 
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   if (isStandalone) {
@@ -293,8 +292,6 @@ function installPWA() {
     );
   }
 }
-
-// 개발자 도구 및 우클릭 제한 완전 해제 (사용자가 편하게 검사 가능)
 
 function customAlert(message, title = "알림") {
   return new Promise((resolve) => {
@@ -406,6 +403,32 @@ window.addEventListener('firebase-loaded', () => {
   storage = window.storage;
   analytics = window.analytics;
 
+  if(auth) {
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      const authBtn = document.getElementById('authBtn');
+      const myPageBtn = document.getElementById('myPageBtn');
+      const userDmBtn = document.getElementById('userDmBtn');
+      const userAuthDisplay = document.getElementById('userAuthDisplay');
+
+      if (user) {
+        if(authBtn) { authBtn.innerText = '로그아웃'; authBtn.className = 'btn-secondary'; }
+        if(myPageBtn) myPageBtn.style.display = 'inline-flex';
+        if(userDmBtn) userDmBtn.style.display = 'inline-flex';
+        if(userAuthDisplay) userAuthDisplay.innerText = `${user.displayName || user.email.split('@')[0]}님`;
+        syncUserRecord(user);
+        checkUnreadLetters();
+        checkUnreadDms();
+      } else {
+        if(authBtn) { authBtn.innerText = '로그인'; authBtn.className = 'btn'; }
+        if(myPageBtn) myPageBtn.style.display = 'none';
+        if(userDmBtn) userDmBtn.style.display = 'none';
+        if(userAuthDisplay) userAuthDisplay.innerText = '';
+        if(dmUnreadListener) { dmUnreadListener(); dmUnreadListener = null; }
+      }
+    });
+  }
+
   if(db) {
     db.collection(COLL_SOURCES).onSnapshot((snapshot) => {
       window.gamesCache = {}; 
@@ -450,14 +473,13 @@ async function recordAndCheckVisitor() {
       await db.collection(COLL_VISITORS).add({
         ip: visitorIP,
         dateStr: getTodayDateStr(),
-        userEmail: auth && auth.currentUser ? auth.currentUser.email : '비로그인 방문자',
+        userEmail: window.auth && window.auth.currentUser ? window.auth.currentUser.email : '비로그인 방문자',
         visitedAt: firebase.firestore.FieldValue.serverTimestamp()
       }).catch(err => console.warn("Visitor log write skipped/failed:", err));
     } catch(e) {}
   }
   checkVisitorMilestone();
 }
-// 로딩 단축을 위해 지연 없이 즉시 호출
 recordAndCheckVisitor();
 
 function checkVisitorMilestone() {
@@ -497,8 +519,9 @@ function updateBannerState(dailyVisitorCount) {
 }
 
 function syncUserRecord(user, extraPass = "") {
-  if (!db || !user) return;
-  const ref = db.collection(COLL_USERS).doc(user.uid);
+  const activeDb = db || window.db;
+  if (!activeDb || !user) return;
+  const ref = activeDb.collection(COLL_USERS).doc(user.uid);
   ref.get().then(doc => {
     const data = {
       uid: user.uid,
@@ -519,35 +542,9 @@ function syncUserRecord(user, extraPass = "") {
   }).catch(() => {});
 }
 
-if (auth) {
-  auth.onAuthStateChanged((user) => {
-    currentUser = user;
-    const authBtn = document.getElementById('authBtn');
-    const myPageBtn = document.getElementById('myPageBtn');
-    const userDmBtn = document.getElementById('userDmBtn');
-    const userAuthDisplay = document.getElementById('userAuthDisplay');
-
-    if (user) {
-      if(authBtn) { authBtn.innerText = '로그아웃'; authBtn.className = 'btn-secondary'; }
-      if(myPageBtn) myPageBtn.style.display = 'inline-flex';
-      if(userDmBtn) userDmBtn.style.display = 'inline-flex';
-      if(userAuthDisplay) userAuthDisplay.innerText = `${user.displayName || user.email.split('@')[0]}님`;
-      syncUserRecord(user);
-      checkUnreadLetters();
-      checkUnreadDms();
-    } else {
-      if(authBtn) { authBtn.innerText = '로그인'; authBtn.className = 'btn'; }
-      if(myPageBtn) myPageBtn.style.display = 'none';
-      if(userDmBtn) userDmBtn.style.display = 'none';
-      if(userAuthDisplay) userAuthDisplay.innerText = '';
-      if(dmUnreadListener) { dmUnreadListener(); dmUnreadListener = null; }
-    }
-  });
-}
-
-function checkUnreadLetters() {if(!db || !currentUser) return;db.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {let unreadCount = 0;snap.forEach(doc => { if(!doc.data().read) unreadCount++; });const badge = document.getElementById('unreadBadge');if(badge) {if(unreadCount > 0) {badge.innerText = unreadCount;badge.style.display = 'inline-block';} else {badge.style.display = 'none';}}}).catch(() => {});}
-function checkUnreadDms() {if(!db || !currentUser) return;if(dmUnreadListener) dmUnreadListener();
-dmUnreadListener = db.collection(COLL_DMS).where("receiverEmail", "==", currentUser.email.toLowerCase()).onSnapshot(snap => {let unreadCount = 0;snap.forEach(doc => { if(!doc.data().read) unreadCount++; });const badge = document.getElementById('unreadDmBadge');if(badge) {if(unreadCount > 0) {badge.innerText = unreadCount;badge.style.display = 'inline-block';} else {badge.style.display = 'none';}}}, err => {});}
+function checkUnreadLetters() {const activeDb = db || window.db;if(!activeDb || !currentUser) return;activeDb.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {let unreadCount = 0;snap.forEach(doc => { if(!doc.data().read) unreadCount++; });const badge = document.getElementById('unreadBadge');if(badge) {if(unreadCount > 0) {badge.innerText = unreadCount;badge.style.display = 'inline-block';} else {badge.style.display = 'none';}}}).catch(() => {});}
+function checkUnreadDms() {const activeDb = db || window.db;if(!activeDb || !currentUser) return;if(dmUnreadListener) dmUnreadListener();
+dmUnreadListener = activeDb.collection(COLL_DMS).where("receiverEmail", "==", currentUser.email.toLowerCase()).onSnapshot(snap => {let unreadCount = 0;snap.forEach(doc => { if(!doc.data().read) unreadCount++; });const badge = document.getElementById('unreadDmBadge');if(badge) {if(unreadCount > 0) {badge.innerText = unreadCount;badge.style.display = 'inline-block';} else {badge.style.display = 'none';}}}, err => {});}
 function getFriendlyAuthError(err) {const errorString = (typeof err === 'object' ? JSON.stringify(err) + (err.message || '') + (err.code || '') : String(err)).toLowerCase();if (errorString.includes('unauthorized-domain')) return '도메인 승인 오류: 파이어베이스 콘솔에 현재 도메인을 추가해주세요.';if (errorString.includes('invalid_login_credentials') || errorString.includes('invalid-credential') || errorString.includes('user-not-found') || errorString.includes('wrong-password')) return '이메일 또는 비밀번호가 올바르지 않습니다.';if (errorString.includes('email-already-in-use')) return '이미 사용 중인 이메일 주소입니다.';if (errorString.includes('weak-password')) return '비밀번호는 최소 6자리 이상이어야 합니다.';return '입력하신 로그인 정보를 다시 확인해주세요.';}
 function setAuthView(view) {const title = document.getElementById('authModalTitle');const loginForm = document.getElementById('emailLoginForm');const signupForm = document.getElementById('emailSignupForm');const resetForm = document.getElementById('emailResetForm');const googleBtn = document.getElementById('googleLoginBtn');const forgotLink = document.getElementById('forgotPasswordLink');const toggleText = document.getElementById('authToggleText');const toggleBtn = document.getElementById('authToggleBtn');
 if(!loginForm || !signupForm || !resetForm) return;
@@ -555,10 +552,29 @@ loginForm.style.display = 'none';signupForm.style.display = 'none';resetForm.sty
 document.getElementById('resetStep1').style.display = 'block';document.getElementById('resetStep2').style.display = 'none';
 if (view === 'login') {title.innerText = '로그인';loginForm.style.display = 'block';toggleText.innerText = '계정이 없으신가요?';toggleBtn.innerText = '회원가입';toggleBtn.setAttribute('onclick', "setAuthView('signup')");} else if (view === 'signup') {title.innerText = '전용 회원가입';signupForm.style.display = 'block';forgotLink.style.display = 'none';toggleText.innerText = '이미 계정이 있으신가요?';toggleBtn.innerText = '로그인';toggleBtn.setAttribute('onclick', "setAuthView('login')");document.getElementById('signupStep1').style.display = 'block';document.getElementById('signupStep2').style.display = 'none';} else if (view === 'reset') {title.innerText = '비밀번호 찾기 (인증번호)';resetForm.style.display = 'block';googleBtn.style.display = 'none';forgotLink.style.display = 'none';toggleText.innerText = '기억나셨나요?';toggleBtn.innerText = '로그인';toggleBtn.setAttribute('onclick', "setAuthView('login')");}}
 
-function loginWithGoogle() {if (!auth) return showToast('Firebase 인증 시스템이 연결되지 않았습니다.');auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then((res) => {closeModal('loginModal');syncUserRecord(res.user);showToast(`${res.user.displayName || '회원'}님 환영합니다!`);}).catch(err => showToast(getFriendlyAuthError(err)));}
+function loginWithGoogle() {
+  const activeAuth = auth || window.auth;
+  if (!activeAuth) return showToast('Firebase 인증 시스템이 연결되지 않았습니다.');
+  activeAuth.signInWithPopup(new window.firebase.auth.GoogleAuthProvider()).then((res) => {
+    closeModal('loginModal');
+    syncUserRecord(res.user);
+    showToast(`${res.user.displayName || '회원'}님 환영합니다!`);
+  }).catch(err => showToast(getFriendlyAuthError(err)));
+}
 
-function handleEmailLogin(e) {e.preventDefault();if(!auth) return showToast('Firebase 인증 시스템이 연결되지 않았습니다.');const email = document.getElementById('loginEmail').value.trim();const pass = document.getElementById('loginPassword').value;
-auth.signInWithEmailAndPassword(email, pass).then((res) => {closeModal('loginModal');syncUserRecord(res.user, pass);showToast(`환영합니다!`);}).catch(err => showToast(getFriendlyAuthError(err)));}
+function handleEmailLogin(e) {
+  e.preventDefault();
+  const activeAuth = auth || window.auth;
+  if(!activeAuth) return showToast('Firebase 인증 시스템이 연결되지 않았습니다.');
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPassword').value;
+  
+  activeAuth.signInWithEmailAndPassword(email, pass).then((res) => {
+    closeModal('loginModal');
+    syncUserRecord(res.user, pass);
+    showToast(`환영합니다!`);
+  }).catch(err => showToast(getFriendlyAuthError(err)));
+}
 
 let generatedSignupOtp = "";let signupPendingData = { nickname: '', email: '', password: '' };
 function sendSignupOtpCode() {const nickname = document.getElementById('signupNickname').value.trim();const email = document.getElementById('signupEmail').value.trim();const password = document.getElementById('signupPassword').value;
@@ -566,47 +582,73 @@ if(!nickname) return showToast('닉네임을 입력해주세요.');if(!email) re
 signupPendingData = { nickname, email, password };generatedSignupOtp = Math.floor(100000 + Math.random() * 900000).toString();showToast('인증번호 발송 중...');
 emailjs.send("service_udgdg1y", "template_ax6m1qi", {to_email: email,to_name: nickname,otp_code: generatedSignupOtp}).then(() => {showToast('6자리 인증번호가 이메일로 발송되었습니다!');document.getElementById('signupStep1').style.display = 'none';document.getElementById('signupStep2').style.display = 'block';}).catch(() => {showToast('메일 발송 실패: 이메일 주소를 올바르게 입력했는지 확인해주세요.');});}
 
-function verifySignupOtpAndRegister() {const userOtp = document.getElementById('signupOtpInput').value.trim();if(!userOtp) return showToast('인증번호를 입력해주세요.');if(userOtp !== generatedSignupOtp) return showToast('인증번호가 일치하지 않습니다.');if(!auth) return showToast('Firebase 인증 시스템이 연결되지 않았습니다.');
-showToast('회원가입 진행 중...');auth.createUserWithEmailAndPassword(signupPendingData.email, signupPendingData.password).then((res) => res.user.updateProfile({ displayName: signupPendingData.nickname }).then(() => {closeModal('loginModal');syncUserRecord(res.user, signupPendingData.password);showToast(`${signupPendingData.nickname}님 회원가입이 완료되었습니다!`);document.getElementById('emailSignupForm').reset();document.getElementById('signupStep1').style.display = 'block';document.getElementById('signupStep2').style.display = 'none';})).catch(err => showToast(getFriendlyAuthError(err)));}
+function verifySignupOtpAndRegister() {
+  const userOtp = document.getElementById('signupOtpInput').value.trim();
+  if(!userOtp) return showToast('인증번호를 입력해주세요.');
+  if(userOtp !== generatedSignupOtp) return showToast('인증번호가 일치하지 않습니다.');
+  const activeAuth = auth || window.auth;
+  if(!activeAuth) return showToast('Firebase 인증 시스템이 연결되지 않았습니다.');
+  
+  showToast('회원가입 진행 중...');
+  activeAuth.createUserWithEmailAndPassword(signupPendingData.email, signupPendingData.password).then((res) => res.user.updateProfile({ displayName: signupPendingData.nickname }).then(() => {
+    closeModal('loginModal');
+    syncUserRecord(res.user, signupPendingData.password);
+    showToast(`${signupPendingData.nickname}님 회원가입이 완료되었습니다!`);
+    document.getElementById('emailSignupForm').reset();
+    document.getElementById('signupStep1').style.display = 'block';
+    document.getElementById('signupStep2').style.display = 'none';
+  })).catch(err => showToast(getFriendlyAuthError(err)));
+}
 
 let generatedOtp = "";let targetResetEmail = "";
 function sendOtpCode() {const email = document.getElementById('resetEmail').value.trim();if(!email) return showToast('가입 이메일을 입력해주세요.');targetResetEmail = email;generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();showToast('인증번호 발송 중...');
 emailjs.send("service_udgdg1y", "template_ax6m1qi", {to_email: email,to_name: email.split('@')[0],otp_code: generatedOtp}).then(() => {showToast('6자리 인증번호가 이메일로 발송되었습니다!');document.getElementById('resetStep1').style.display = 'none';document.getElementById('resetStep2').style.display = 'block';}).catch(() => {showToast('메일 발송 실패: EmailJS 설정을 확인해주세요.');});}
 function verifyOtpAndChangePassword() {const userOtp = document.getElementById('resetOtpInput').value.trim();const newPassword = document.getElementById('newPasswordInput').value;if(!userOtp) return showToast('인증번호를 입력해주세요.');if(!newPassword || newPassword.length < 6) return showToast('새 비밀번호는 6자 이상이어야 합니다.');if(userOtp !== generatedOtp) return showToast('인증번호가 일치하지 않습니다.');
 showToast('인증번호 확인 완료! 로그인 화면으로 이동합니다.');setAuthView('login');}
-function handleAuthAction() {if(!auth) return showToast('인증 시스템 로딩 중...');if(currentUser) {auth.signOut().then(() => showToast('로그아웃 되었습니다.'));} else {setAuthView('login');openModal('loginModal');}}
+
+function handleAuthAction() {
+  const activeAuth = auth || window.auth;
+  if(!activeAuth) return showToast('인증 시스템 로딩 중...');
+  if(currentUser) {
+    activeAuth.signOut().then(() => showToast('로그아웃 되었습니다.'));
+  } else {
+    setAuthView('login');
+    openModal('loginModal');
+  }
+}
+
 function checkAuthAndOpenSubmit() {if(currentUser) {const subAuthorEl = document.getElementById('subAuthor');if(subAuthorEl) subAuthorEl.value = currentUser.displayName || currentUser.email.split('@')[0];
 const typeSelect = document.getElementById('subContentType');if(typeSelect) {typeSelect.value = 'code';toggleContentTypeFields('code');}openModal('submitModal');} else {setAuthView('login');openModal('loginModal');}}
 
-function openUserDmModal() {if(!currentUser || !db) return showToast('로그인이 필요합니다.');openModal('userDmModal');loadMemberListForDm();switchDmTab('send');}
+function openUserDmModal() {if(!currentUser || !(db || window.db)) return showToast('로그인이 필요합니다.');openModal('userDmModal');loadMemberListForDm();switchDmTab('send');}
 function switchDmTab(tab) {const sendForm = document.getElementById('dmSendForm');const inboxArea = document.getElementById('dmInboxArea');const sentArea = document.getElementById('dmSentArea');const btnSend = document.getElementById('dmTabSendBtn');const btnInbox = document.getElementById('dmTabInboxBtn');const btnSent = document.getElementById('dmTabSentBtn');
 if(!sendForm || !inboxArea || !sentArea) return;
 btnSend.className = tab === 'send' ? 'btn' : 'btn-secondary';btnInbox.className = tab === 'inbox' ? 'btn' : 'btn-secondary';btnSent.className = tab === 'sent' ? 'btn' : 'btn-secondary';
 sendForm.style.display = tab === 'send' ? 'block' : 'none';inboxArea.style.display = tab === 'inbox' ? 'block' : 'none';sentArea.style.display = tab === 'sent' ? 'block' : 'none';
 if(tab === 'inbox') loadMyInboxDms();if(tab === 'sent') loadMySentDms();}
-function loadMemberListForDm() {if(!db || !currentUser) return;const selectEl = document.getElementById('dmRecipientSelect');if(!selectEl) return;
-db.collection(COLL_USERS).get().then(snap => {selectEl.innerHTML = '<option value="">-- 메시지를 받을 회원을 선택하세요 --</option>';snap.forEach(doc => {const u = doc.data();if(u.email && u.email.toLowerCase() !== currentUser.email.toLowerCase()) {const name = u.displayName || u.email.split('@')[0];selectEl.innerHTML += `<option value="${u.email.toLowerCase()}|${u.uid || ''}|${escapeJsStr(name)}">${name} (${u.email})</option>`;}});}).catch(() => {selectEl.innerHTML = '<option value="">회원 목록 로드 실패 (권한 확인 필요)</option>';});}
-function sendUserDm(e) {e.preventDefault();if(!currentUser || !db) return showToast('로그인이 필요합니다.');
+function loadMemberListForDm() {const activeDb = db || window.db;if(!activeDb || !currentUser) return;const selectEl = document.getElementById('dmRecipientSelect');if(!selectEl) return;
+activeDb.collection(COLL_USERS).get().then(snap => {selectEl.innerHTML = '<option value="">-- 메시지를 받을 회원을 선택하세요 --</option>';snap.forEach(doc => {const u = doc.data();if(u.email && u.email.toLowerCase() !== currentUser.email.toLowerCase()) {const name = u.displayName || u.email.split('@')[0];selectEl.innerHTML += `<option value="${u.email.toLowerCase()}|${u.uid || ''}|${escapeJsStr(name)}">${name} (${u.email})</option>`;}});}).catch(() => {selectEl.innerHTML = '<option value="">회원 목록 로드 실패 (권한 확인 필요)</option>';});}
+function sendUserDm(e) {e.preventDefault();const activeDb = db || window.db;if(!currentUser || !activeDb) return showToast('로그인이 필요합니다.');
 const recipientVal = document.getElementById('dmRecipientSelect').value;const title = document.getElementById('dmTitleInput').value.trim();const content = document.getElementById('dmContentInput').value.trim();
 if(!recipientVal) return showToast('메시지를 받을 회원을 선택해주세요.');if(!title || !content) return showToast('제목과 내용을 모두 작성해주세요.');
 const [recEmail, recUid, recName] = recipientVal.split('|');
-db.collection(COLL_DMS).add({senderEmail: currentUser.email.toLowerCase(),senderUid: currentUser.uid,senderName: currentUser.displayName || currentUser.email.split('@')[0],receiverEmail: recEmail.toLowerCase(),receiverUid: recUid || '',receiverName: recName || recEmail,title: title,content: content,read: false,createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast(`💌 [${recName}] 회원에게 DM이 발송되었습니다!`);document.getElementById('dmTitleInput').value = '';document.getElementById('dmContentInput').value = '';switchDmTab('sent');}).catch(err => showToast('DM 전송 실패: ' + err.message));}
-function loadMyInboxDms() {if(!db || !currentUser) return;const inboxArea = document.getElementById('dmInboxArea');if(!inboxArea) return;
-db.collection(COLL_DMS).where("receiverEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {if(snap.empty) {inboxArea.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:2rem;">받은 DM 메시지가 없습니다.</div>';return;}let html = '';snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '방금 전';html += `<div class="dm-item ${d.read ? '' : 'unread'}"><div class="dm-header"><span>💬 보낸 사람: ${d.senderName || d.senderEmail} (${d.senderEmail})</span><span style="font-size:0.75rem; color:#64748b;">${dateStr}</span></div><div style="font-weight:700; color:#0f172a; margin-bottom:4px;">제목: ${d.title}</div><div class="dm-body">${d.content}</div></div>`;if(!d.read) {db.collection(COLL_DMS).doc(doc.id).update({ read: true }).catch(() => {});}});inboxArea.innerHTML = html;}).catch(() => {});}
-function loadMySentDms() {if(!db || !currentUser) return;const sentArea = document.getElementById('dmSentArea');if(!sentArea) return;
-db.collection(COLL_DMS).where("senderEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {if(snap.empty) {sentArea.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:2rem;">보낸 DM 메시지가 없습니다.</div>';return;}let html = '';snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '방금 전';html += `<div class="dm-item"><div class="dm-header"><span>📤 받는 사람: ${d.receiverName || d.receiverEmail} (${d.receiverEmail})</span><span style="font-size:0.75rem; color:${d.read ? '#10b981' : '#ef4444'}; font-weight:bold;">${d.read ? '✓ 읽음' : '✉ 안읽음'} | ${dateStr}</span></div><div style="font-weight:700; color:#0f172a; margin-bottom:4px;">제목: ${d.title}</div><div class="dm-body">${d.content}</div></div>`;});sentArea.innerHTML = html;}).catch(() => {});}
-function openMyPage() {if(!currentUser || !db) return showToast('로그인이 필요합니다.');const nickInput = document.getElementById('myPageNicknameInput');if(nickInput) nickInput.value = currentUser.displayName || '';
+activeDb.collection(COLL_DMS).add({senderEmail: currentUser.email.toLowerCase(),senderUid: currentUser.uid,senderName: currentUser.displayName || currentUser.email.split('@')[0],receiverEmail: recEmail.toLowerCase(),receiverUid: recUid || '',receiverName: recName || recEmail,title: title,content: content,read: false,createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast(`💌 [${recName}] 회원에게 DM이 발송되었습니다!`);document.getElementById('dmTitleInput').value = '';document.getElementById('dmContentInput').value = '';switchDmTab('sent');}).catch(err => showToast('DM 전송 실패: ' + err.message));}
+function loadMyInboxDms() {const activeDb = db || window.db;if(!activeDb || !currentUser) return;const inboxArea = document.getElementById('dmInboxArea');if(!inboxArea) return;
+activeDb.collection(COLL_DMS).where("receiverEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {if(snap.empty) {inboxArea.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:2rem;">받은 DM 메시지가 없습니다.</div>';return;}let html = '';snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '방금 전';html += `<div class="dm-item ${d.read ? '' : 'unread'}"><div class="dm-header"><span>💬 보낸 사람: ${d.senderName || d.senderEmail} (${d.senderEmail})</span><span style="font-size:0.75rem; color:#64748b;">${dateStr}</span></div><div style="font-weight:700; color:#0f172a; margin-bottom:4px;">제목: ${d.title}</div><div class="dm-body">${d.content}</div></div>`;if(!d.read) {activeDb.collection(COLL_DMS).doc(doc.id).update({ read: true }).catch(() => {});}});inboxArea.innerHTML = html;}).catch(() => {});}
+function loadMySentDms() {const activeDb = db || window.db;if(!activeDb || !currentUser) return;const sentArea = document.getElementById('dmSentArea');if(!sentArea) return;
+activeDb.collection(COLL_DMS).where("senderEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {if(snap.empty) {sentArea.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:2rem;">보낸 DM 메시지가 없습니다.</div>';return;}let html = '';snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '방금 전';html += `<div class="dm-item"><div class="dm-header"><span>📤 받는 사람: ${d.receiverName || d.receiverEmail} (${d.receiverEmail})</span><span style="font-size:0.75rem; color:${d.read ? '#10b981' : '#ef4444'}; font-weight:bold;">${d.read ? '✓ 읽음' : '✉ 안읽음'} | ${dateStr}</span></div><div style="font-weight:700; color:#0f172a; margin-bottom:4px;">제목: ${d.title}</div><div class="dm-body">${d.content}</div></div>`;});sentArea.innerHTML = html;}).catch(() => {});}
+function openMyPage() {const activeDb = db || window.db;if(!currentUser || !activeDb) return showToast('로그인이 필요합니다.');const nickInput = document.getElementById('myPageNicknameInput');if(nickInput) nickInput.value = currentUser.displayName || '';
 loadUserLetters();
-db.collection(COLL_EARNINGS).where("authorUid", "==", currentUser.uid).get().then(snap => {let views = 0, downloads = 0;snap.forEach(doc => {if(doc.data().type === 'view') views++;if(doc.data().type === 'download') downloads++;});const totalRevenue = isAdAndRevenueActive ? (views + downloads) * 50 : 0;document.getElementById('myTotalRevenue').innerText = totalRevenue.toLocaleString() + '원';document.getElementById('myTotalViews').innerText = views.toLocaleString() + '회';document.getElementById('myTotalDownloads').innerText = downloads.toLocaleString() + '회';}).catch(() => {});
-db.collection(COLL_SOURCES).where("authorUid", "==", currentUser.uid).get().then(snap => {const list = document.getElementById('mySourcesList');if(!list) return;list.innerHTML = snap.empty ? '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">등록된 소스가 없습니다.</div>' : '';snap.forEach(doc => {const d = doc.data();const itemDiv = document.createElement('div');itemDiv.style.cssText = 'background:#f8fafc; padding:0.8rem; border-radius:10px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;';
+activeDb.collection(COLL_EARNINGS).where("authorUid", "==", currentUser.uid).get().then(snap => {let views = 0, downloads = 0;snap.forEach(doc => {if(doc.data().type === 'view') views++;if(doc.data().type === 'download') downloads++;});const totalRevenue = isAdAndRevenueActive ? (views + downloads) * 50 : 0;document.getElementById('myTotalRevenue').innerText = totalRevenue.toLocaleString() + '원';document.getElementById('myTotalViews').innerText = views.toLocaleString() + '회';document.getElementById('myTotalDownloads').innerText = downloads.toLocaleString() + '회';}).catch(() => {});
+activeDb.collection(COLL_SOURCES).where("authorUid", "==", currentUser.uid).get().then(snap => {const list = document.getElementById('mySourcesList');if(!list) return;list.innerHTML = snap.empty ? '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">등록된 소스가 없습니다.</div>' : '';snap.forEach(doc => {const d = doc.data();const itemDiv = document.createElement('div');itemDiv.style.cssText = 'background:#f8fafc; padding:0.8rem; border-radius:10px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;';
 const spanTitle = document.createElement('span');spanTitle.style.fontWeight = '600';spanTitle.innerText = `${d.icon || '📦'} ${d.title || ''}`;itemDiv.appendChild(spanTitle);
 const rightDiv = document.createElement('div');rightDiv.style.cssText = 'display:flex; gap:8px; align-items:center;';
 const spanPlays = document.createElement('span');spanPlays.style.cssText = 'font-size:0.8rem; color:var(--primary); font-weight:700;';spanPlays.innerText = `🔥 ${d.plays||0} 조회`;rightDiv.appendChild(spanPlays);
 const editBtn = document.createElement('button');editBtn.type = 'button';editBtn.className = 'btn';editBtn.style.cssText = 'padding:0.3rem 0.6rem; font-size:0.75rem;';editBtn.innerText = '수정';editBtn.onclick = () => openEditModalFromMyPage(doc.id);rightDiv.appendChild(editBtn);
 itemDiv.appendChild(rightDiv);list.appendChild(itemDiv);});}).catch(() => {});
 openModal('myPageModal');}
-function loadUserLetters() {if(!db || !currentUser) return;const lettersEl = document.getElementById('myLettersList');if(!lettersEl) return;
-db.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {if(snap.empty) {lettersEl.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">받은 메시지가 없습니다.</div>';return;}let html = '';snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '';html += `<div class="letter-item ${d.read ? '' : 'unread'}"><div class="letter-header"><span>💌 ${d.title || '운영진 메시지'} (보낸이: ${d.sender || '관리자'})</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">${dateStr}</span></div><div class="letter-body">${d.content}</div></div>`;if(!d.read) {db.collection(COLL_LETTERS).doc(doc.id).update({ read: true }).catch(() => {});}});lettersEl.innerHTML = html;checkUnreadLetters();}).catch(() => {});}
+function loadUserLetters() {const activeDb = db || window.db;if(!activeDb || !currentUser) return;const lettersEl = document.getElementById('myLettersList');if(!lettersEl) return;
+activeDb.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {let html = '';if(snap.empty) {lettersEl.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">받은 메시지가 없습니다.</div>';return;}snap.forEach(doc => {const d = doc.data();const dateStr = d.createdAt ? new Date(d.createdAt.toDate()).toLocaleString() : '';html += `<div class="letter-item ${d.read ? '' : 'unread'}"><div class="letter-header"><span>💌 ${d.title || '운영진 메시지'} (보낸이: ${d.sender || '관리자'})</span><span style="font-size:0.75rem; color:#64748b; font-weight:normal;">${dateStr}</span></div><div class="letter-body">${d.content}</div></div>`;if(!d.read) {activeDb.collection(COLL_LETTERS).doc(doc.id).update({ read: true }).catch(() => {});}});lettersEl.innerHTML = html;checkUnreadLetters();}).catch(() => {});}
 function updateMyNickname() {if(!currentUser) return showToast('로그인이 필요합니다.');const newName = document.getElementById('myPageNicknameInput').value.trim();if(!newName) return showToast('변경할 닉네임을 입력해주세요.');currentUser.updateProfile({ displayName: newName }).then(() => {showToast('닉네임 변경 완료!');syncUserRecord(currentUser);const authDisp = document.getElementById('userAuthDisplay');if(authDisp) authDisp.innerText = `${newName}님`;}).catch(err => showToast(getFriendlyAuthError(err)));}
 function updateMyPassword() {if(!currentUser) return showToast('로그인이 필요합니다.');const newPass = document.getElementById('myPagePasswordInput').value;if(!newPass || newPass.length < 6) return showToast('비밀번호는 최소 6자 이상이어야 합니다.');currentUser.updatePassword(newPass).then(() => {showToast('비밀번호가 성공적으로 변경되었습니다!');syncUserRecord(currentUser, newPass);document.getElementById('myPagePasswordInput').value = '';}).catch(err => {if(err.code === 'auth/requires-recent-login') {showToast('보안을 위해 다시 로그인한 후 비밀번호를 설정해주세요.');} else {showToast(getFriendlyAuthError(err));}});}
 
@@ -620,7 +662,9 @@ function selectSearchDropdownItem(id, title) {document.getElementById('searchInp
 
 async function handleUserSubmitGame(e) {
   e.preventDefault();
-  if(!currentUser || !db) return showToast('로그인이 필요합니다.');
+  const activeDb = db || window.db;
+  const activeStorage = storage || window.storage;
+  if(!currentUser || !activeDb) return showToast('로그인이 필요합니다.');
   const submitBtn = document.getElementById('submitBtn');
   const originalBtnText = submitBtn ? submitBtn.innerText : '등록 요청하기';
   const title = document.getElementById('subTitle').value;
@@ -634,13 +678,13 @@ async function handleUserSubmitGame(e) {
   if(cType === 'file') {
     const fileInput = document.getElementById('subFileInput');
     if(!fileInput.files.length) return showToast('업로드할 파일(.jpg, .png 등)을 선택해주세요.');
-    if(!storage) return showToast('Firebase Storage가 연결되지 않았습니다.');
+    if(!activeStorage) return showToast('Firebase Storage가 연결되지 않았습니다.');
     const file = fileInput.files[0];
     fileName = file.name;
     if(submitBtn) submitBtn.disabled = true;
     try {
       const safeStorageName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9_.-]/g, '_')}`;
-      const ref = storage.ref().child(`uploads/${safeStorageName}`);
+      const ref = activeStorage.ref().child(`uploads/${safeStorageName}`);
       const uploadTask = ref.put(file);
       await new Promise((resolve, reject) => {
         uploadTask.on('state_changed',
@@ -663,7 +707,7 @@ async function handleUserSubmitGame(e) {
   }
 
   if(submitBtn) { submitBtn.disabled = true; submitBtn.innerText = '⏳ 데이터 등록 중...'; }
-  db.collection(COLL_PENDING).add({
+  activeDb.collection(COLL_PENDING).add({
     author: currentUser.displayName || currentUser.email.split('@')[0],
     authorUid: currentUser.uid,
     email: currentUser.email,
@@ -697,27 +741,28 @@ const codeArea = document.createElement('textarea');codeArea.className = 'form-c
 const previewBtn = document.createElement('button');previewBtn.type = 'button';previewBtn.className = 'btn';previewBtn.style.cssText = 'width:100%; margin-top:0.8rem; background:linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);';previewBtn.innerHTML = '▶️ 코드 미리보기 실행';previewBtn.onclick = () => previewCode(game.id);contentSection.appendChild(previewBtn);
 const copyBtn = document.createElement('button');copyBtn.type = 'button';copyBtn.className = 'btn btn-success';copyBtn.style.cssText = 'width:100%; margin-top:0.5rem;';copyBtn.innerText = '📋 내용 복사하기';copyBtn.onclick = () => copySnippet(game.id);contentSection.appendChild(copyBtn);
 const dlCodeBtn = document.createElement('button');dlCodeBtn.type = 'button';dlCodeBtn.className = 'btn';dlCodeBtn.style.cssText = 'width:100%; margin-top:0.5rem; background:linear-gradient(135deg, #10b981 0%, #059669 100%);';dlCodeBtn.innerText = '📥 소스 파일 다운로드 (.html / .js)';dlCodeBtn.onclick = () => downloadSnippet(game.id);contentSection.appendChild(dlCodeBtn);}
-loadReviews(gameId);openModal('detailModal');triggerRevenue(gameId, 'view');if(db) db.collection(COLL_SOURCES).doc(gameId).update({ plays: firebase.firestore.FieldValue.increment(1) }).catch(() => {});}
+loadReviews(gameId);openModal('detailModal');triggerRevenue(gameId, 'view');const activeDb = db || window.db;if(activeDb) activeDb.collection(COLL_SOURCES).doc(gameId).update({ plays: firebase.firestore.FieldValue.increment(1) }).catch(() => {});}
 function copySnippet(gameId) {const game = window.gamesCache[gameId];if(!game) return;fallbackCopyText(game.html || '');showToast('클립보드 복사 완료!');triggerRevenue(gameId, 'download');}
 function openEditModalFromDetail() {if(!activePlayingGameId) return;closeModal('detailModal');openEditModal(activePlayingGameId);}
 function openEditModalFromMyPage(gameId) {closeModal('myPageModal');openEditModal(gameId);}
 function openEditModal(gameId) {const game = window.gamesCache[gameId];if(!game) return;document.getElementById('editGameId').value = gameId;document.getElementById('editTitle').value = game.title || '';document.getElementById('editDesc').value = game.desc || '';const codeGroup = document.getElementById('editGroupCode');const htmlField = document.getElementById('editHtml');if(game.contentType === 'file') {codeGroup.style.display = 'none';} else {codeGroup.style.display = 'block';htmlField.value = game.html || '';}openModal('editModal');}
-function handleUserEditGame(e) {e.preventDefault();const gameId = document.getElementById('editGameId').value;const title = document.getElementById('editTitle').value;const desc = document.getElementById('editDesc').value;const html = document.getElementById('editHtml').value;if(!db) return;
-db.collection(COLL_SOURCES).doc(gameId).update({title, desc, html,updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('소스가 성공적으로 수정되었습니다!');closeModal('editModal');}).catch(err => showToast('수정 실패: ' + err.message));}
+function handleUserEditGame(e) {e.preventDefault();const activeDb = db || window.db;const gameId = document.getElementById('editGameId').value;const title = document.getElementById('editTitle').value;const desc = document.getElementById('editDesc').value;const html = document.getElementById('editHtml').value;if(!activeDb) return;
+activeDb.collection(COLL_SOURCES).doc(gameId).update({title, desc, html,updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('소스가 성공적으로 수정되었습니다!');closeModal('editModal');}).catch(err => showToast('수정 실패: ' + err.message));}
 function openReportModalFromDetail() {if(!activePlayingGameId) return;const game = window.gamesCache[activePlayingGameId];if(!game) return;document.getElementById('reportGameId').value = game.id;document.getElementById('reportGameTitle').value = game.title || '';closeModal('detailModal');openModal('reportModal');}
-function submitGameReport(e) {e.preventDefault();const gameId = document.getElementById('reportGameId').value;const gameTitle = document.getElementById('reportGameTitle').value;const reason = document.getElementById('reportReason').value.trim();if(!db) return;db.collection(COLL_REPORTS).add({gameId, gameTitle, reason,reporter: currentUser ? (currentUser.displayName || currentUser.email) : '익명',createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('신고가 정상 접수되었습니다.');closeModal('reportModal');document.getElementById('reportReason').value = '';}).catch(err => showToast(getFriendlyAuthError(err)));}
-function handleSupportSubmit(e) {e.preventDefault();const author = document.getElementById('supAuthor').value.trim();const content = document.getElementById('supContent').value.trim();if(!db) return;db.collection(COLL_INQUIRIES).add({author, content,userEmail: currentUser ? currentUser.email : '',userUid: currentUser ? currentUser.uid : '',createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('문의가 정상 접수되었습니다.');document.getElementById('supContent').value = '';closeModal('supportModal');}).catch(err => showToast(getFriendlyAuthError(err)));}
-function loadReviews(gameId) {if(!db) return;db.collection(COLL_REVIEWS).where("gameId", "==", gameId).get().then(snap => {const listEl = document.getElementById('reviewsList');const avgEl = document.getElementById('avgRatingDisplay');if(!listEl || !avgEl) return;if(snap.empty) {listEl.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">등록된 후기가 없습니다. 첫 후기를 남겨보세요!</div>';avgEl.innerHTML = '⭐ 0.0 (0)';return;}let totalScore = 0; let html = '';snap.forEach(doc => {const d = doc.data();totalScore += Number(d.rating);const stars = '⭐'.repeat(Number(d.rating));html += `<div class="review-card"><div class="review-header"><b>${d.author}</b><span>${stars}</span></div><div style="font-size: 0.95rem; color: #1e293b;">${d.comment}</div></div>`;});avgEl.innerHTML = `⭐ ${(totalScore / snap.size).toFixed(1)} (${snap.size})`;listEl.innerHTML = html;}).catch(() => {});}
-function submitReview(e) {e.preventDefault();if(!currentUser) { closeModal('detailModal'); setAuthView('login'); openModal('loginModal'); return showToast('로그인이 필요합니다.'); }if(!activePlayingGameId) return;const rating = document.getElementById('reviewRating').value;const comment = document.getElementById('reviewComment').value.trim();db.collection(COLL_REVIEWS).add({gameId: activePlayingGameId, author: currentUser.displayName || currentUser.email.split('@')[0],authorUid: currentUser.uid, rating: Number(rating), comment, createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('후기가 등록되었습니다!');document.getElementById('reviewComment').value = '';loadReviews(activePlayingGameId);});}
-function loadSiteReviews() {if(!db) return;db.collection(COLL_SITE_REVIEWS).get().then(snap => {const listEl = document.getElementById('siteReviewsList');const avgEl = document.getElementById('siteAvgRatingDisplay');if(!listEl || !avgEl) return;if(snap.empty) {listEl.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">아직 플랫폼 후기가 없습니다. 첫 후기를 남겨보세요!</div>';avgEl.innerHTML = '⭐ 0.0 (0개의 후기)';return;}let totalScore = 0; let html = '';snap.forEach(doc => {const d = doc.data();totalScore += Number(d.rating);const stars = '⭐'.repeat(Number(d.rating));html += `<div class="review-card"><div class="review-header"><b>${d.author}</b><span>${stars}</span></div><div style="font-size: 0.95rem; color: #1e293b;">${d.comment}</div></div>`;});avgEl.innerHTML = `⭐ ${(totalScore / snap.size).toFixed(1)} (${snap.size}개의 후기)`;listEl.innerHTML = html;}).catch(() => {});}
-function submitSiteReview(e) {e.preventDefault();if(!currentUser) { closeModal('siteReviewModal'); setAuthView('login'); openModal('loginModal'); return showToast('로그인이 필요합니다.'); }const rating = document.getElementById('siteReviewRating').value;const comment = document.getElementById('siteReviewComment').value.trim();db.collection(COLL_SITE_REVIEWS).add({author: currentUser.displayName || currentUser.email.split('@')[0],authorUid: currentUser.uid, rating: Number(rating), comment, createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('플랫폼 후기가 등록되었습니다!');document.getElementById('siteReviewComment').value = '';loadSiteReviews();});}
-function triggerRevenue(gameId, type) {if(!db) return;const game = window.gamesCache[gameId];if(!game) return;db.collection(COLL_EARNINGS).add({gameId, gameTitle: game.title || '', author: game.author || '관리자', authorUid: game.authorUid || 'admin', type, timestamp: firebase.firestore.FieldValue.serverTimestamp()}).catch(() => {});}
+function submitGameReport(e) {e.preventDefault();const activeDb = db || window.db;const gameId = document.getElementById('reportGameId').value;const gameTitle = document.getElementById('reportGameTitle').value;const reason = document.getElementById('reportReason').value.trim();if(!activeDb) return;activeDb.collection(COLL_REPORTS).add({gameId, gameTitle, reason,reporter: currentUser ? (currentUser.displayName || currentUser.email) : '익명',createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('신고가 정상 접수되었습니다.');closeModal('reportModal');document.getElementById('reportReason').value = '';}).catch(err => showToast(getFriendlyAuthError(err)));}
+function handleSupportSubmit(e) {e.preventDefault();const activeDb = db || window.db;const author = document.getElementById('supAuthor').value.trim();const content = document.getElementById('supContent').value.trim();if(!activeDb) return;activeDb.collection(COLL_INQUIRIES).add({author, content,userEmail: currentUser ? currentUser.email : '',userUid: currentUser ? currentUser.uid : '',createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('문의가 정상 접수되었습니다.');document.getElementById('supContent').value = '';closeModal('supportModal');}).catch(err => showToast(getFriendlyAuthError(err)));}
+function loadReviews(gameId) {const activeDb = db || window.db;if(!activeDb) return;activeDb.collection(COLL_REVIEWS).where("gameId", "==", gameId).get().then(snap => {const listEl = document.getElementById('reviewsList');const avgEl = document.getElementById('avgRatingDisplay');if(!listEl || !avgEl) return;if(snap.empty) {listEl.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">등록된 후기가 없습니다. 첫 후기를 남겨보세요!</div>';avgEl.innerHTML = '⭐ 0.0 (0)';return;}let totalScore = 0; let html = '';snap.forEach(doc => {const d = doc.data();totalScore += Number(d.rating);const stars = '⭐'.repeat(Number(d.rating));html += `<div class="review-card"><div class="review-header"><b>${d.author}</b><span>${stars}</span></div><div style="font-size: 0.95rem; color: #1e293b;">${d.comment}</div></div>`;});avgEl.innerHTML = `⭐ ${(totalScore / snap.size).toFixed(1)} (${snap.size})`;listEl.innerHTML = html;}).catch(() => {});}
+function submitReview(e) {e.preventDefault();const activeDb = db || window.db;if(!currentUser) { closeModal('detailModal'); setAuthView('login'); openModal('loginModal'); return showToast('로그인이 필요합니다.'); }if(!activePlayingGameId) return;const rating = document.getElementById('reviewRating').value;const comment = document.getElementById('reviewComment').value.trim();activeDb.collection(COLL_REVIEWS).add({gameId: activePlayingGameId, author: currentUser.displayName || currentUser.email.split('@')[0],authorUid: currentUser.uid, rating: Number(rating), comment, createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('후기가 등록되었습니다!');document.getElementById('reviewComment').value = '';loadReviews(activePlayingGameId);});}
+function loadSiteReviews() {const activeDb = db || window.db;if(!activeDb) return;activeDb.collection(COLL_SITE_REVIEWS).get().then(snap => {const listEl = document.getElementById('siteReviewsList');const avgEl = document.getElementById('siteAvgRatingDisplay');if(!listEl || !avgEl) return;if(snap.empty) {listEl.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:0.9rem; padding:1rem;">아직 플랫폼 후기가 없습니다. 첫 후기를 남겨보세요!</div>';avgEl.innerHTML = '⭐ 0.0 (0개의 후기)';return;}let totalScore = 0; let html = '';snap.forEach(doc => {const d = doc.data();totalScore += Number(d.rating);const stars = '⭐'.repeat(Number(d.rating));html += `<div class="review-card"><div class="review-header"><b>${d.author}</b><span>${stars}</span></div><div style="font-size: 0.95rem; color: #1e293b;">${d.comment}</div></div>`;});avgEl.innerHTML = `⭐ ${(totalScore / snap.size).toFixed(1)} (${snap.size}개의 후기)`;listEl.innerHTML = html;}).catch(() => {});}
+function submitSiteReview(e) {e.preventDefault();const activeDb = db || window.db;if(!currentUser) { closeModal('siteReviewModal'); setAuthView('login'); openModal('loginModal'); return showToast('로그인이 필요합니다.'); }const rating = document.getElementById('siteReviewRating').value;const comment = document.getElementById('siteReviewComment').value.trim();activeDb.collection(COLL_SITE_REVIEWS).add({author: currentUser.displayName || currentUser.email.split('@')[0],authorUid: currentUser.uid, rating: Number(rating), comment, createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast('플랫폼 후기가 등록되었습니다!');document.getElementById('siteReviewComment').value = '';loadSiteReviews();});}
+function triggerRevenue(gameId, type) {const activeDb = db || window.db;if(!activeDb) return;const game = window.gamesCache[gameId];if(!game) return;activeDb.collection(COLL_EARNINGS).add({gameId, gameTitle: game.title || '', author: game.author || '관리자', authorUid: game.authorUid || 'admin', type, timestamp: firebase.firestore.FieldValue.serverTimestamp()}).catch(() => {});}
 function toggleContentTypeFields(type) {const codeGroup = document.getElementById('groupCode');const fileGroup = document.getElementById('groupFile');const htmlInput = document.getElementById('subHtml');const fileInput = document.getElementById('subFileInput');
 if (type === 'file') {if(codeGroup) codeGroup.style.display = 'none';if(fileGroup) fileGroup.style.display = 'block';if(htmlInput) { htmlInput.required = false; htmlInput.value = ''; }if(fileInput) { fileInput.required = true; }} else {if(codeGroup) codeGroup.style.display = 'block';if(fileGroup) fileGroup.style.display = 'none';if(htmlInput) { htmlInput.required = true; }if(fileInput) { fileInput.required = false; fileInput.value = ''; }}}
 function openModal(id) {const modal = document.getElementById(id);if(modal) modal.style.display = 'flex';if(id === 'siteReviewModal') loadSiteReviews();}function closeModal(id) {const modal = document.getElementById(id);if(modal) modal.style.display = 'none';}
 
 function verifyAdminAccess() {
-  if(!currentUser || !db) return showToast('먼저 로그인 후 관리자 확인을 눌러주세요.');
+  const activeDb = db || window.db;
+  if(!currentUser || !activeDb) return showToast('먼저 로그인 후 관리자 확인을 눌러주세요.');
   const userEmail = currentUser.email ? currentUser.email.toLowerCase() : "";
   const masterAdmins = ['kjoon.kang@gmail.com', 'leemyungsu486@gmail.com', 'gekojoon@gmail.com'];
   if (masterAdmins.includes(userEmail) || isAnyMasterAdmin()) {
@@ -726,7 +771,7 @@ function verifyAdminAccess() {
     loadAdminDashboard();
     return;
   }
-  db.collection(COLL_SETTINGS).doc("adminWhitelist").get().then(doc => {
+  activeDb.collection(COLL_SETTINGS).doc("adminWhitelist").get().then(doc => {
     let wl = (doc.exists && doc.data().list) ? doc.data().list : [];
     masterAdmins.forEach(adminEmail => {if(!wl.includes(adminEmail)) wl.push(adminEmail);});
     let isAllowed = wl.some(item => item.toLowerCase().trim() === userEmail);
@@ -748,26 +793,27 @@ function verifyAdminAccess() {
   });
 }
 
-function sendDirectLetter(targetEmail, targetUid, title, content) {if(!isSuperAdmin()) return showToast('해당 권한은 최상위 마스터 관리자(kjoon.kang@gmail.com) 전용입니다.');if(!db || !targetEmail) return showToast('대상 이메일이 필요합니다.');db.collection(COLL_LETTERS).add({toEmail: targetEmail.toLowerCase(),toUid: targetUid || '',title: title || '운영진 메시지',content: content,sender: currentUser ? (currentUser.displayName || '관리자') : '관리자',read: false,createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast(`💌 ${targetEmail}님에게 편지가 전달되었습니다!`);}).catch(err => showToast('발송 실패: ' + err.message));}
+function sendDirectLetter(targetEmail, targetUid, title, content) {const activeDb = db || window.db;if(!isSuperAdmin()) return showToast('해당 권한은 최상위 마스터 관리자(kjoon.kang@gmail.com) 전용입니다.');if(!activeDb || !targetEmail) return showToast('대상 이메일이 필요합니다.');activeDb.collection(COLL_LETTERS).add({toEmail: targetEmail.toLowerCase(),toUid: targetUid || '',title: title || '운영진 메시지',content: content,sender: currentUser ? (currentUser.displayName || '관리자') : '관리자',read: false,createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => {showToast(`💌 ${targetEmail}님에게 편지가 전달되었습니다!`);}).catch(err => showToast('발송 실패: ' + err.message));}
 async function replyToInquiry(inquiryId, targetEmail, targetUid) {if(!isAnyMasterAdmin()) return showToast('관리자 권한이 필요합니다.');const replyText = await customPrompt(`[${targetEmail || '회원'}] 문의에 보낼 답장 내용을 입력하세요:`, "", "고객센터 답장");if(!replyText) return;sendDirectLetter(targetEmail, targetUid, "고객센터 문의 답변", replyText);deleteInquiry(inquiryId);}
 function safeFetchColl(collRef) {return collRef.get().catch(err => {console.warn("Collection fetch fallback:", err);return null;});}
 
 function loadAdminDashboard() {
   const container = document.getElementById('adminDashboardContent');
-  if(!container || !db) return;
+  const activeDb = db || window.db;
+  if(!container || !activeDb) return;
   container.innerHTML = '<div style="text-align:center; padding:2rem; color:#64748b;">데이터를 불러오는 중...</div>';
   const isSuper = isSuperAdmin();
   const promises = [
-    safeFetchColl(db.collection(COLL_USERS)),
-    safeFetchColl(db.collection(COLL_VISITORS)),
-    safeFetchColl(db.collection(COLL_PENDING)),
-    safeFetchColl(db.collection(COLL_SOURCES)),
-    safeFetchColl(db.collection(COLL_REPORTS)),
-    safeFetchColl(db.collection(COLL_INQUIRIES)),
-    safeFetchColl(db.collection(COLL_SETTINGS).doc("adminWhitelist")),
-    safeFetchColl(db.collection(COLL_SETTINGS).doc("blockedIPs")),
-    isSuper ? safeFetchColl(db.collection(COLL_DMS)) : Promise.resolve(null),
-    isSuper ? safeFetchColl(db.collection(COLL_LETTERS)) : Promise.resolve(null)
+    safeFetchColl(activeDb.collection(COLL_USERS)),
+    safeFetchColl(activeDb.collection(COLL_VISITORS)),
+    safeFetchColl(activeDb.collection(COLL_PENDING)),
+    safeFetchColl(activeDb.collection(COLL_SOURCES)),
+    safeFetchColl(activeDb.collection(COLL_REPORTS)),
+    safeFetchColl(activeDb.collection(COLL_INQUIRIES)),
+    safeFetchColl(activeDb.collection(COLL_SETTINGS).doc("adminWhitelist")),
+    safeFetchColl(activeDb.collection(COLL_SETTINGS).doc("blockedIPs")),
+    isSuper ? safeFetchColl(activeDb.collection(COLL_DMS)) : Promise.resolve(null),
+    isSuper ? safeFetchColl(activeDb.collection(COLL_LETTERS)) : Promise.resolve(null)
   ];
 
   Promise.all(promises).then((results) => {
@@ -871,24 +917,25 @@ function loadAdminDashboard() {
   });
 }
 
-function approvePendingSource(id) {if(!db) return;db.collection(COLL_PENDING).doc(id).get().then(doc => {if(!doc.exists) return;const data = doc.data();data.plays = 0;data.approvedAt = firebase.firestore.FieldValue.serverTimestamp();db.collection(COLL_SOURCES).add(data).then(() => {db.collection(COLL_PENDING).doc(id).delete();showToast('소스가 최종 승인되어 게시되었습니다!');loadAdminDashboard();});});}
-async function rejectPendingSource(id) {if(!db) return;if(!(await customConfirm("이 소스 기여 요청을 거절하시겠습니까?"))) return;db.collection(COLL_PENDING).doc(id).delete().then(() => {showToast('기여 요청이 거절되었습니다.');loadAdminDashboard();});}
-async function deleteSourceAdmin(id) {if(!db) return;if(!(await customConfirm("정말 이 소스를 삭제하시겠습니까?"))) return;db.collection(COLL_SOURCES).doc(id).delete().then(() => {showToast('소스가 삭제되었습니다.');loadAdminDashboard();});}
-function dismissReport(id) {if(!db) return;db.collection(COLL_REPORTS).doc(id).delete().then(() => {showToast('신고 내역이 처리(삭제)되었습니다.');loadAdminDashboard();});}
-function deleteInquiry(id) {if(!db) return;db.collection(COLL_INQUIRIES).doc(id).delete().then(() => {showToast('문의 내역이 삭제되었습니다.');loadAdminDashboard();});}
-async function adminEditUser(uid, currentNick, currentPass) {if(!isSuperAdmin()) return showToast('해당 기능은 마스터 계정 전용입니다.');const newNick = await customPrompt("변경할 닉네임:", currentNick, "회원 수정");if(newNick === null) return;const newPass = await customPrompt("변경할 비밀번호:", currentPass, "회원 수정");if(newPass === null) return;db.collection(COLL_USERS).doc(uid).update({displayName: newNick, setPass: newPass, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("회원 정보 수정 완료"); loadAdminDashboard(); });}
+function approvePendingSource(id) {const activeDb = db || window.db;if(!activeDb) return;activeDb.collection(COLL_PENDING).doc(id).get().then(doc => {if(!doc.exists) return;const data = doc.data();data.plays = 0;data.approvedAt = firebase.firestore.FieldValue.serverTimestamp();activeDb.collection(COLL_SOURCES).add(data).then(() => {activeDb.collection(COLL_PENDING).doc(id).delete();showToast('소스가 최종 승인되어 게시되었습니다!');loadAdminDashboard();});});}
+async function rejectPendingSource(id) {const activeDb = db || window.db;if(!activeDb) return;if(!(await customConfirm("이 소스 기여 요청을 거절하시겠습니까?"))) return;activeDb.collection(COLL_PENDING).doc(id).delete().then(() => {showToast('기여 요청이 거절되었습니다.');loadAdminDashboard();});}
+async function deleteSourceAdmin(id) {const activeDb = db || window.db;if(!activeDb) return;if(!(await customConfirm("정말 이 소스를 삭제하시겠습니까?"))) return;activeDb.collection(COLL_SOURCES).doc(id).delete().then(() => {showToast('소스가 삭제되었습니다.');loadAdminDashboard();});}
+function dismissReport(id) {const activeDb = db || window.db;if(!activeDb) return;activeDb.collection(COLL_REPORTS).doc(id).delete().then(() => {showToast('신고 내역이 처리(삭제)되었습니다.');loadAdminDashboard();});}
+function deleteInquiry(id) {const activeDb = db || window.db;if(!activeDb) return;activeDb.collection(COLL_INQUIRIES).doc(id).delete().then(() => {showToast('문의 내역이 삭제되었습니다.');loadAdminDashboard();});}
+async function adminEditUser(uid, currentNick, currentPass) {const activeDb = db || window.db;if(!isSuperAdmin()) return showToast('해당 기능은 마스터 계정 전용입니다.');const newNick = await customPrompt("변경할 닉네임:", currentNick, "회원 수정");if(newNick === null) return;const newPass = await customPrompt("변경할 비밀번호:", currentPass, "회원 수정");if(newPass === null) return;activeDb.collection(COLL_USERS).doc(uid).update({displayName: newNick, setPass: newPass, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("회원 정보 수정 완료"); loadAdminDashboard(); });}
 async function adminSendLetterPrompt(email, uid) {if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');const title = await customPrompt("편지 제목:", "운영진 메시지", "편지 발송");if(!title) return;const content = await customPrompt("편지 내용:", "", "편지 발송");if(!content) return;sendDirectLetter(email, uid, title, content);}
-async function adminReportWarningUser(uid, name) {if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');const warningMsg = await customPrompt(`[${name}] 회원 경고 메시지:`, "이용약관 위반으로 경고 조치 되었습니다.", "회원 경고");if(!warningMsg) return;db.collection(COLL_USERS).doc(uid).update({warningReport: warningMsg, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("경고 처리 완료"); loadAdminDashboard(); });}
-async function adminClearWarningUser(uid) {if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');if(!(await customConfirm("이 회원의 경고를 해제하시겠습니까?"))) return;db.collection(COLL_USERS).doc(uid).update({warningReport: firebase.firestore.FieldValue.delete()}).then(() => { showToast("경고가 해제되었습니다."); loadAdminDashboard(); });}
-async function adminDeleteUser(uid) {if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');if(!(await customConfirm("정말 이 회원을 삭제하시겠습니까?"))) return;db.collection(COLL_USERS).doc(uid).delete().then(() => { showToast("회원이 삭제되었습니다."); loadAdminDashboard(); });}
+async function adminReportWarningUser(uid, name) {const activeDb = db || window.db;if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');const warningMsg = await customPrompt(`[${name}] 회원 경고 메시지:`, "이용약관 위반으로 경고 조치 되었습니다.", "회원 경고");if(!warningMsg) return;activeDb.collection(COLL_USERS).doc(uid).update({warningReport: warningMsg, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("경고 처리 완료"); loadAdminDashboard(); });}
+async function adminClearWarningUser(uid) {const activeDb = db || window.db;if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');if(!(await customConfirm("이 회원의 경고를 해제하시겠습니까?"))) return;activeDb.collection(COLL_USERS).doc(uid).update({warningReport: firebase.firestore.FieldValue.delete()}).then(() => { showToast("경고가 해제되었습니다."); loadAdminDashboard(); });}
+async function adminDeleteUser(uid) {const activeDb = db || window.db;if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');if(!(await customConfirm("정말 이 회원을 삭제하시겠습니까?"))) return;activeDb.collection(COLL_USERS).doc(uid).delete().then(() => { showToast("회원이 삭제되었습니다."); loadAdminDashboard(); });}
 
 let rawAiLogsCache = [];
 function openAiLogsModal(filterEmail = '') {if(!isAnyMasterAdmin()) return showToast('마스터 관리자 권한이 필요합니다.');openModal('aiLogsModal');const searchInput = document.getElementById('aiLogSearchInput');if(searchInput) searchInput.value = filterEmail || '';loadAiLogs();}
 function loadAiLogs() {
-  if(!db || !isAnyMasterAdmin()) return;
+  const activeDb = db || window.db;
+  if(!activeDb || !isAnyMasterAdmin()) return;
   const container = document.getElementById('aiLogsContainer');
   if(container) container.innerHTML = '<div style="text-align:center; color:#64748b; padding:2rem;">AI 기록 로딩 중...</div>';
-  db.collection(COLL_AI_LOGS).get().then(snap => {
+  activeDb.collection(COLL_AI_LOGS).get().then(snap => {
     rawAiLogsCache = [];
     if(snap && !snap.empty) {
       snap.forEach(doc => { const d = doc.data(); d.id = doc.id; rawAiLogsCache.push(d); });
@@ -899,12 +946,10 @@ function loadAiLogs() {
     if(container) container.innerHTML = `<div style="color:red; text-align:center; padding:2rem;">로그 로드 실패 (${err.message})</div>`;
   });
 }
-async function deleteAiLog(id) {if(!isSuperAdmin()) return showToast('삭제 권한이 없습니다.');if(!(await customConfirm("이 AI 기록을 삭제하시겠습니까?"))) return;db.collection(COLL_AI_LOGS).doc(id).delete().then(() => {showToast("AI 기록이 삭제되었습니다.");loadAiLogs();});}
+async function deleteAiLog(id) {const activeDb = db || window.db;if(!isSuperAdmin()) return showToast('삭제 권한이 없습니다.');if(!(await customConfirm("이 AI 기록을 삭제하시겠습니까?"))) return;activeDb.collection(COLL_AI_LOGS).doc(id).delete().then(() => {showToast("AI 기록이 삭제되었습니다.");loadAiLogs();});}
 function renderFilteredAiLogs() {const container = document.getElementById('aiLogsContainer');const searchInput = document.getElementById('aiLogSearchInput');if(!container) return;const keyword = searchInput ? searchInput.value.trim().toLowerCase() : '';let list = rawAiLogsCache;if(keyword) {list = list.filter(item =>(item.userEmail || '').toLowerCase().includes(keyword) ||(item.userText || '').toLowerCase().includes(keyword) ||(item.aiReply || '').toLowerCase().includes(keyword));}if(list.length === 0) {container.innerHTML = '<div style="text-align:center; color:#94a3b8; padding:2rem;">기록된 AI 대화/이미지 내역이 없습니다.</div>';return;}let html = '';list.forEach(item => {const timeStr = item.timestamp ? new Date(item.timestamp.toDate()).toLocaleString() : '방금 전';html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:12px; font-size:0.88rem;"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px dashed #cbd5e1; padding-bottom:6px;"><div><b style="color:var(--primary);">👤 회원: ${item.userEmail || '익명 방문자'}</b></div><div style="display:flex; gap:8px; align-items:center;"><span style="font-size:0.75rem; color:#64748b;">${timeStr}</span>${isSuperAdmin() ? `<button type="button" class="btn-danger" style="padding:2px 8px; font-size:0.75rem;" onclick="deleteAiLog('${item.id}')">🗑️ 삭제</button>` : ''}</div></div><div style="margin-bottom:8px; color:#0f172a;"><b>질문 원문:</b><pre style="white-space:pre-wrap; word-break:break-all; background:#ffffff; padding:8px; border-radius:6px; border:1px solid #e2e8f0; font-family:inherit; margin-top:4px;">${item.userText || ''}</pre></div><div style="color:#334155; background:#ffffff; padding:0.8rem; border-radius:8px; border:1px solid #e2e8f0; font-size:0.85rem;"><b style="color:#8b5cf6;">🤖 게코준 AI 답변 원문:</b><pre style="white-space:pre-wrap; word-break:break-all; font-family:inherit; margin-top:4px;">${item.aiReply || ''}</pre></div></div>`;});container.innerHTML = html;}
 
 const GEKOJOON_GEMINI_KEY = "AQ.Ab8RN6LiZ8YkS57-Qd5abU_Wyk5s5Y6wq8SRAP9FfEK0S7Y6AA";let selectedAiFile = null;
-const GEKOJOON_SYSTEM_INSTRUCTION = {parts: [{text: `너의 정체성은 '게코준 AI'야. 개발자인 '경준tv'와 '게코뱀'이 제작했어. 핵심 모델명은 gemini-3.5-flash-lite 야. 친절하고 명확하게 질문에 답변해줘. [IMAGE_PROMPT: 상세한 영문 이미지 생성 프롬프트]`}]};
-
 function toggleGekojoonAiModal() {const modal = document.getElementById('gekojoonAiModal');if(!modal) return;modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';}
 function handleAiFileSelect(e) {selectedAiFile = e.target.files[0];}
 function clearAiAttachedFile() {selectedAiFile = null;}
@@ -963,8 +1008,9 @@ async function sendGekojoonAiMessage() {
   botMsgDiv.querySelector('.ai-bubble').innerHTML = formatMarkdown(botReply);
   chatBody.scrollTop = chatBody.scrollHeight;
 
-  if(db && currentUser) {
-    db.collection(COLL_AI_LOGS).add({
+  const activeDb = db || window.db;
+  if(activeDb && currentUser) {
+    activeDb.collection(COLL_AI_LOGS).add({
       userEmail: currentUser.email || '비로그인',
       userUid: currentUser.uid || '',
       userText: text,
