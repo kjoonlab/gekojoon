@@ -73,7 +73,7 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
 <div class="modal" id="loginModal"><div class="modal-content" style="max-width: 420px; text-align: center;"><button type="button" class="close-btn" onclick="closeModal('loginModal')">&times;</button><h2 id="authModalTitle" style="margin-bottom: 1rem;">로그인</h2><button type="button" id="googleLoginBtn" onclick="loginWithGoogle()" style="width: 100%; padding: 0.9rem; background: #4285F4; color: #fff; border-radius: 10px; font-weight: 700; margin-bottom: 1.2rem; display:flex; align-items:center; justify-content:center; gap:8px;">Google 계정으로 계속하기</button><form id="emailLoginForm" onsubmit="handleEmailLogin(event)" style="text-align: left;"><div class="form-group"><label>이메일</label><input type="email" id="loginEmail" class="form-control" required></div><div class="form-group"><label>비밀번호</label><input type="password" id="loginPassword" class="form-control" required></div><button type="submit" class="btn" style="width: 100%; padding: 0.9rem; margin-top: 0.5rem;">로그인하기</button></form><form id="emailSignupForm" onsubmit="event.preventDefault();" style="text-align: left; display: none;"><div id="signupStep1"><div class="form-group"><label>닉네임</label><input type="text" id="signupNickname" class="form-control" required></div><div class="form-group"><label>이메일</label><input type="email" id="signupEmail" class="form-control" required></div><div class="form-group"><label>비밀번호 (6자 이상)</label><input type="password" id="signupPassword" class="form-control" required minlength="6"></div><button type="button" class="btn" onclick="sendSignupOtpCode()" style="width: 100%; padding: 0.9rem; margin-top: 0.5rem;">인증번호 받기</button></div><div id="signupStep2" style="display: none;"><p style="font-size: 0.85rem; color: var(--success); margin-bottom: 1rem; line-height: 1.4;">✅ 인증번호가 발송되었습니다. 메일함에서 6자리 번호를 확인해 입력해주세요.</p><div class="form-group"><label>6자리 인증번호</label><input type="text" id="signupOtpInput" class="form-control" placeholder="예: 123456" maxlength="6" required></div><button type="button" class="btn-success" onclick="verifySignupOtpAndRegister()" style="width: 100%; padding: 0.9rem; margin-top: 0.5rem;">회원가입 완료</button></div></form><div id="emailResetForm" style="text-align: left; display: none;"><div id="resetStep1"><p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.4;">가입하신 이메일을 입력하시면 6자리 인증번호가 발송됩니다.</p><div class="form-group"><label>가입 이메일</label><input type="email" id="resetEmail" class="form-control" required></div><button type="button" class="btn" onclick="sendOtpCode()" style="width: 100%; padding: 0.9rem; margin-top: 0.5rem;">인증번호 받기</button></div><div id="resetStep2" style="display: none;"><p style="font-size: 0.85rem; color: var(--success); margin-bottom: 1rem; line-height: 1.4;">✅ 인증번호가 발송되었습니다. 메일함에서 6자리 번호를 확인해 입력해주세요.</p><div class="form-group"><label>6자리 인증번호</label><input type="text" id="resetOtpInput" class="form-control" placeholder="예: 123456" maxlength="6" required></div><div class="form-group"><label>새 비밀번호 (6자 이상)</label><input type="password" id="newPasswordInput" class="form-control" minlength="6" required></div><button type="button" class="btn-success" onclick="verifyOtpAndChangePassword()" style="width: 100%; padding: 0.9rem; margin-top: 0.5rem;">비밀번호 변경 완료</button></div></div><div style="margin-top: 1.2rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-muted);"><a href="javascript:void(0);" onclick="setAuthView('reset')" id="forgotPasswordLink" style="color: var(--text-muted); text-decoration: underline;">비밀번호 찾기</a><div><span id="authToggleText">계정이 없으신가요?</span><a href="javascript:void(0);" onclick="setAuthView('signup')" id="authToggleBtn" style="color: var(--primary); font-weight: 700; text-decoration: none; margin-left: 5px;">회원가입</a></div></div></div></div>
 <div class="modal" id="submitModal"><div class="modal-content"><button type="button" class="close-btn" onclick="closeModal('submitModal')">&times;</button><h2>🚀 소스 및 파일 기여 (광고 수익 5:5 정산)</h2><form onsubmit="handleUserSubmitGame(event)" style="margin-top: 1.2rem;"><div style="display:flex; gap:10px;"><div class="form-group" style="flex:1;"><label>닉네임</label><input type="text" id="subAuthor" class="form-control" readonly style="background:#e2e8f0; color:#64748b;"></div><div class="form-group" style="flex:1;"><label>아이콘 이모지</label><input type="text" id="subIcon" class="form-control" value="📦" required maxlength="2"></div></div><div class="form-group"><label>콘텐츠 제목</label><input type="text" id="subTitle" class="form-control" required placeholder="예: 웹 크롤링 파이썬 소스"></div><div style="display:flex; gap:10px;"><div class="form-group" style="flex:1;"><label>유형</label><select id="subContentType" class="form-control" onchange="toggleContentTypeFields(this.value)" required><option value="code">💻 코드</option><option value="file">📁 파일</option></select></div><div class="form-group" style="flex:1;"><label>카테고리 태그</label><select id="subTag" class="form-control" required><option value="Python">🐍 Python</option><option value="JavaScript">🟨 JavaScript</option><option value="React">⚛️ React</option><option value="HTML/CSS">🌐 HTML/CSS</option><option value="Design">🎨 디자인</option><option value="Utility">🛠️ 유틸리티</option><option value="Other" selected>기타</option></select></div></div><div class="form-group"><label>상세 설명</label><textarea id="subDesc" class="form-control" required style="min-height: 80px;"></textarea></div><div class="form-group" id="groupCode"><label>소스코드 내용</label><textarea id="subHtml" class="form-control" style="min-height: 150px;"></textarea></div><div class="form-group" id="groupFile" style="display:none;"><label>파일 선택 (이미지 .jpg/.png, 문서 등)</label><input type="file" id="subFileInput" class="form-control" style="padding: 0.6rem;"></div><button type="submit" id="submitBtn" style="width: 100%; padding: 0.9rem; margin-top: 0.5rem; border-radius: 12px;">등록 요청하기</button></form></div></div>
 <div class="modal" id="adminLoginModal"><div class="modal-content" style="max-width: 400px; text-align: center;"><button type="button" class="close-btn" onclick="closeModal('adminLoginModal')">&times;</button><h2>관리자 패널</h2><p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.2rem;">로그인된 계정 및 관리자 권한을 확인합니다.</p><button type="button" onclick="verifyAdminAccess()" style="width: 100%; padding: 1rem; background: #4285F4; color: #fff; border-radius: 10px; font-weight:700;">관리자 확인</button></div></div>
-<div class="modal" id="adminDashboardModal"><div class="modal-content" style="max-width: 1000px;"><button type="button" class="close-btn" onclick="closeModal('adminDashboardModal')">&times;</button><h2>⚙️ 관리자 대시보드 (통합 제어 센터)</h2><div id="adminDashboardContent" style="margin-top:1.5rem;"></div></div></div>
+<div class="modal" id="adminDashboardModal"><div class="modal-content" style="max-width: 1100px;"><button type="button" class="close-btn" onclick="closeModal('adminDashboardModal')">&times;</button><h2>⚙️ 관리자 대시보드 (통합 제어 센터)</h2><div id="adminDashboardContent" style="margin-top:1.5rem;"></div></div></div>
 <div class="modal" id="aiLogsModal"><div class="modal-content" style="max-width: 850px;"><button type="button" class="close-btn" onclick="closeModal('aiLogsModal')">&times;</button><h2 style="display:flex; align-items:center; gap:8px;">🤖 사용자별 AI 대화 & 이미지 생성 기록 원문 관제</h2><div style="margin-top: 1rem; display: flex; gap: 10px;"><input type="text" id="aiLogSearchInput" class="form-control" placeholder="회원 이메일 또는 질문 키워드 검색..." oninput="renderFilteredAiLogs()"><button type="button" class="btn" onclick="loadAiLogs()" style="white-space:nowrap;">새로고침</button></div><div id="aiLogsContainer" style="margin-top: 1.2rem; max-height: 520px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;"><div style="text-align:center; color:#64748b; padding:2rem;">기록을 불러오는 중...</div></div></div></div>
 <div class="modal" id="reportModal"><div class="modal-content" style="max-width: 450px;"><button type="button" class="close-btn" onclick="closeModal('reportModal')">&times;</button><h2>🚨 소스 신고하기</h2><form onsubmit="submitGameReport(event)" style="margin-top: 1.2rem;"><input type="hidden" id="reportGameId"><div class="form-group"><label>신고 대상</label><input type="text" id="reportGameTitle" class="form-control" readonly style="background:#e2e8f0;"></div><div class="form-group"><label>신고 사유</label><textarea id="reportReason" class="form-control" required placeholder="신고 사유를 구체적으로 적어주세요." style="min-height: 100px;"></textarea></div><button type="submit" class="btn-danger" style="width:100%; margin-top:1rem; padding: 0.8rem;">신고 접수</button></form></div></div>
 <div class="modal" id="supportModal"><div class="modal-content" style="max-width: 500px;"><button type="button" class="close-btn" onclick="closeModal('supportModal')">&times;</button><h2>💬 고객센터 문의</h2><form onsubmit="handleSupportSubmit(event)" style="margin-top: 1.2rem;"><div class="form-group"><label>닉네임 / 작성자</label><input type="text" id="supAuthor" class="form-control" required placeholder="닉네임 입력"></div><div class="form-group"><label>문의 내용</label><textarea id="supContent" class="form-control" required placeholder="문의하실 내용을 입력해주세요." style="min-height: 120px;"></textarea></div><button type="submit" class="btn" style="width:100%; margin-top:1rem; padding: 0.8rem;">문의 접수하기</button></form></div></div>
@@ -100,6 +100,13 @@ footer { background: #ffffff; border-top: 1px solid var(--border-color); padding
 </div>
 
 <script type="module">
+  // [도메인 무단 복제 방지 라이선스 보안 검증]
+  const currentHost = window.location.hostname;
+  if (currentHost !== 'gekojoon.com' && currentHost !== 'localhost' && currentHost !== '127.0.0.1' && !currentHost.includes('github.io')) {
+    document.body.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100vh; font-size:1.5rem; color:#ef4444; font-weight:bold; background:#0f172a;">🚨 Unauthorized Domain: 무단 복제된 코드는 실행할 수 없습니다.</div>';
+    throw new Error("Security Violation: Unauthorized domain execution.");
+  }
+
   import { initializeApp } from "firebase/app";
   import { getAnalytics } from "firebase/analytics";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, updatePassword } from "firebase/auth";
@@ -287,7 +294,7 @@ function installPWA() {
   }
 }
 
-document.addEventListener('contextmenu', e => e.preventDefault());document.addEventListener('keydown', e => {if (e.key === 'F12') { e.preventDefault(); return false; }if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['I', 'i', 'J', 'j', 'C', 'c'].includes(e.key)) { e.preventDefault(); return false; }if ((e.ctrlKey || e.metaKey) && ['U', 'u', 'S', 's', 'A', 'a'].includes(e.key)) { e.preventDefault(); return false; }if (e.metaKey && e.altKey && ['I', 'i', 'J', 'j', 'C', 'c', 'U', 'u'].includes(e.key)) { e.preventDefault(); return false; }if (e.metaKey && ['U', 'u', 'S', 's'].includes(e.key)) { e.preventDefault(); return false; }});
+// 개발자 도구 및 우클릭 제한 완전 해제 (사용자가 편하게 검사 가능)
 
 function customAlert(message, title = "알림") {
   return new Promise((resolve) => {
@@ -450,7 +457,8 @@ async function recordAndCheckVisitor() {
   }
   checkVisitorMilestone();
 }
-setTimeout(() => { recordAndCheckVisitor(); }, 500);
+// 로딩 단축을 위해 지연 없이 즉시 호출
+recordAndCheckVisitor();
 
 function checkVisitorMilestone() {
   if(!db) return;
@@ -460,7 +468,6 @@ function checkVisitorMilestone() {
     isAdAndRevenueActive = dailyVisitorCount >= TARGET_VISITORS;
     updateBannerState(dailyVisitorCount);
   }).catch(err => {
-    console.warn("Visitor milestone read error, using local fallback:", err);
     updateBannerState(1);
   });
 }
@@ -512,33 +519,31 @@ function syncUserRecord(user, extraPass = "") {
   }).catch(() => {});
 }
 
-setTimeout(() => {
-  if (auth) {
-    auth.onAuthStateChanged((user) => {
-      currentUser = user;
-      const authBtn = document.getElementById('authBtn');
-      const myPageBtn = document.getElementById('myPageBtn');
-      const userDmBtn = document.getElementById('userDmBtn');
-      const userAuthDisplay = document.getElementById('userAuthDisplay');
+if (auth) {
+  auth.onAuthStateChanged((user) => {
+    currentUser = user;
+    const authBtn = document.getElementById('authBtn');
+    const myPageBtn = document.getElementById('myPageBtn');
+    const userDmBtn = document.getElementById('userDmBtn');
+    const userAuthDisplay = document.getElementById('userAuthDisplay');
 
-      if (user) {
-        if(authBtn) { authBtn.innerText = '로그아웃'; authBtn.className = 'btn-secondary'; }
-        if(myPageBtn) myPageBtn.style.display = 'inline-flex';
-        if(userDmBtn) userDmBtn.style.display = 'inline-flex';
-        if(userAuthDisplay) userAuthDisplay.innerText = `${user.displayName || user.email.split('@')[0]}님`;
-        syncUserRecord(user);
-        checkUnreadLetters();
-        checkUnreadDms();
-      } else {
-        if(authBtn) { authBtn.innerText = '로그인'; authBtn.className = 'btn'; }
-        if(myPageBtn) myPageBtn.style.display = 'none';
-        if(userDmBtn) userDmBtn.style.display = 'none';
-        if(userAuthDisplay) userAuthDisplay.innerText = '';
-        if(dmUnreadListener) { dmUnreadListener(); dmUnreadListener = null; }
-      }
-    });
-  }
-}, 500);
+    if (user) {
+      if(authBtn) { authBtn.innerText = '로그아웃'; authBtn.className = 'btn-secondary'; }
+      if(myPageBtn) myPageBtn.style.display = 'inline-flex';
+      if(userDmBtn) userDmBtn.style.display = 'inline-flex';
+      if(userAuthDisplay) userAuthDisplay.innerText = `${user.displayName || user.email.split('@')[0]}님`;
+      syncUserRecord(user);
+      checkUnreadLetters();
+      checkUnreadDms();
+    } else {
+      if(authBtn) { authBtn.innerText = '로그인'; authBtn.className = 'btn'; }
+      if(myPageBtn) myPageBtn.style.display = 'none';
+      if(userDmBtn) userDmBtn.style.display = 'none';
+      if(userAuthDisplay) userAuthDisplay.innerText = '';
+      if(dmUnreadListener) { dmUnreadListener(); dmUnreadListener = null; }
+    }
+  });
+}
 
 function checkUnreadLetters() {if(!db || !currentUser) return;db.collection(COLL_LETTERS).where("toEmail", "==", currentUser.email.toLowerCase()).get().then(snap => {let unreadCount = 0;snap.forEach(doc => { if(!doc.data().read) unreadCount++; });const badge = document.getElementById('unreadBadge');if(badge) {if(unreadCount > 0) {badge.innerText = unreadCount;badge.style.display = 'inline-block';} else {badge.style.display = 'none';}}}).catch(() => {});}
 function checkUnreadDms() {if(!db || !currentUser) return;if(dmUnreadListener) dmUnreadListener();
@@ -791,8 +796,9 @@ function loadAdminDashboard() {
     let html = '';
     html += `<div style="background:linear-gradient(135deg, #1e1b4b, #312e81); padding:1.2rem; border-radius:14px; margin-bottom:20px; color:#fff; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;"><div><h3 style="margin:0; font-size:1.15rem; color:#c7d2fe;">🛡️ 마스터 관리자 통합 관제 센터 (${currentUser.email})</h3><p style="margin:4px 0 0 0; font-size:0.8rem; color:#a5b4fc;">${isSuper ? '최상위 마스터 권한 (전체 기능 및 DM/편지 전체 제어 가능)' : '마스터 관리자 권한 (회원 및 AI/방문자 관제)'}</p></div><button type="button" class="btn" style="background:linear-gradient(135deg, #a855f7, #6366f1); border:none;" onclick="openAiLogsModal()">🤖 AI 대화/이미지 기록 원문 관제</button></div>`;
 
+    // 1. 회원 정보 관제
     html += `<h3 style="margin-bottom:10px; color:#1e293b;">👥 전체 회원 정보 관제 (${usersSnap && !usersSnap.empty ? usersSnap.size : 0}명)</h3>`;
-    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:260px; overflow-y:auto;">`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;
     if (usersSnap && !usersSnap.empty) {
       usersSnap.forEach(doc => {
         const u = doc.data();
@@ -800,10 +806,62 @@ function loadAdminDashboard() {
         const uNick = escapeJsStr(u.displayName || '이름없음');
         const uIp = userIpMap[uEmail.toLowerCase()] || u.ip || '최근 IP 기록 없음';
         const hasWarning = !!u.warningReport;
-        html += `<div style="padding:10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem; background:#ffffff; border-radius:8px; margin-bottom:6px;"><div><b style="color:#0f172a;">👤 닉네임: ${uNick}</b> | <span style="color:var(--primary); font-size:0.82rem;">📧 이메일: <code>${uEmail}</code></span><br><span style="color:#64748b; font-size:0.78rem;">비밀번호: <b>${isSuper ? (u.setPass || '구글 계정') : '🔒 암호화됨'}</b></span>${hasWarning ? `<span style="color:#ef4444; font-size:0.75rem; font-weight:bold; margin-left:6px;">⚠️ 경고: ${u.warningReport}</span>` : ''}</div><div style="display:flex; align-items:center; gap:8px;"><span style="background:#e2e8f0; color:#334155; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:0.8rem;">🌐 IP: ${uIp}</span><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#0284c7;" onclick="openAiLogsModal('${uEmail}')">AI기록</button>${isSuper ? `<button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="adminEditUser('${doc.id}', '${uNick}', '${escapeJsStr(u.setPass||'')}')">수정</button><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#8b5cf6;" onclick="adminSendLetterPrompt('${uEmail}', '${u.uid}')">편지</button>${hasWarning ? `<button type="button" class="btn-success" style="padding:3px 8px; font-size:0.75rem;" onclick="adminClearWarningUser('${doc.id}')">해제</button>` : `<button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="adminReportWarningUser('${doc.id}', '${uNick}')">경고</button>`}<button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem; background:#991b1b;" onclick="adminDeleteUser('${doc.id}')">삭제</button>` : ''}</div></div>`;
+        html += `<div style="padding:10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem; background:#ffffff; border-radius:8px; margin-bottom:6px;"><div><b style="color:#0f172a;">👤 닉네임: ${uNick}</b> | <span style="color:var(--primary); font-size:0.82rem;">📧 이메일: <code>${uEmail}</code></span><br><span style="color:#64748b; font-size:0.78rem;">비밀번호: <b>${isSuper ? (u.setPass || '구글 계정') : '🔒 암호화됨'}</b></span>${hasWarning ? `<span style="color:#ef4444; font-size:0.75rem; font-weight:bold; margin-left:6px;">⚠️ 경고: ${u.warningReport}</span>` : ''}</div><div style="display:flex; align-items:center; gap:8px;"><span style="background:#e2e8f0; color:#334155; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:0.80rem;">🌐 IP: ${uIp}</span><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#0284c7;" onclick="openAiLogsModal('${uEmail}')">AI기록</button>${isSuper ? `<button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem;" onclick="adminEditUser('${doc.id}', '${uNick}', '${escapeJsStr(u.setPass||'')}')">수정</button><button type="button" class="btn" style="padding:3px 8px; font-size:0.75rem; background:#8b5cf6;" onclick="adminSendLetterPrompt('${uEmail}', '${u.uid}')">편지</button>${hasWarning ? `<button type="button" class="btn-success" style="padding:3px 8px; font-size:0.75rem;" onclick="adminClearWarningUser('${doc.id}')">해제</button>` : `<button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="adminReportWarningUser('${doc.id}', '${uNick}')">경고</button>`}<button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem; background:#991b1b;" onclick="adminDeleteUser('${doc.id}')">삭제</button>` : ''}</div></div>`;
       });
     } else {
-      html += `<div style="text-align:center; color:#94a3b8; padding:1.5rem;">회원 목록이 비어있습니다.</div>`;
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">회원 목록이 비어있습니다.</div>`;
+    }
+    html += `</div>`;
+
+    // 2. 소스 기여 승인 대기열
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">📥 소스 기여 승인 대기열 (${pendingSnap && !pendingSnap.empty ? pendingSnap.size : 0}건)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:220px; overflow-y:auto;">`;
+    if (pendingSnap && !pendingSnap.empty) {
+      pendingSnap.forEach(doc => {
+        const p = doc.data();
+        html += `<div style="padding:10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem; background:#ffffff; border-radius:8px; margin-bottom:6px;"><div><b>${p.icon||'📦'} ${p.title}</b> <span style="font-size:0.75rem; color:var(--text-muted);">(by ${p.author})</span></div><div style="display:flex; gap:6px;"><button type="button" class="btn-success" style="padding:4px 10px; font-size:0.75rem;" onclick="approvePendingSource('${doc.id}')">승인</button><button type="button" class="btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="rejectPendingSource('${doc.id}')">거절</button></div></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">승인 대기 중인 소스가 없습니다.</div>`;
+    }
+    html += `</div>`;
+
+    // 3. 신고 관리
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">🚨 접수된 신고 목록 (${reportsSnap && !reportsSnap.empty ? reportsSnap.size : 0}건)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:200px; overflow-y:auto;">`;
+    if (reportsSnap && !reportsSnap.empty) {
+      reportsSnap.forEach(doc => {
+        const r = doc.data();
+        html += `<div style="padding:10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem; background:#ffffff; border-radius:8px; margin-bottom:6px;"><div><b>대상: ${r.gameTitle}</b><br><span style="color:#ef4444; font-size:0.82rem;">사유: ${r.reason}</span> <span style="color:#64748b; font-size:0.75rem;">(신고인: ${r.reporter})</span></div><button type="button" class="btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="dismissReport('${doc.id}')">처리완료(삭제)</button></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">접수된 신고가 없습니다.</div>`;
+    }
+    html += `</div>`;
+
+    // 4. 고객센터 문의 관리
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">💬 고객센터 문의함 (${inquiriesSnap && !inquiriesSnap.empty ? inquiriesSnap.size : 0}건)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; margin-bottom:20px; max-height:200px; overflow-y:auto;">`;
+    if (inquiriesSnap && !inquiriesSnap.empty) {
+      inquiriesSnap.forEach(doc => {
+        const i = doc.data();
+        html += `<div style="padding:10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem; background:#ffffff; border-radius:8px; margin-bottom:6px;"><div><b>작성자: ${i.author}</b> (${i.userEmail || '비회원'})<br><span style="color:#334155; font-size:0.85rem;">${i.content}</span></div><div style="display:flex; gap:6px;"><button type="button" class="btn" style="padding:4px 10px; font-size:0.75rem;" onclick="replyToInquiry('${doc.id}', '${escapeJsStr(i.userEmail||'')}', '${i.userUid||''}')">답장</button><button type="button" class="btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="deleteInquiry('${doc.id}')">삭제</button></div></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">등록된 문의가 없습니다.</div>`;
+    }
+    html += `</div>`;
+
+    // 5. 게시된 전체 소스 관리
+    html += `<h3 style="margin-bottom:10px; color:#1e293b;">📦 게시된 전체 소스 관리 (${sourcesSnap && !sourcesSnap.empty ? sourcesSnap.size : 0}개)</h3>`;
+    html += `<div style="background:#f8fafc; border:1px solid var(--border-color); padding:1rem; border-radius:10px; max-height:200px; overflow-y:auto;">`;
+    if (sourcesSnap && !sourcesSnap.empty) {
+      sourcesSnap.forEach(doc => {
+        const s = doc.data();
+        html += `<div style="padding:8px 10px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; font-size:0.88rem; background:#ffffff; border-radius:8px; margin-bottom:6px;"><div><b>${s.icon||'📦'} ${s.title}</b> <span style="font-size:0.75rem; color:var(--text-muted);">(조회: ${s.plays||0}회)</span></div><button type="button" class="btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="deleteSourceAdmin('${doc.id}')">삭제</button></div>`;
+      });
+    } else {
+      html += `<div style="text-align:center; color:#94a3b8; padding:1rem;">등록된 소스가 없습니다.</div>`;
     }
     html += `</div>`;
 
@@ -818,24 +876,8 @@ async function rejectPendingSource(id) {if(!db) return;if(!(await customConfirm(
 async function deleteSourceAdmin(id) {if(!db) return;if(!(await customConfirm("정말 이 소스를 삭제하시겠습니까?"))) return;db.collection(COLL_SOURCES).doc(id).delete().then(() => {showToast('소스가 삭제되었습니다.');loadAdminDashboard();});}
 function dismissReport(id) {if(!db) return;db.collection(COLL_REPORTS).doc(id).delete().then(() => {showToast('신고 내역이 처리(삭제)되었습니다.');loadAdminDashboard();});}
 function deleteInquiry(id) {if(!db) return;db.collection(COLL_INQUIRIES).doc(id).delete().then(() => {showToast('문의 내역이 삭제되었습니다.');loadAdminDashboard();});}
-async function adminBlockIpDirectly(ipToBlock) {
-  if(!db) return;
-  if(!ipToBlock || ipToBlock === '알 수 없음') return showToast('차단할 유효한 IP가 아닙니다.');
-  if(!(await customConfirm(`[${ipToBlock}] IP를 즉시 차단하시겠습니까?`))) return;
-  const docRef = db.collection(COLL_SETTINGS).doc("blockedIPs");
-  const docSnap = await docRef.get().catch(() => null);
-  let list = (docSnap && docSnap.exists && docSnap.data().list) ? docSnap.data().list : [];
-  if(!list.includes(ipToBlock)) {
-    list.push(ipToBlock);
-    await docRef.set({ list }).catch(err => showToast('IP 차단 저장 실패: ' + err.message));
-    showToast(`[${ipToBlock}] IP가 성공적으로 차단되었습니다.`);
-    loadAdminDashboard();
-  } else {
-    showToast('이미 차단된 IP입니다.');
-  }
-}
 async function adminEditUser(uid, currentNick, currentPass) {if(!isSuperAdmin()) return showToast('해당 기능은 마스터 계정 전용입니다.');const newNick = await customPrompt("변경할 닉네임:", currentNick, "회원 수정");if(newNick === null) return;const newPass = await customPrompt("변경할 비밀번호:", currentPass, "회원 수정");if(newPass === null) return;db.collection(COLL_USERS).doc(uid).update({displayName: newNick, setPass: newPass, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("회원 정보 수정 완료"); loadAdminDashboard(); });}
-async function adminдетLetterPrompt(email, uid) {if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');const title = await customPrompt("편지 제목:", "운영진 메시지", "편지 발송");if(!title) return;const content = await customPrompt("편지 내용:", "", "편지 발송");if(!content) return;sendDirectLetter(email, uid, title, content);}
+async function adminSendLetterPrompt(email, uid) {if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');const title = await customPrompt("편지 제목:", "운영진 메시지", "편지 발송");if(!title) return;const content = await customPrompt("편지 내용:", "", "편지 발송");if(!content) return;sendDirectLetter(email, uid, title, content);}
 async function adminReportWarningUser(uid, name) {if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');const warningMsg = await customPrompt(`[${name}] 회원 경고 메시지:`, "이용약관 위반으로 경고 조치 되었습니다.", "회원 경고");if(!warningMsg) return;db.collection(COLL_USERS).doc(uid).update({warningReport: warningMsg, updatedAt: firebase.firestore.FieldValue.serverTimestamp()}).then(() => { showToast("경고 처리 완료"); loadAdminDashboard(); });}
 async function adminClearWarningUser(uid) {if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');if(!(await customConfirm("이 회원의 경고를 해제하시겠습니까?"))) return;db.collection(COLL_USERS).doc(uid).update({warningReport: firebase.firestore.FieldValue.delete()}).then(() => { showToast("경고가 해제되었습니다."); loadAdminDashboard(); });}
 async function adminDeleteUser(uid) {if(!isSuperAdmin()) return showToast('마스터 계정 전용입니다.');if(!(await customConfirm("정말 이 회원을 삭제하시겠습니까?"))) return;db.collection(COLL_USERS).doc(uid).delete().then(() => { showToast("회원이 삭제되었습니다."); loadAdminDashboard(); });}
@@ -868,7 +910,6 @@ function handleAiFileSelect(e) {selectedAiFile = e.target.files[0];}
 function clearAiAttachedFile() {selectedAiFile = null;}
 function handleAiInputKeyDown(e) {if (e.key === 'Enter' && !e.shiftKey) {e.preventDefault();sendGekojoonAiMessage();}}
 
-// [AI 메시지 전송 및 이미지 생성 기능 완벽 구현]
 async function sendGekojoonAiMessage() {
   const inputEl = document.getElementById('gekojoonAiInput');
   const chatBody = document.getElementById('gekojoonAiChatBody');
