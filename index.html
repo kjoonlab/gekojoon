@@ -1,236 +1,357 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>명훈쌤 생신 편지 투표</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리반 투표 및 토론</title>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background-color: #f9f9f9; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h2 { color: #333; font-size: 18px; line-height: 1.5; }
+        input[type="text"], textarea { width: 100%; padding: 12px; margin: 8px 0 15px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; }
+        textarea { resize: vertical; height: 70px; }
+        .options label { display: block; padding: 12px; margin-bottom: 10px; background: #f1f3f5; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button { background: #4CAF50; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
+        button:hover { background: #45a049; }
+        .admin-panel { background: #fff3cd; border: 1px solid #ffeeba; margin-top: 15px; padding: 15px; border-radius: 6px; }
+        .hidden { display: none; }
+        .vote-item, .comment-item { border-bottom: 1px solid #eee; padding: 10px 0; font-size: 14px; }
+        .vote-item-content { display: flex; justify-content: space-between; align-items: flex-start; }
+        .device-info { font-size: 11px; color: #666; margin-top: 4px; background: #f8f9fa; padding: 4px; border-radius: 3px; }
+        .delete-btn { background: #ff4d4f; width: auto; padding: 5px 10px; font-size: 12px; }
+        .google-btn { background: #4285F4; margin-bottom: 15px; }
+        .comment-section { margin-top: 25px; border-top: 2px solid #f1f3f5; padding-top: 15px; }
+        .comment-list { max-height: 250px; overflow-y: auto; margin-bottom: 15px; }
+        .rate-box { background: #e8f4fd; padding: 12px; border-radius: 6px; margin-bottom: 15px; font-size: 15px; font-weight: bold; color: #0056b3; }
+        .result-bar { margin: 10px 0; font-size: 15px; font-weight: bold; }
+    </style>
 </head>
-<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col items-center p-4 sm:p-6">
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 
-  <!-- 메인 투표 화면 (gekojoon.com) -->
-  <main id="user-view" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 mt-6 hidden">
-    <div class="text-center mb-6">
-      <span class="bg-rose-100 text-rose-600 font-semibold text-xs px-3 py-1 rounded-full">🎂 생신 축하 이벤트</span>
-      <h1 class="text-2xl font-bold text-slate-900 mt-2">명훈쌤 생신 편지 투표</h1>
-      <p class="text-slate-500 text-sm mt-1">명훈쌤께 전달할 생신 편지 문구를 선택해주세요!</p>
-    </div>
-
-    <form id="vote-form" class="space-y-5">
-      <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1">투표자 이름</label>
-        <input type="text" id="voter-name" required placeholder="이름을 입력하세요"
-          class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none">
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-slate-700 mb-2">편지 시안 선택</label>
-        <div class="space-y-3">
-          <label class="flex items-start p-3.5 border rounded-xl cursor-pointer hover:bg-slate-50 transition border-slate-200">
-            <input type="radio" name="letter-option" value="시안 1: 감동형 (스승의 은혜 강조)" required class="mt-1 text-rose-600 focus:ring-rose-500">
-            <div class="ml-3">
-              <span class="block text-sm font-semibold text-slate-900">시안 1. 감동형</span>
-              <span class="block text-xs text-slate-500 mt-0.5">"언제나 저희를 따뜻하게 지도해주시는 명훈쌤, 생신 진심으로 축하드립니다!"</span>
-            </div>
-          </label>
-
-          <label class="flex items-start p-3.5 border rounded-xl cursor-pointer hover:bg-slate-50 transition border-slate-200">
-            <input type="radio" name="letter-option" value="시안 2: 위트형 (유쾌한 축하)" class="mt-1 text-rose-600 focus:ring-rose-500">
-            <div class="ml-3">
-              <span class="block text-sm font-semibold text-slate-900">시안 2. 위트형</span>
-              <span class="block text-xs text-slate-500 mt-0.5">"명훈쌤의 생신을 축하드립니다! 오늘 하루는 세상에서 가장 행복한 하루 되세요!"</span>
-            </div>
-          </label>
-
-          <label class="flex items-start p-3.5 border rounded-xl cursor-pointer hover:bg-slate-50 transition border-slate-200">
-            <input type="radio" name="letter-option" value="시안 3: 짧고 강렬한 메시지" class="mt-1 text-rose-600 focus:ring-rose-500">
-            <div class="ml-3">
-              <span class="block text-sm font-semibold text-slate-900">시안 3. 짧고 강렬한 메시지</span>
-              <span class="block text-xs text-slate-500 mt-0.5">"명훈쌤 최고! 생신 축하드려요 🎉"</span>
-            </div>
-          </label>
+    <!-- 투표 카드 (학생용) -->
+    <div class="card">
+        <h2>김명훈 선생님 생신 때 1학기와 2학기 임원이 준비한 활동을 같이 하는 것에 동의하십니까?</h2>
+        
+        <!-- 전체 학급 투표율 상자 -->
+        <div class="rate-box">
+            📊 전체 학급 투표율: <span id="class-vote-rate">0%</span> (<span id="total-voters">0</span> / <span id="total-class">24</span>명 참여)
         </div>
-      </div>
 
-      <button type="submit" id="submit-btn"
-        class="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-3 rounded-xl transition shadow-lg shadow-rose-200">
-        투표 제출하기
-      </button>
-    </form>
+        <div id="vote-section">
+            <label for="student-name"><b>이름 입력 (예: 15번 홍길동)</b></label>
+            <input type="text" id="student-name" placeholder="이름을 입력하세요">
+            
+            <div class="options">
+                <label><input type="radio" name="voteOption" value="예"> 예</label>
+                <label><input type="radio" name="voteOption" value="아니요"> 아니요</label>
+            </div>
+            <button onclick="submitVote()">투표하기</button>
+        </div>
+        
+        <!-- 투표 완료 후 항목별 비율(투표자 기준) 결과 표시 -->
+        <div id="result-section" class="hidden">
+            <h3>투표가 완료되었습니다! 🎉</h3>
+            <p><b>실시간 투표 결과 분석</b></p>
+            <div class="result-bar">👍 예 (찬성): <span id="count-yes">0</span>표 (투표자 중 <span id="percent-yes">0%</span>)</div>
+            <div class="result-bar">👎 아니요 (반대): <span id="count-no">0</span>표 (투표자 중 <span id="percent-no">0%</span>)</div>
+        </div>
 
-    <div id="success-msg" class="hidden text-center py-8">
-      <div class="text-4xl mb-3">🎉</div>
-      <h3 class="text-xl font-bold text-slate-900">투표가 완료되었습니다!</h3>
-      <p class="text-slate-500 text-sm mt-1">소중한 의견을 반영하여 명훈쌤께 전해드릴게요.</p>
-    </div>
-  </main>
-
-  <!-- 관리자 패널 (joon.gekojoon.com) -->
-  <section id="admin-view" class="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-6 mt-6 hidden">
-    <div class="flex justify-between items-center border-b pb-4 mb-6">
-      <div>
-        <h1 class="text-2xl font-bold text-slate-900">🔒 관리자 패널</h1>
-        <p class="text-slate-500 text-sm">joon.gekojoon.com 접속 전용 실시간 투표 및 IP 모니터링</p>
-      </div>
-      <button id="refresh-btn" class="bg-slate-800 hover:bg-slate-900 text-white text-xs px-3 py-2 rounded-lg transition">
-        새로고침
-      </button>
-    </div>
-
-    <!-- 통계 요약 -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-        <span class="text-xs text-slate-500 font-medium">총 참여 투표 수</span>
-        <div id="total-count" class="text-2xl font-bold text-slate-900 mt-1">0표</div>
-      </div>
-      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-        <span class="text-xs text-slate-500 font-medium">최근 투표 시각</span>
-        <div id="last-updated" class="text-sm font-semibold text-slate-700 mt-1">-</div>
-      </div>
+        <!-- 실시간 댓글 / 의견 공간 -->
+        <div class="comment-section">
+            <h3>자유 의견 및 댓글</h3>
+            <div id="comment-list" class="comment-list"></div>
+            
+            <input type="text" id="comment-name" placeholder="이름 (예: 15번 홍길동)">
+            <textarea id="comment-text" placeholder="댓글을 남겨주세요 (궁금한 점, 의견 등)"></textarea>
+            <button onclick="submitComment()" style="background: #008CBA;">댓글 등록</button>
+        </div>
     </div>
 
-    <!-- 상세 목록 테이블 -->
-    <div class="overflow-x-auto">
-      <table class="w-full text-left text-sm border-collapse">
-        <thead>
-          <tr class="bg-slate-100 border-b border-slate-200 text-slate-600">
-            <th class="p-3">이름</th>
-            <th class="p-3">선택한 시안</th>
-            <th class="p-3">IP 주소</th>
-            <th class="p-3">일시</th>
-          </tr>
-        </thead>
-        <tbody id="vote-table-body" class="divide-y divide-slate-100 text-slate-700">
-          <tr>
-            <td colspan="4" class="p-4 text-center text-slate-400">데이터를 불러오는 중...</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- 관리자 패널 -->
+    <div class="card">
+        <button id="login-btn" class="google-btn" onclick="loginAdmin()">관리자(본인) 구글 로그인</button>
+        
+        <div id="admin-panel" class="admin-panel hidden">
+            <h3>관리자 패널 (제작자 전용)</h3>
+            <p>로그인 계정: <span id="admin-email"></span> <button onclick="logoutAdmin()" style="background:#6c757d; width:auto; padding:3px 8px; font-size:12px; float:right;">로그아웃</button></p>
+            <hr>
+            <h4>투표 참여 명단 (IP 및 기기 정보 포함) & 무효화</h4>
+            <div id="vote-list">데이터를 불러오는 중...</div>
+            
+            <h4 style="margin-top: 20px;">댓글 관리 (삭제 가능)</h4>
+            <div id="admin-comment-list">댓글을 불러오는 중...</div>
+        </div>
     </div>
-  </section>
 
-  <!-- Firebase & App Script -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyC1i2JDosCgSAKStg6lZfqD8sEkFBPPKyM",
-      authDomain: "code-8edf2.firebaseapp.com",
-      projectId: "code-8edf2",
-      storageBucket: "code-8edf2.firebasestorage.app",
-      messagingSenderId: "874029593317",
-      appId: "1:874029593317:web:11e19d15053dd8aa2b1a0c",
-      measurementId: "G-694C7PL2C4"
-    };
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForProject222216565551",
+            authDomain: "project-222216565551.firebaseapp.com",
+            projectId: "project-222216565551",
+            storageBucket: "project-222216565551.appspot.com",
+            messagingSenderId: "222216565551",
+            appId: "1:222216565551:web:dummyappid"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
 
-    // IP 수집 함수
-    async function getUserIP() {
-      try {
-        const res = await fetch("https://api.ipify.org?format=json");
-        const data = await res.json();
-        return data.ip;
-      } catch (e) {
-        return "IP 확인 불가";
-      }
-    }
+        // 🌟 관리자 인증 구글 계정 고정 설정
+        const MY_ADMIN_EMAIL = "gekojoon@gmail.com"; 
+        const TOTAL_CLASS_STUDENTS = 24; 
 
-    // 도메인 판별 (joon.gekojoon.com 접속 시 관리자 화면 표시)
-    const hostname = window.location.hostname;
-    const isAdmin = hostname === "joon.gekojoon.com" || window.location.search.includes("admin=true");
+        let userIp = "확인 불가";
+        fetch('https://api.ipify.org?format=json')
+            .then(res => res.json())
+            .then(data => { userIp = data.ip; })
+            .catch(() => { userIp = "알 수 없음"; });
 
-    const userView = document.getElementById("user-view");
-    const adminView = document.getElementById("admin-view");
-
-    if (isAdmin) {
-      adminView.classList.remove("hidden");
-      loadAdminData();
-    } else {
-      userView.classList.remove("hidden");
-    }
-
-    // [사용자] 투표 제출 처리
-    const voteForm = document.getElementById("vote-form");
-    voteForm?.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const submitBtn = document.getElementById("submit-btn");
-      submitBtn.disabled = true;
-      submitBtn.innerText = "제출 중...";
-
-      const name = document.getElementById("voter-name").value.trim();
-      const selectedOption = document.querySelector('input[name="letter-option"]:checked')?.value;
-      const userIp = await getUserIP();
-
-      try {
-        await addDoc(collection(db, "votes"), {
-          voterName: name,
-          option: selectedOption,
-          ipAddress: userIp,
-          createdAt: serverTimestamp()
-        });
-
-        voteForm.classList.add("hidden");
-        document.getElementById("success-msg").classList.remove("hidden");
-      } catch (err) {
-        alert("투표 저장 중 오류가 발생했습니다. 다시 시도해 주세요.");
-        submitBtn.disabled = false;
-        submitBtn.innerText = "투표 제출하기";
-      }
-    });
-
-    // [관리자] 투표 내역 및 IP 로드
-    async function loadAdminData() {
-      const tbody = document.getElementById("vote-table-body");
-      const totalCount = document.getElementById("total-count");
-      const lastUpdated = document.getElementById("last-updated");
-
-      tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">데이터를 불러오는 중...</td></tr>`;
-
-      try {
-        const q = query(collection(db, "votes"), orderBy("createdAt", "desc"));
-        const snapshot = await getDocs(q);
-
-        totalCount.innerText = `${snapshot.size}표`;
-
-        if (snapshot.empty) {
-          tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">아직 제출된 투표가 없습니다.</td></tr>`;
-          lastUpdated.innerText = "-";
-          return;
+        window.onload = function() {
+            if (localStorage.getItem("hasVoted") === "true") {
+                document.getElementById('vote-section').classList.add('hidden');
+                document.getElementById('result-section').classList.remove('hidden');
+            }
         }
 
-        tbody.innerHTML = "";
-        let firstRow = true;
+        function getClientDeviceInfo() {
+            const ua = navigator.userAgent;
+            let browser = "알 수 없는 브라우저";
+            let device = "PC / 기타 기기";
 
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const dateStr = data.createdAt?.toDate
-            ? data.createdAt.toDate().toLocaleString("ko-KR")
-            : "방금 전";
+            if (ua.indexOf("Whale") > -1) browser = "네이버 웨일";
+            else if (ua.indexOf("Chrome") > -1) browser = "구글 크롬";
+            else if (ua.indexOf("Safari") > -1) browser = "사파리";
+            else if (ua.indexOf("Firefox") > -1) browser = "파이어폭스";
+            else if (ua.indexOf("Edge") > -1) browser = "마이크로소프트 엣지";
 
-          if (firstRow) {
-            lastUpdated.innerText = dateStr;
-            firstRow = false;
-          }
+            if (/android/i.test(ua)) device = "안드로이드 스마트폰/태블릿";
+            else if (/iphone|ipad|ipod/i.test(ua)) device = "아이폰/아이패드 (iOS)";
+            else if (/windows/i.test(ua)) device = "Windows PC";
+            else if (/macintosh|mac os x/i.test(ua)) device = "Mac OS PC";
 
-          const tr = document.createElement("tr");
-          tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
-          tr.innerHTML = `
-            <td class="p-3 font-semibold text-slate-900">${data.voterName || "익명"}</td>
-            <td class="p-3 text-slate-800">${data.option}</td>
-            <td class="p-3 font-mono text-xs text-rose-600 bg-rose-50 rounded px-2 py-1 inline-block my-2">${data.ipAddress}</td>
-            <td class="p-3 text-xs text-slate-400">${dateStr}</td>
-          `;
-          tbody.appendChild(tr);
+            return `${device} / ${browser}`;
+        }
+
+        async function submitVote() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            const selectedOption = document.querySelector('input[name="voteOption"]:checked');
+
+            if (!nameInput) {
+                alert("이름을 입력해주세요!");
+                return;
+            }
+            if (!selectedOption) {
+                alert("투표 항목을 선택해주세요!");
+                return;
+            }
+
+            const votesRef = db.collection('votes');
+
+            try {
+                // 중복 이름 체크
+                const nameQuery = await votesRef.where('name', '==', nameInput).get();
+                if (!nameQuery.empty) {
+                    alert("이미 투표에 사용된 이름입니다. 본인 이름이 이미 쓰였다면 관리자에게 무효화를 요청하세요!");
+                    return;
+                }
+
+                // 데이터베이스(Firestore)에 투표 데이터 저장
+                await votesRef.add({
+                    name: nameInput,
+                    option: selectedOption.value,
+                    ip: userIp,
+                    deviceInfo: getClientDeviceInfo(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                localStorage.setItem("hasVoted", "true");
+
+                alert("투표가 완료되었습니다!");
+                document.getElementById('vote-section').classList.add('hidden');
+                document.getElementById('result-section').classList.remove('hidden');
+
+            } catch (error) {
+                console.error("에러 발생: ", error);
+                alert("투표 중 오류가 발생했습니다.");
+            }
+        }
+
+        async function submitComment() {
+            const nameInput = document.getElementById('comment-name').value.trim();
+            const textInput = document.getElementById('comment-text').value.trim();
+
+            if (!nameInput) {
+                alert("이름을 입력해주세요!");
+                return;
+            }
+            if (!textInput) {
+                alert("댓글 내용을 입력해주세요!");
+                return;
+            }
+
+            try {
+                await db.collection('comments').add({
+                    name: nameInput,
+                    text: textInput,
+                    ip: userIp,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                document.getElementById('comment-text').value = '';
+            } catch (error) {
+                console.error("댓글 에러: ", error);
+                alert("댓글 작성 중 오류가 발생했습니다.");
+            }
+        }
+
+        // 실시간 데이터베이스 연동 및 항목별 퍼센트 계산
+        db.collection('votes').onSnapshot((snapshot) => {
+            let yesCount = 0;
+            let noCount = 0;
+            let voteListHtml = '';
+            let totalVotes = snapshot.size;
+
+            if (snapshot.empty) {
+                voteListHtml = '<p style="color: #666; font-size: 13px;">아직 투표한 학생이 없습니다.</p>';
+            }
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.option === '예') yesCount++;
+                if (data.option === '아니요') noCount++;
+
+                voteListHtml += `
+                    <div class="vote-item">
+                        <div class="vote-item-content">
+                            <div>
+                                <b>${data.name}</b> (${data.option})
+                                <div class="device-info">🌐 IP: ${data.ip || '정보 없음'} | 📱 기기: ${data.deviceInfo || '정보 없음'}</div>
+                            </div>
+                            <button class="delete-btn" onclick="invalidateVote('${doc.id}')">무효화</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 화면 표시 갱신
+            document.getElementById('count-yes').innerText = yesCount;
+            document.getElementById('count-no').innerText = noCount;
+            document.getElementById('total-voters').innerText = totalVotes;
+
+            // 투표자 기준 항목별 백분율 계산 (예 몇 %, 아니요 몇 %)
+            let percentYes = totalVotes > 0 ? Math.round((yesCount / totalVotes) * 100) : 0;
+            let percentNo = totalVotes > 0 ? Math.round((noCount / totalVotes) * 100) : 0;
+            
+            document.getElementById('percent-yes').innerText = percentYes + "%";
+            document.getElementById('percent-no').innerText = percentNo + "%";
+
+            // 전체 학급(24명) 기준 투표율 계산
+            let classRate = Math.round((totalVotes / TOTAL_CLASS_STUDENTS) * 100);
+            if (classRate > 100) classRate = 100;
+            document.getElementById('class-vote-rate').innerText = classRate + "%";
+            
+            const voteListEl = document.getElementById('vote-list');
+            if (voteListEl) voteListEl.innerHTML = voteListHtml;
         });
-      } catch (err) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-rose-500">데이터 로드 실패: ${err.message}</td></tr>`;
-      }
-    }
 
-    document.getElementById("refresh-btn")?.addEventListener("click", loadAdminData);
-  </script>
+        // 댓글 실시간 연동
+        db.collection('comments').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+            let commentListHtml = '';
+            let adminCommentHtml = '';
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                
+                commentListHtml += `
+                    <div class="comment-item">
+                        <div><b>${data.name}</b>: ${data.text}</div>
+                    </div>
+                `;
+
+                adminCommentHtml += `
+                    <div class="comment-item">
+                        <div class="vote-item-content">
+                            <div>
+                                <b>${data.name}</b>: ${data.text}
+                                <div class="device-info">🌐 IP: ${data.ip || '정보 없음'}</div>
+                            </div>
+                            <button class="delete-btn" onclick="deleteComment('${doc.id}')">삭제</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('comment-list').innerHTML = commentListHtml || '<p style="color: #666; font-size: 13px;">아직 댓글이 없습니다.</p>';
+            const adminCommentEl = document.getElementById('admin-comment-list');
+            if (adminCommentEl) adminCommentEl.innerHTML = adminCommentHtml || '<p style="color: #666; font-size: 13px;">작성된 댓글이 없습니다.</p>';
+        });
+
+        function loginAdmin() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider).catch((error) => {
+                alert("로그인 실패: " + error.message);
+            });
+        }
+
+        function logoutAdmin() {
+            auth.signOut();
+        }
+
+        auth.onAuthStateChanged((user) => {
+            const loginBtn = document.getElementById('login-btn');
+            const adminPanel = document.getElementById('admin-panel');
+            const adminEmailSpan = document.getElementById('admin-email');
+
+            if (user) {
+                if (user.email === MY_ADMIN_EMAIL) {
+                    loginBtn.classList.add('hidden');
+                    adminPanel.classList.remove('hidden');
+                    adminEmailSpan.innerText = user.email;
+                } else {
+                    alert("관리자 권한이 없는 구글 계정입니다.");
+                    auth.signOut();
+                }
+            } else {
+                loginBtn.classList.remove('hidden');
+                adminPanel.classList.add('hidden');
+            }
+        });
+
+        async function invalidateVote(docId) {
+            if (confirm("이 투표를 무효화(삭제)하시겠습니까?")) {
+                try {
+                    await db.collection('votes').doc(docId).delete();
+                    localStorage.removeItem("hasVoted"); 
+                    alert("투표가 무효화되었습니다.");
+                } catch (error) {
+                    alert("오류가 발생했습니다.");
+                }
+            }
+        }
+
+        async function deleteComment(docId) {
+            if (confirm("이 댓글을 삭제하시겠습니까?")) {
+                try {
+                    await db.collection('comments').doc(docId).delete();
+                } catch (error) {
+                    alert("댓글 삭제 중 오류가 발생했습니다.");
+                }
+            }
+        }
+
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || 
+                (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || 
+                (e.ctrlKey && e.keyCode == 85)) {
+                return false;
+            }
+        }
+    </script>
 </body>
 </html>
